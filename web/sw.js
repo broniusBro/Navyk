@@ -1,8 +1,9 @@
-// Navyk service worker: cache-first for the app shell, network-first for /api (lessons work offline
-// once opened), stale-while-revalidate for Google Fonts. /api/review, /api/auth/* and /api/progress
+// Navyk service worker: network-first for the app shell and /api, so a deploy is visible on the next
+// load without bumping VERSION; the cache is only the offline fallback. Stale-while-revalidate for
+// Google Fonts. /api/review, /api/auth/* and /api/progress
 // are never cached (private, per account).
 
-const VERSION = "navyk-v4";
+const VERSION = "navyk-v5";
 const SHELL = `${VERSION}-shell`;
 const DATA = `${VERSION}-data`;
 const FONTS = `${VERSION}-fonts`;
@@ -61,7 +62,7 @@ self.addEventListener("install", (event) => {
   event.waitUntil(
     caches
       .open(SHELL)
-      .then((c) => c.addAll(SHELL_FILES))
+      .then((c) => c.addAll(SHELL_FILES.map((u) => new Request(u, { cache: "reload" }))))
       .then(() => self.skipWaiting()),
   );
 });
@@ -87,12 +88,15 @@ async function networkFirst(req) {
   }
 }
 
-async function cacheFirst(req) {
-  const hit = await caches.match(req, { ignoreSearch: true });
-  if (hit) return hit;
-  const res = await fetch(req);
-  if (res.ok) (await caches.open(SHELL)).put(req, res.clone());
-  return res;
+async function shellNetworkFirst(req) {
+  try {
+    const res = await fetch(req);
+    if (res.ok) (await caches.open(SHELL)).put(req, res.clone());
+    return res;
+  } catch {
+    const hit = await caches.match(req, { ignoreSearch: true });
+    return hit ?? new Response("", { status: 504 });
+  }
 }
 
 async function staleWhileRevalidate(req) {
@@ -125,5 +129,5 @@ self.addEventListener("fetch", (event) => {
     event.respondWith(fetch(req).catch(() => caches.match("./index.html")));
     return;
   }
-  event.respondWith(cacheFirst(req));
+  event.respondWith(shellNetworkFirst(req));
 });

@@ -73,3 +73,14 @@ test("daily limiter resets at UTC midnight", () => {
   assert.equal(l.canUse("a", new Date("2026-10-14T00:00:01Z")), true);
   assert.equal(l.resetAt(d1), "2026-10-14T00:00:00.000Z");
 });
+
+test("static files always revalidate: no-cache + ETag → 304", async () => {
+  const r1 = await fetch(`${base}/js/app.js`);
+  assert.equal(r1.status, 200);
+  assert.equal(r1.headers.get("cache-control"), "no-cache");
+  const etag = r1.headers.get("etag");
+  assert.ok(etag);
+  const r2 = await fetch(`${base}/js/app.js`, { headers: { "if-none-match": etag! } });
+  assert.equal(r2.status, 304);
+  assert.equal((await fetch(`${base}/sw.js`)).headers.get("cache-control"), "no-cache");
+});

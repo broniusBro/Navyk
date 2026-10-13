@@ -32,14 +32,21 @@ const MIME: Record<string, string> = {
   ".ico": "image/x-icon",
 };
 
-async function serveFile(res: ServerResponse, base: string, rel: string, cache: string) {
+async function serveFile(req: IncomingMessage, res: ServerResponse, base: string, rel: string, cache: string) {
   const path = normalize(join(base, rel));
   if (!path.startsWith(base)) return send(res, 403, { error: "forbidden" });
   try {
     const s = await stat(path);
     if (!s.isFile()) throw new Error("not a file");
+    // ETag from size+mtime: with "no-cache" the browser revalidates every time and gets a cheap 304.
+    const etag = `W/"${s.size.toString(36)}-${Math.floor(s.mtimeMs).toString(36)}"`;
+    const headers = { "content-type": MIME[extname(path)] ?? "application/octet-stream", "cache-control": cache, etag };
+    if (req.headers["if-none-match"] === etag) {
+      res.writeHead(304, headers);
+      return res.end();
+    }
     const data = await readFile(path);
-    send(res, 200, data, { "content-type": MIME[extname(path)] ?? "application/octet-stream", "cache-control": cache });
+    send(res, 200, data, headers);
   } catch {
     send(res, 404, { error: "not_found" });
   }
@@ -184,7 +191,7 @@ export function createApp(opts: AppOptions = {}) {
       const m = p.match(/^\/api\/lessons\/([a-z]{2})\/([a-z]\d+\.\d+)$/);
       if (req.method === "GET" && m) {
         if (!LANGS.has(m[1])) return send(res, 404, { error: "not_found" });
-        return serveFile(res, DIST, `${m[1]}/${m[2]}.json`, "no-cache");
+        return serveFile(req, res, DIST, `${m[1]}/${m[2]}.json`, "no-cache");
       }
       if (req.method === "POST" && p === "/api/review") return handleReview(req, res, reviewDeps);
       if (p.startsWith("/api/")) return send(res, 404, { error: "not_found" });
@@ -192,7 +199,8 @@ export function createApp(opts: AppOptions = {}) {
       // Статика веб-клиента; неизвестные пути → index.html (одностраничное приложение).
       const rel = p === "/" ? "index.html" : p.slice(1);
       const exists = await stat(normalize(join(WEB, rel))).then((s) => s.isFile()).catch(() => false);
-      return serveFile(res, WEB, exists ? rel : "index.html", rel === "sw.js" || !exists || rel === "index.html" ? "no-cache" : "public, max-age=3600");
+      // Always revalidate (ETag → 304): a deploy reaches everyone on the next load, not an hour later.
+      return serveFile(req, res, WEB, exists ? rel : "index.html", "no-cache");
     } catch (e) {
       log({ event: "error", path: p, message: String((e as Error).message) });
       if (!res.headersSent) return send(res, 500, { error: "internal" });
