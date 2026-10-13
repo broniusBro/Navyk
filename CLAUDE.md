@@ -25,7 +25,7 @@ Navyk — мобильное/веб-приложение для изучения
 которые не переносятся в мобильное приложение, без обёртки-абстракции.
 
 ## Сервер
-Общий сервер приложений Hetzner 65.108.234.212 (там же bronus.app), правила — `bronus-core/host/README.md`:
+Продакшен: https://navyk.app — общий сервер приложений Hetzner 65.108.234.212 (там же bronus.app), правила — `bronus-core/host/README.md`:
 Docker Compose проект `navyk`, порт 127.0.0.1:8100, секреты `/etc/navyk/navyk.env`, сайт `/etc/caddy/sites/<домен>.caddy`.
 Не трогать общий Caddyfile и чужие проекты. Первый запуск: `deploy/deploy-from-mac.sh`; дальше сервер сам
 подтягивает `main` каждые 5 минут (`deploy/autoupdate.sh`) с откатом при сбое. Подробно: `docs/infra/hetzner.md`.
