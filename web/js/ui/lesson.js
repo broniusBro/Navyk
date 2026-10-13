@@ -65,7 +65,7 @@ export function mountLesson(container, opts) {
   function renderStep(block) {
     const md = resolveDataRefs(block.markdown, opts.data, opts.lang);
     const body = markdown(md, { assistantLabel: t("chat.claude") });
-    const el = h(`section.step.step--${block.variant ?? "explain"}`, block.variant === "hook" ? h("h1.step__title", { tabindex: "-1" }, lesson.meta.title) : null, block.variant === "summary" ? h("h2.step__kicker", { tabindex: "-1" }, t("lesson.summary")) : null, body);
+    const el = h(`section.step.step--${block.variant ?? "explain"}`, block.variant === "hook" ? h("h1.step__title", { tabindex: "-1" }, h("span.hl", lesson.meta.title)) : null, block.variant === "summary" ? h("h2.step__kicker", { tabindex: "-1" }, h("span.hl.hl--ok", t("lesson.summary"))) : null, body);
     ctx.setPrimary(t("common.next"), ctx.next);
     ctx.setSecondary(null);
     return el;

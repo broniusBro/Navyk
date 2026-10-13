@@ -70,7 +70,8 @@ function optionList(ex, ctx, multi) {
         b.classList.add(`option--${state}`);
         const label = t(`exercise.state_${state}`);
         b.append(h("span.option__state", icon(state === "bad" ? "cross" : "check"), h("span.sr-only", label)));
-        b.parentElement.append(whyNote(item.why, good ? "ok" : "bad"));
+        const lead = chosen ? t(good ? "exercise.lead_ok" : "exercise.lead_bad") : null;
+        b.parentElement.append(whyNote(item.why, good ? "ok" : "bad", lead));
       }
     },
   };

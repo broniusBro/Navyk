@@ -15,6 +15,11 @@ export function langPicker() {
   return h("div.lang", h("label.sr-only", { for: id }, t("lang.label")), select);
 }
 
+/** "navyk." wordmark with the pink brand dot (dot is decorative). */
+export function wordmark() {
+  return h("p.wordmark", { aria: { label: "Navyk" } }, h("span", { aria: { hidden: "true" } }, "navyk"), h("span.wordmark__dot", { aria: { hidden: "true" } }, "."));
+}
+
 export function statChips({ xp, streak, activeToday }) {
   return h(
     "div.stats",

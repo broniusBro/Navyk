@@ -7,7 +7,7 @@ import { t } from "../i18n.js";
 import { check, canCheck } from "../../engine/exercises.js";
 
 export function questionHeading(ex) {
-  return h("h2.ex__question", { tabindex: "-1", data: { autofocus: "1" } }, ex.question);
+  return [h("p.ex__tag", t(`exercise.type.${ex.type}`)), h("h2.ex__question", { tabindex: "-1", data: { autofocus: "1" } }, ex.question)];
 }
 
 export function hintBox(ex) {
@@ -27,9 +27,9 @@ export function hintBox(ex) {
 }
 
 /** A `why` note rendered under an item. kind: ok | bad | info */
-export function whyNote(text, kind = "info") {
-  if (!text) return null;
-  return h(`p.why.why--${kind}`, text);
+export function whyNote(text, kind = "info", lead = null) {
+  if (!text && !lead) return null;
+  return h(`p.why.why--${kind}`, lead ? h("strong.why__lead", lead) : null, lead && text ? " " : null, text ?? "");
 }
 
 export function mountAutoExercise(ex, ctx, impl) {

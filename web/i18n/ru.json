@@ -52,7 +52,19 @@
       "many": "{count} тем ждут повторения",
       "other": "{count} темы ждут повторения"
     },
-    "due_start": "Повторить"
+    "due_start": "Повторить",
+    "module_kicker": "{level} · модуль {n} из {total}",
+    "you_are_here": "Ты здесь",
+    "goal_title": "Цель дня",
+    "goal_todo": "1 урок · ты справишься!",
+    "goal_done": "1 урок · выполнено!",
+    "repeat_count": {
+      "one": "{count} тема",
+      "few": "{count} темы",
+      "many": "{count} тем",
+      "other": "{count} темы"
+    },
+    "repeat_none": "Пока нечего повторять"
   },
   "lesson": {
     "loading": "Открываем урок…",
@@ -115,7 +127,21 @@
     "gap_label": "Пропуск {n}: {value}",
     "gap_empty": "пусто",
     "gap_options": "Варианты для пропуска {n}",
-    "gap_correct": "Верно: {text}"
+    "gap_correct": "Верно: {text}",
+    "lead_ok": "Ура, верно!",
+    "lead_bad": "Не совсем.",
+    "type": {
+      "single_choice": "Выбери ответ",
+      "multi_choice": "Несколько ответов",
+      "compare_answers": "Сравни ответы",
+      "find_error": "Найди ошибку",
+      "match_pairs": "Соедини пары",
+      "order_steps": "Расставь по порядку",
+      "build_prompt": "Собери запрос",
+      "fill_gap": "Заполни пропуск",
+      "write_prompt": "Напиши запрос",
+      "improve_prompt": "Улучши запрос"
+    }
   },
   "feedback": {
     "correct_first": "Верно с первой попытки!",
@@ -181,7 +207,15 @@
     "selfcheck_title": "Чек-лист самопроверки",
     "selfcheck_lead": "Отметь пункты, которые уже есть в запросе. Чего нет, то допиши в следующий раз.",
     "edit_again": "Изменить запрос",
-    "retry_send": "Отправить ещё раз"
+    "retry_send": "Отправить ещё раз",
+    "passed_xp": "Засчитано · +{xp} XP",
+    "hero": {
+      "draft": "Хорошее начало",
+      "working": "Рабочий запрос",
+      "strong": "Сильный запрос!",
+      "off_task": "Не по заданию",
+      "not_passed": "Почти получилось"
+    }
   },
   "verdict": {
     "draft": "Черновик",

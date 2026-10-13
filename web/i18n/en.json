@@ -46,7 +46,17 @@
       "one": "{count} topic is ready for review",
       "other": "{count} topics are ready for review"
     },
-    "due_start": "Review now"
+    "due_start": "Review now",
+    "module_kicker": "{level} · module {n} of {total}",
+    "you_are_here": "You are here",
+    "goal_title": "Daily goal",
+    "goal_todo": "1 lesson · you've got this!",
+    "goal_done": "1 lesson · done!",
+    "repeat_count": {
+      "one": "{count} topic",
+      "other": "{count} topics"
+    },
+    "repeat_none": "Nothing to review yet"
   },
   "lesson": {
     "loading": "Opening the lesson…",
@@ -107,7 +117,21 @@
     "gap_label": "Gap {n}: {value}",
     "gap_empty": "empty",
     "gap_options": "Options for gap {n}",
-    "gap_correct": "Correct: {text}"
+    "gap_correct": "Correct: {text}",
+    "lead_ok": "Yes, that's right!",
+    "lead_bad": "Not quite.",
+    "type": {
+      "single_choice": "Pick an answer",
+      "multi_choice": "Pick all that apply",
+      "compare_answers": "Compare answers",
+      "find_error": "Spot the problem",
+      "match_pairs": "Match the pairs",
+      "order_steps": "Put in order",
+      "build_prompt": "Build the prompt",
+      "fill_gap": "Fill the gap",
+      "write_prompt": "Write a prompt",
+      "improve_prompt": "Improve the prompt"
+    }
   },
   "feedback": {
     "correct_first": "Correct on the first try!",
@@ -169,7 +193,15 @@
     "selfcheck_title": "Self-check list",
     "selfcheck_lead": "Tick what your prompt already covers. Add anything missing next time.",
     "edit_again": "Edit prompt",
-    "retry_send": "Send again"
+    "retry_send": "Send again",
+    "passed_xp": "Passed · +{xp} XP",
+    "hero": {
+      "draft": "A good start",
+      "working": "A working prompt",
+      "strong": "Strong prompt!",
+      "off_task": "Off task",
+      "not_passed": "Almost there"
+    }
   },
   "verdict": {
     "draft": "Draft",

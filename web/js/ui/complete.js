@@ -1,6 +1,6 @@
 // Lesson complete screen: XP breakdown, streak, next review date, sources.
 
-import { h, icon, markdown, focusFirst } from "./dom.js";
+import { h, icon, markdown, focusFirst, confetti } from "./dom.js";
 import { t, formatNumber, formatDate } from "./i18n.js";
 import { footer } from "./chrome.js";
 
@@ -20,12 +20,16 @@ export function renderComplete(p) {
   const main = h(
     "main.complete",
     { id: "main" },
-    h("div.complete__mark", { aria: { hidden: "true" } }, icon("check", "icon complete__icon")),
-    h("h1.complete__title", { tabindex: "-1" }, t(p.isReview ? "complete.review_title" : "complete.title")),
-    p.title ? h("p.complete__lesson", p.title) : null,
+    h(
+      "div.complete__hero",
+      confetti(),
+      h("div.complete__mark", { aria: { hidden: "true" } }, icon("check", "icon complete__icon")),
+      h("h1.complete__title", { tabindex: "-1" }, t(p.isReview ? "complete.review_title" : "complete.title")),
+      p.title ? h("p.complete__lesson", p.title) : null,
+      h("p.xp-chip", { aria: { label: t("stats.xp_label", { count: p.awarded }) } }, h("span", { aria: { hidden: "true" } }, `+${formatNumber(p.awarded)} ${t("stats.xp_unit")}`)),
+    ),
     h(
       "div.complete__stats",
-      h("p.big-stat", h("span.big-stat__value", `+${formatNumber(p.awarded)}`), h("span.big-stat__label", t("stats.xp_unit"))),
       h(
         `p.big-stat.big-stat--streak${streakUp ? ".is-up" : ""}`,
         h("span.big-stat__value", icon("flame"), formatNumber(p.streakAfter)),

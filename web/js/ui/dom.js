@@ -61,10 +61,15 @@ export function focusFirst(root, selector = "h1, h2, [data-autofocus]") {
   el.focus({ preventScroll: false });
 }
 
+/** Decorative confetti dots for success screens (static; only the pop-in animation respects reduced motion in CSS). */
+export function confetti() {
+  return h("span.confetti", { aria: { hidden: "true" } }, h("i"), h("i"), h("i"), h("i"), h("i"));
+}
+
 /** Simple inline SVG icon by name (decorative, aria-hidden). */
 const ICONS = {
   close: "M6 6l12 12M18 6L6 18",
-  check: "M5 12.5l4.5 4.5L19 7",
+  check: "M5 12.5l4.5 4.5L19 7.5",
   cross: "M7 7l10 10M17 7L7 17",
   up: "M12 18V6M6 11l6-6 6 6",
   down: "M12 6v12M6 13l6 6 6-6",

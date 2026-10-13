@@ -52,7 +52,19 @@
       "many": "{count} тем чекають на повторення",
       "other": "{count} теми чекають на повторення"
     },
-    "due_start": "Повторити"
+    "due_start": "Повторити",
+    "module_kicker": "{level} · модуль {n} з {total}",
+    "you_are_here": "Ти тут",
+    "goal_title": "Ціль дня",
+    "goal_todo": "1 урок · у тебе вийде!",
+    "goal_done": "1 урок · виконано!",
+    "repeat_count": {
+      "one": "{count} тема",
+      "few": "{count} теми",
+      "many": "{count} тем",
+      "other": "{count} теми"
+    },
+    "repeat_none": "Поки нічого повторювати"
   },
   "lesson": {
     "loading": "Відкриваємо урок…",
@@ -115,7 +127,21 @@
     "gap_label": "Пропуск {n}: {value}",
     "gap_empty": "порожньо",
     "gap_options": "Варіанти для пропуску {n}",
-    "gap_correct": "Правильно: {text}"
+    "gap_correct": "Правильно: {text}",
+    "lead_ok": "Ура, правильно!",
+    "lead_bad": "Не зовсім.",
+    "type": {
+      "single_choice": "Обери відповідь",
+      "multi_choice": "Кілька відповідей",
+      "compare_answers": "Порівняй відповіді",
+      "find_error": "Знайди помилку",
+      "match_pairs": "Поєднай пари",
+      "order_steps": "Розстав по порядку",
+      "build_prompt": "Збери запит",
+      "fill_gap": "Заповни пропуск",
+      "write_prompt": "Напиши запит",
+      "improve_prompt": "Покращ запит"
+    }
   },
   "feedback": {
     "correct_first": "Правильно з першої спроби!",
@@ -181,7 +207,15 @@
     "selfcheck_title": "Чек-лист самоперевірки",
     "selfcheck_lead": "Познач пункти, які вже є в запиті. Чого немає, те допиши наступного разу.",
     "edit_again": "Змінити запит",
-    "retry_send": "Надіслати ще раз"
+    "retry_send": "Надіслати ще раз",
+    "passed_xp": "Зараховано · +{xp} XP",
+    "hero": {
+      "draft": "Гарний початок",
+      "working": "Робочий запит",
+      "strong": "Сильний запит!",
+      "off_task": "Не за завданням",
+      "not_passed": "Майже вийшло"
+    }
   },
   "verdict": {
     "draft": "Чернетка",

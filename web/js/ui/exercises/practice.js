@@ -1,10 +1,11 @@
 // write_prompt / improve_prompt: textarea, idea chips, min_chars counter, AI review via backend,
 // fallback self-check when the reviewer is unavailable or the daily limit is reached.
 
-import { h, icon } from "../dom.js";
+import { h, icon, confetti } from "../dom.js";
 import { t, formatTime } from "../i18n.js";
 import { initialPromptText, insertIdea } from "../../engine/exercises.js";
 import { validatePrompt, interpretReview, criterionLevel, MAX_PROMPT_CHARS } from "../../engine/review.js";
+import { XP } from "../../engine/progress.js";
 import { requestReview } from "../../platform/api.js";
 import { copyText } from "../../platform/clipboard.js";
 import { questionHeading, hintBox } from "./frame.js";
@@ -116,15 +117,26 @@ export function renderPractice(ex, ctx) {
     }
     parts.push(
       h(
-        "div.verdict",
-        h(`span.badge.badge--${r.verdict}`, t(`verdict.${r.verdict}`)),
-        r.score != null ? h("span.verdict__score", t("practice.score", { score: r.score })) : null,
-        h("p.verdict__text", t(r.passed ? "practice.passed" : r.offTask ? "practice.off_task" : "practice.not_passed")),
+        `div.verdict.verdict--${r.verdict}${r.passed ? ".is-passed" : ".is-not-passed"}`,
+        r.passed ? confetti() : null,
+        r.score != null ? h("p.verdict__score", { role: "img", aria: { label: t("practice.score", { score: r.score }) } }, String(r.score)) : null,
+        h(
+          "div.verdict__body",
+          h("h3.verdict__title", t(`practice.hero.${!r.passed && (r.verdict === "working" || r.verdict === "strong") ? "not_passed" : r.verdict}`)),
+          h(`p.verdict__text`, r.passed ? t("practice.passed_xp", { xp: XP.aiPassed }) : t(r.offTask ? "practice.off_task" : "practice.not_passed")),
+        ),
       ),
     );
     parts.push(h("details.mine", h("summary", t("practice.your_prompt")), h("div.bubble.bubble--user", h("p.bubble__text", lastPrompt))));
-    if (r.strengths.length) parts.push(listBlock("practice.strengths", r.strengths, "ok"));
-    if (r.gaps.length) parts.push(listBlock("practice.gaps", r.gaps, "gap"));
+    if (r.strengths.length || r.gaps.length) {
+      parts.push(
+        h(
+          "div.review-card",
+          r.strengths.length ? listBlock("practice.strengths", r.strengths, "ok") : null,
+          r.gaps.length ? listBlock("practice.gaps", r.gaps, "gap") : null,
+        ),
+      );
+    }
     if (r.criteria.length) {
       parts.push(
         h(
@@ -134,12 +146,14 @@ export function renderPractice(ex, ctx) {
             "ul.criteria__list",
             r.criteria.map((c) => {
               const lvl = criterionLevel(c.score);
+              const stars = lvl === "good" ? "\u2605\u2605" : lvl === "partial" ? "\u2605\u2606" : "\u2606\u2606";
               return h(
                 `li.crit.crit--${lvl}`,
                 h(
                   "p.crit__head",
                   h("span.crit__name", t(`criteria.${c.id}.name`)),
-                  h("span.crit__meter", { role: "img", aria: { label: t(`criteria_level.${lvl}`) } }, h("i"), h("i")),
+                  h("span.crit__stars", { aria: { hidden: "true" } }, stars),
+                  h("span.sr-only", `: ${t(`criteria_level.${lvl}`)}`),
                 ),
                 c.comment ? h("p.crit__comment", c.comment) : null,
               );
@@ -188,7 +202,7 @@ export function renderPractice(ex, ctx) {
 }
 
 function listBlock(titleKey, items, kind) {
-  return h(`div.review-list.review-list--${kind}`, h("h3.review__title", t(titleKey)), h("ul", items.map((s) => h("li", s))));
+  return h(`div.review-list.review-list--${kind}`, h("h3.review__title", h(`span.hl.hl--${kind === "ok" ? "ok" : "improve"}`, t(titleKey))), h("ul", items.map((s) => h("li", s))));
 }
 
 function copyable(titleKey, text, collapsed = false) {
