@@ -1,0 +1,11 @@
+{
+  "name": "navyk-web",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Navyk web client MVP. No dependencies, no build step: plain HTML, CSS and native ES modules.",
+  "scripts": {
+    "test": "node --test test/index.js",
+    "check": "find js test sw.js -name '*.js' -exec node --check {} \\;"
+  }
+}

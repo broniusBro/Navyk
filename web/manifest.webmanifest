@@ -1,0 +1,15 @@
+{
+  "name": "Navyk",
+  "short_name": "Navyk",
+  "description": "Navyk: short lessons and prompt practice. Independent course, not affiliated with Anthropic.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#edf1ea",
+  "theme_color": "#1f5c4f",
+  "icons": [
+    { "src": "icons/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "icons/icon-maskable.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "maskable" }
+  ]
+}

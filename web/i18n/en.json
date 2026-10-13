@@ -1,0 +1,222 @@
+{
+  "app": {
+    "title": "Navyk: learn to work with Claude",
+    "description": "Short lessons and prompt practice with feedback. An independent course, not affiliated with Anthropic.",
+    "skip": "Skip to content",
+    "offline": "You're offline. Lessons you've opened still work, and progress is saved on this device."
+  },
+  "common": {
+    "next": "Continue",
+    "quote": "“{text}”"
+  },
+  "lang": {
+    "label": "Language for the app and lessons",
+    "ru": "Русский",
+    "uk": "Українська",
+    "en": "English"
+  },
+  "stats": {
+    "streak_label": {
+      "one": "Streak: {count} day in a row",
+      "other": "Streak: {count} days in a row"
+    },
+    "xp_label": {
+      "one": "{count} experience point",
+      "other": "{count} experience points"
+    },
+    "xp_unit": "XP"
+  },
+  "footer": {
+    "independent": "Navyk is an independent course, not affiliated with Anthropic",
+    "about": "About",
+    "about_text": "Navyk is an unofficial learning app about Claude. It teaches you to use Claude and Claude Code through practice. Anthropic is not involved in the project and does not review its materials.",
+    "trademark": "Claude and Anthropic are trademarks of Anthropic, PBC. Navyk does not use their logos or brand identity."
+  },
+  "path": {
+    "title": "Your path",
+    "loading": "Loading the course…",
+    "offline": "We couldn't load the course. Check your connection: the path will open as soon as you're back online.",
+    "checking": "Checking which lessons are ready…",
+    "module_count": "{done} of {total}",
+    "status_done": "Completed",
+    "status_current": "Start here",
+    "status_open": "Available",
+    "status_soon": "Coming soon",
+    "due": {
+      "one": "{count} topic is ready for review",
+      "other": "{count} topics are ready for review"
+    },
+    "due_start": "Review now"
+  },
+  "lesson": {
+    "loading": "Opening the lesson…",
+    "not_found": "This lesson isn't available in your language yet. Go back to the path and pick another one.",
+    "doc_title": "{title}",
+    "close": "Close lesson",
+    "leave_confirm": "Leave the lesson? Your progress in this lesson won't be saved.",
+    "progress": "Lesson progress",
+    "progress_text": "Screen {n} of {total}",
+    "summary": "Key takeaway",
+    "unsupported": "This task will arrive in the next version of the app. You can skip it for now."
+  },
+  "chat": {
+    "claude": "Claude"
+  },
+  "exercise": {
+    "hint": "Hint",
+    "check": "Check",
+    "retry": "Try again",
+    "show_answer": "Show answer",
+    "choose_one": "Pick one answer",
+    "choose_many": "Select all that apply",
+    "state_ok": "Correct",
+    "state_bad": "Incorrect",
+    "state_missed": "Correct answer",
+    "state_neutral": "This part is fine",
+    "find_error_instruction": "Tap parts of the prompt. Tap again to unmark.",
+    "marked": {
+      "one": "{count} part marked",
+      "other": "{count} parts marked"
+    },
+    "found_of": "Weak spots found: {found} of {total}",
+    "match_instruction": "Pick an item on the left, then its match on the right.",
+    "match_left": "Left column",
+    "match_right": "Right column",
+    "match_linked": "{text}, matched with item {n}",
+    "match_pick_left": "Pick an item on the left first.",
+    "matched": "Matched: {count} of {total}",
+    "match_some_wrong": "Some pairs don't match. Explanations appear once you get it right or after your second try.",
+    "order_instruction": "Use the arrow buttons to reorder the steps.",
+    "order_list": "Steps in your order",
+    "move_up": "Move up: {text}",
+    "move_down": "Move down: {text}",
+    "moved_to": "Moved to position {n}",
+    "correct_order": "Correct order",
+    "build_instruction": "Tap the blocks in the order they belong in the prompt. Leave out the ones you don't need.",
+    "build_pool": "Available blocks",
+    "build_assembled": "Your prompt",
+    "build_empty": "Your prompt will appear here",
+    "build_remove": "Remove from prompt: {text}",
+    "build_ok": "In the right place",
+    "build_misplaced": "Needed, but in the wrong place",
+    "build_missing": "This block belongs in the prompt",
+    "build_noise_used": "This block isn't needed",
+    "build_noise_skipped": "Right call leaving this one out",
+    "fill_instruction": "Pick the option that fills the gap.",
+    "fill_instruction_many": "Tap a gap, then pick an option for it.",
+    "gap_label": "Gap {n}: {value}",
+    "gap_empty": "empty",
+    "gap_options": "Options for gap {n}",
+    "gap_correct": "Correct: {text}"
+  },
+  "feedback": {
+    "correct_first": "Correct on the first try!",
+    "correct": "Got it this time!",
+    "wrong_retry": "Not quite. Read the explanation and try again.",
+    "wrong_final": "No problem. Here's the right answer with explanations."
+  },
+  "roles": {
+    "goal": "Goal",
+    "context": "Context",
+    "format": "Format",
+    "role": "Role",
+    "noise": "Not needed"
+  },
+  "practice": {
+    "label_write": "Your prompt",
+    "label_improve": "Your version of the prompt",
+    "weak_prompt": "Original prompt",
+    "ideas": "Ideas: tap to add",
+    "insert_idea": "Add to prompt: {text}",
+    "chars_left": {
+      "one": "{count} more character to send",
+      "other": "{count} more characters to send"
+    },
+    "chars_ok": "{count} characters. Ready to send",
+    "privacy_note": "Leave out passwords, card and ID numbers, and other people's phone numbers or addresses.",
+    "send": "Get feedback",
+    "checking": "Claude is reading your prompt. This usually takes up to 15 seconds.",
+    "checking_short": "Checking…",
+    "result_region": "Feedback on your prompt",
+    "error_input_too_short": "Your prompt is too short. Say what you need and add a couple of details.",
+    "error_input_too_long": "Your prompt is too long. Keep it under 4,000 characters.",
+    "privacy_title": "Your prompt contains personal data",
+    "privacy_default": "It looks like the text includes a password, a card or ID number, or someone's contact details. Swap them for placeholders like “Alex” or “card ending 1234”.",
+    "privacy_not_passed": "The task can't count while the prompt contains this data. Remove it and send again.",
+    "score": "{score} out of 100",
+    "passed": "Task complete.",
+    "not_passed": "Good start. Add what's missing and send it again to complete the task.",
+    "off_task": "This doesn't look like a prompt for this task. Reread the task and try again.",
+    "your_prompt": "Your prompt",
+    "strengths": "What already works",
+    "gaps": "What to add",
+    "criteria": "Point by point",
+    "improved": "One way to write it",
+    "reference": "A strong example from the lesson authors",
+    "copy": "Copy",
+    "copied": "Copied",
+    "copy_failed": "Couldn't copy. Select the text and copy it manually.",
+    "remaining": {
+      "one": "{count} feedback left today",
+      "other": "{count} feedbacks left today"
+    },
+    "try_again": "Try again",
+    "limit_title": "You've used today's feedback",
+    "limit_text": "More feedback is available tomorrow. For now, check your prompt with the checklist: the task still counts.",
+    "limit_text_at": "More feedback is available from {time}. For now, check your prompt with the checklist: the task still counts.",
+    "unavailable_title": "Feedback isn't available right now",
+    "unavailable_text": "Check your prompt with the checklist below: the task still counts. You can send it again later.",
+    "selfcheck_title": "Self-check list",
+    "selfcheck_lead": "Tick what your prompt already covers. Add anything missing next time.",
+    "edit_again": "Edit prompt",
+    "retry_send": "Send again"
+  },
+  "verdict": {
+    "draft": "Draft",
+    "working": "Working",
+    "strong": "Strong",
+    "off_task": "Off task"
+  },
+  "criteria": {
+    "R1": { "name": "Goal" },
+    "R2": { "name": "Context" },
+    "R3": { "name": "Format" },
+    "R4": { "name": "Success criteria" },
+    "R5": { "name": "Steps" },
+    "R6": { "name": "Examples" },
+    "R7": { "name": "Structure" },
+    "R8": { "name": "Grounding" },
+    "R9": { "name": "Scope and safety" }
+  },
+  "criteria_level": {
+    "good": "Good",
+    "partial": "Partly there",
+    "missing": "Missing"
+  },
+  "complete": {
+    "title": "Lesson complete",
+    "review_title": "Review complete",
+    "xp_lesson": "Lesson",
+    "xp_first_try": "Right on the first try",
+    "xp_ai": "Practice passed",
+    "replay_note": "You've done this lesson before, so you only earn points above your previous best.",
+    "streak_days": {
+      "one": "day in a row",
+      "other": "days in a row"
+    },
+    "streak_started": "Your streak has started. Come back tomorrow to keep it going.",
+    "streak_up": {
+      "one": "{count}-day streak. Keep it up!",
+      "other": "{count}-day streak. Keep it up!"
+    },
+    "next_review": "Next review: {date}",
+    "sources": "Sources",
+    "verified_at": "Facts checked on {date}",
+    "back": "Back to path"
+  },
+  "review": {
+    "title": "Review",
+    "result": "Correct: {correct} of {total}",
+    "unavailable": "We couldn't load the review tasks. Try again later."
+  }
+}

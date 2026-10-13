@@ -23,3 +23,6 @@ jobs:
       - name: Server tests
         working-directory: server
         run: npm test
+      - name: Web client tests
+        working-directory: web
+        run: npm test && npm run check
