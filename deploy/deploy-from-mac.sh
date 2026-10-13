@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 # Navyk on the shared application server 65.108.234.212 (bronus.app lives there too; see bronus-core/host/README.md).
 # Run on the Mac, from the navyk repository folder:
-#   bash deploy/deploy-from-mac.sh                      # temporary address https://65-108-234-212.sslip.io
-#   SITE=navyk.example.com bash deploy/deploy-from-mac.sh   # own domain (A record -> 65.108.234.212 first)
+#   bash deploy/deploy-from-mac.sh                      # production https://navyk.app
+#   SITE=65-108-234-212.sslip.io bash deploy/deploy-from-mac.sh   # temporary address without DNS
 # Safe to run again: updates code, keeps secrets and settings. Afterwards the server updates itself from GitHub.
 set -euo pipefail
 APP_IP="${APP_IP:-65.108.234.212}"
 SERVER="root@$APP_IP"
-SITE="${SITE:-$(echo "$APP_IP" | tr . -).sslip.io}"
+SITE="${SITE:-navyk.app}"
 REPO_URL="${REPO_URL:-https://github.com/broniusBro/Navyk.git}"   # public repository: no deploy key needed
 
 step() { printf '\n== %s\n' "$*"; }

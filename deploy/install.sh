@@ -7,7 +7,9 @@ set -euo pipefail
 REPO="$(cd "$(dirname "$0")/.." && pwd)"; cd "$REPO"
 APP_PORT="${APP_PORT:-8100}"
 IP="$(curl -fsS -m 5 http://169.254.169.254/hetzner/v1/metadata/public-ipv4 2>/dev/null || hostname -I | awk '{print $1}')"
-SITE="${SITE:-$(echo "$IP" | tr . -).sslip.io}"
+# without SITE keep the domain navyk already serves (so a re-run never falls back to sslip.io)
+CURRENT="$(grep -l "reverse_proxy 127.0.0.1:$APP_PORT" /etc/caddy/sites/*.caddy 2>/dev/null | head -1 | xargs -r basename | sed 's/\.caddy$//')"
+SITE="${SITE:-${CURRENT:-$(echo "$IP" | tr . -).sslip.io}}"
 ENV_FILE=/etc/navyk/navyk.env
 CADDY_SITE="/etc/caddy/sites/$SITE.caddy"
 say() { printf '\n== navyk: %s\n' "$*"; }
