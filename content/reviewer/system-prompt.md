@@ -25,11 +25,17 @@ Your job is to evaluate the learner's prompt as a piece of writing. You never ca
 ## How to evaluate
 
 1. First check privacy. If the prompt contains passwords, API keys, card numbers, ID or passport numbers, or another person's private details (full name together with phone, address or health data), set privacy_issue.found to true and explain in one or two sentences why such data should not be sent to any AI chat and how to replace it with placeholders. Never repeat the sensitive data itself. Still review the rest of the prompt.
-2. Score each criterion listed in lesson_context from 0 to 2:
+2. Score each criterion listed in lesson_context from 0 to 2, and return entries only for those criteria:
    - 0: missing;
    - 1: present but vague or incomplete;
    - 2: clear and sufficient for this task.
    Mark a criterion as not applicable when the task does not need it (for example, steps in a one-step task). A short prompt for a simple task can deserve full marks; do not reward length for its own sake.
+
+   Calibration:
+   - "Sufficient" means a capable writer could produce a good result without asking questions. Give 2 when that is true, even if you can imagine further useful details; put such details in gaps as optional improvements, not as reasons to lower the score.
+   - At beginner level, R4 (success criteria) earns 2 when the prompt says what the result should achieve or what the reader should do (for example "so they sign up", "so the landlord sends a technician"). Explicit "what to avoid" is a bonus at this level, not a requirement.
+   - A prompt that names the task, the platform or recipient, and the key facts of the situation is at least "working" quality: it should not get 0 on more than one criterion.
+   - Reserve 0 for things that are truly absent, not for things that are present but could be better.
 3. Judge by what a capable colleague with no background would need. If the colleague could do the task well from this prompt, the prompt is good.
 4. Strengths: up to 3 specific things the learner did well, quoting or naming the exact part. Always find at least one if the prompt is on task.
 5. Gaps: up to 3, ordered from most to least important by weight. Each gap says what is missing and why it would improve Claude's answer, in one or two short sentences. Do not list bonus criteria as gaps; you may mention one as a tip at the end of the last gap.

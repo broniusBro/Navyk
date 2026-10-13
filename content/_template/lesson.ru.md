@@ -1,53 +1,101 @@
 ---
-id: b2.1                     # совпадает с content/course.json
-lang: ru                     # ru | uk | en; переводы — lesson.uk.md, lesson.en.md
-title: Умный новый сотрудник
-duration_min: 4
-verified_at: 2026-10-13      # дата проверки фактов по официальным источникам
-review:                      # только для уроков с write_prompt / improve_prompt
-  criteria: [R1, R2, R3, R4] # какие критерии рубрики применять
-  task: >
-    Улучши запрос «напиши пост про наш магазин» так, чтобы его понял человек без контекста.
-  reference_prompt: >
-    Напиши пост для Instagram нашего магазина домашней керамики. ...
-repeat:                      # интервальное повторение: какие понятия возвращаются
-  - concept: P1
-    days: [3, 7, 21]
+# Полное описание формата: content/_template/FORMAT.md. Рабочий пример: content/beginner/b2/b2.1.ru.md
+id: "b2.1"                     # совпадает с content/course.json
+lang: "ru"                     # ru | uk | en
+level: "beginner"              # beginner | advanced | pro
+module: "b2"
+title: "Умный новый сотрудник"
+goal: "После урока ты сможешь …"   # одна измеримая цель
+duration_min: 4                # 3–5
+prerequisites: []
+principles: ["P1"]
+free_preview: false
+volatile: false
+data_refs: []                  # ui_paths, models, plans, limits, regions, apps
+verified_at: "2026-10-13"
+sources:
+  - url: "https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices"
+    supports: "Какой факт урока подтверждает источник"
+repeat:
+  - concept: "P1"
+    exercises: ["b2.1.e2"]
+    schedule:
+      - { day: 1, type: single_choice }
+      - { day: 3, type: find_error }
+      - { day: 7, type: fill_gap }
+      - { day: 21, type: write_prompt }
 ---
 
-<!-- Урок = 1 идея. Шаги идут по экранам. Каждый шаг — короткий текст (до 60 слов) или упражнение. -->
+<!-- Урок = одна идея. Блок = один экран. Объяснение — до 60 слов. Не меньше 4 упражнений.
+     У каждого варианта, фрагмента, блока и пары есть why. У каждого упражнения есть hint. -->
 
 ::: step hook
-Пример «до»: расплывчатый запрос и средний ответ Claude. Вопрос: «Почему ответ такой общий?»
+Крючок: ситуация из жизни, запрос «до» и ответ Claude, вопрос к ученику.
+
+```prompt
+Сообщение человека
+```
+
+```claude
+Ответ Claude
+```
 :::
 
 ::: step explain
-Объяснение одной идеи на бытовом примере. Ссылка на английское название в интерфейсе, если есть.
+Одна мысль на бытовом примере. Элементы интерфейса пишутся через {{data.ui_paths.<key>}}.
 :::
 
-::: exercise compare_answers
-question: Какой запрос дал этот ответ?
+::: exercise single_choice
+id: "b2.1.e1"
+type: "single_choice"
+question: "..."
 options:
-  - text: ...
+  - text: "..."
     correct: true
-    why: ...
-  - text: ...
-    why: ...
+    why: "..."
+  - text: "..."
+    correct: false
+    why: "..."
+hint: "..."
 :::
 
 ::: exercise find_error
+id: "b2.1.e2"
+type: "find_error"
+question: "Нажми на все слабые места."
 prompt: "Напиши пост про наш магазин"
-question: Чего здесь не хватает больше всего?
+segments:
+  - text: "Напиши пост "
+    weak: false
+    why: "..."
+  - text: "про наш магазин"
+    weak: true
+    why: "..."
+hint: "..."
 :::
 
 ::: exercise improve_prompt
-<!-- Использует review.task и review.reference_prompt из шапки. -->
+id: "b2.1.e3"
+type: "improve_prompt"
+question: "..."
+weak_prompt: "Напиши пост про наш магазин"
+placeholder: "..."
+min_chars: 40
+hint: "..."
+review:
+  task: "..."
+  criteria: ["R1", "R2", "R3", "R4"]
+  reference_prompt: |
+    ...
+  show_reference: true
+  fallback_feedback:
+    - "Вопрос для самопроверки"
 :::
 
 ::: step summary
-Одна фраза-правило, которую человек унесёт с собой. Например: «Пиши так, будто объясняешь задачу коллеге, который ничего не знает о твоём проекте».
+Одно правило, которое человек унесёт с собой.
 :::
 
 ::: sources
-- https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices
+- [Название](https://...)
 :::

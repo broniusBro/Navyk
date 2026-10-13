@@ -1,0 +1,19 @@
+{
+  "verified_at": "2026-10-13",
+  "source": "https://platform.claude.com/docs/en/about-claude/pricing",
+  "reviewer": {
+    "model": "claude-haiku-5-5",
+    "max_tokens": 1500,
+    "cache_ttl": "1h"
+  },
+  "pricing_usd_per_mtok": {
+    "claude-haiku-5-5": {
+      "input": 0.10,
+      "output": 0.50,
+      "cache_write_5m": 0.125,
+      "cache_write_1h": 0.20,
+      "cache_read": 0.01,
+      "note": "Prompts up to 100k tokens. Reviewer prompts are far below that."
+    }
+  }
+}

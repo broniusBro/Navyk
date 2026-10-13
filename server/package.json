@@ -1,0 +1,12 @@
+{
+  "name": "navyk-server",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Navyk backend. Zero runtime dependencies: Node.js >= 22.18 (native fetch and TypeScript type stripping).",
+  "engines": { "node": ">=22.18" },
+  "scripts": {
+    "test": "node --test \"test/*.test.ts\"",
+    "eval": "node src/reviewer/eval.ts"
+  }
+}

@@ -8,3 +8,5 @@ web-build/
 .env
 .env.*
 !.env.example
+content/dist/
+server/eval/results/*.json
