@@ -1,0 +1,49 @@
+{
+  "_about": "Изменчивые значения для уроков: названия элементов интерфейса Claude (на английском, как в приложении), тарифы и лимиты. Подставляются в {{data.<раздел>.<ключ>}} при сборке (scripts/build_content.py). Источники и даты проверки — content/data/volatile/*.md. Проверено 2026-10-13.",
+  "ui_paths": {
+    "chat_input": { "ru": "внизу экрана", "uk": "внизу екрана", "en": "at the bottom of the screen" },
+    "send": { "label": "↑", "hint": { "ru": "стрелка справа от поля", "uk": "стрілка праворуч від поля", "en": "the arrow on the right of the box" } },
+    "new_chat": { "label": "New chat", "hint": { "ru": "новый чат, вверху слева", "uk": "новий чат, угорі ліворуч", "en": "top left" } },
+    "attach_button": { "label": "+", "hint": { "ru": "кнопка в левом нижнем углу поля ввода", "uk": "кнопка в лівому нижньому куті поля введення", "en": "the button in the bottom-left corner of the message box" } },
+    "add_files": { "label": "Add files or photos", "hint": { "ru": "добавить файлы или фото", "uk": "додати файли або фото", "en": "" } },
+    "chat_plus_menu": { "label": "+", "hint": { "ru": "меню в поле сообщения", "uk": "меню в полі повідомлення", "en": "the menu in the message box" } },
+    "chat_memory_toggle": { "label": "Memory", "hint": { "ru": "память для этого чата, в меню «+»", "uk": "пам'ять для цього чату, у меню «+»", "en": "memory for this chat, in the + menu" } },
+    "projects": { "label": "Projects", "hint": { "ru": "проекты, в боковой панели", "uk": "проєкти, на бічній панелі", "en": "in the sidebar" } },
+    "new_project": { "label": "+ New Project", "hint": { "ru": "новый проект, справа вверху", "uk": "новий проєкт, праворуч угорі", "en": "top right" } },
+    "project_knowledge": { "label": "Project knowledge", "hint": { "ru": "знания проекта, справа на странице проекта", "uk": "знання проєкту, праворуч на сторінці проєкту", "en": "on the right of the project page" } },
+    "project_instructions_set": { "label": "Set project instructions", "hint": { "ru": "задать инструкции проекта", "uk": "задати інструкції проєкту", "en": "" } },
+    "project_instructions_save": { "label": "Save instructions", "hint": { "ru": "сохранить инструкции", "uk": "зберегти інструкції", "en": "" } },
+    "settings_instructions": { "label": "Settings → Instructions for Claude", "hint": { "ru": "инициалы слева внизу → настройки → инструкции для Claude", "uk": "ініціали ліворуч унизу → налаштування → інструкції для Claude", "en": "your initials, bottom left" } },
+    "settings_memory": { "label": "Settings → Memory", "hint": { "ru": "настройки → память", "uk": "налаштування → пам'ять", "en": "" } },
+    "memory_topics": { "label": "Topics", "hint": { "ru": "темы памяти: всё, что помнит Claude", "uk": "теми пам'яті: усе, що пам'ятає Claude", "en": "everything Claude remembers" } },
+    "memory_delete": { "label": "Delete", "hint": { "ru": "удалить тему", "uk": "видалити тему", "en": "remove a topic" } },
+    "memory_pause": { "label": "Pause memory", "hint": { "ru": "пауза памяти", "uk": "пауза пам'яті", "en": "" } },
+    "memory_reset": { "label": "Reset memory", "hint": { "ru": "стереть всю память", "uk": "стерти всю пам'ять", "en": "erase all memory" } },
+    "incognito_button": { "label": "👻", "hint": { "ru": "значок-призрак справа вверху", "uk": "значок-привид праворуч угорі", "en": "the ghost icon, top right" } },
+    "incognito_label": { "label": "Incognito chat", "hint": { "ru": "надпись вверху и чёрная рамка", "uk": "напис угорі й чорна рамка", "en": "a label at the top and a black border" } },
+    "settings_privacy": { "label": "Settings → Privacy", "hint": { "ru": "настройки → приватность", "uk": "налаштування → приватність", "en": "" } },
+    "model_improvement": { "label": "Help improve our AI models", "hint": { "ru": "переключатель улучшения моделей", "uk": "перемикач покращення моделей", "en": "the model improvement toggle" } },
+    "feedback_thumbs": { "label": "👍 / 👎", "hint": { "ru": "оценка ответа под сообщением Claude", "uk": "оцінка відповіді під повідомленням Claude", "en": "rating under Claude's reply" } },
+    "share": { "label": "Share", "hint": { "ru": "поделиться, справа вверху в чате", "uk": "поділитися, праворуч угорі в чаті", "en": "top right of the chat" } },
+    "shared_chats_manage": { "label": "Settings → Privacy → Shared chats → Manage", "hint": { "ru": "все публичные ссылки", "uk": "усі публічні посилання", "en": "all public links" } },
+    "settings_usage": { "label": "Settings → Usage", "hint": { "ru": "настройки → использование", "uk": "налаштування → використання", "en": "" } }
+  },
+  "plans": {
+    "free_projects_max": { "ru": "5", "uk": "5", "en": "5" },
+    "rag_plans": { "ru": "Pro, Max, Team, Enterprise", "uk": "Pro, Max, Team, Enterprise", "en": "Pro, Max, Team, Enterprise" },
+    "memory_availability": { "ru": "на Free, Pro и Max включена по умолчанию; в Team и Enterprise её включает организация", "uk": "на Free, Pro і Max увімкнена за замовчуванням; у Team і Enterprise її вмикає організація", "en": "on by default on Free, Pro and Max; on Team and Enterprise the organization turns it on" },
+    "chat_search_availability": { "ru": "Pro, Max, Team, Enterprise", "uk": "Pro, Max, Team, Enterprise", "en": "Pro, Max, Team, Enterprise" },
+    "incognito_availability": { "ru": "все тарифы, включая Free", "uk": "усі тарифи, включно з Free", "en": "all plans, including Free" }
+  },
+  "limits": {
+    "file_types": { "ru": "PDF, DOCX, TXT, CSV, XLSX и другие документы, а также картинки JPEG, PNG, GIF, WebP", "uk": "PDF, DOCX, TXT, CSV, XLSX та інші документи, а також зображення JPEG, PNG, GIF, WebP", "en": "PDF, DOCX, TXT, CSV, XLSX and other documents, plus JPEG, PNG, GIF and WebP images" },
+    "chat_file_size": { "ru": "до 500 МБ", "uk": "до 500 МБ", "en": "up to 500 MB" },
+    "chat_files_per_chat": { "ru": "до 20", "uk": "до 20", "en": "up to 20" },
+    "image_max_px": { "ru": "до 8000×8000 пикселей", "uk": "до 8000×8000 пікселів", "en": "up to 8000×8000 pixels" },
+    "pdf_pages_max": { "ru": "до 1000 страниц", "uk": "до 1000 сторінок", "en": "up to 1,000 pages" },
+    "pdf_visual_pages": { "ru": "100 страниц", "uk": "100 сторінок", "en": "100 pages" },
+    "project_file_size_max": { "ru": "30 МБ", "uk": "30 МБ", "en": "30 MB" },
+    "rag_capacity_multiplier": { "ru": "до 10 раз", "uk": "до 10 разів", "en": "up to 10 times" },
+    "incognito_retention": { "ru": "30 дней", "uk": "30 днів", "en": "30 days" }
+  }
+}
