@@ -69,6 +69,9 @@ const PAIRS = [
   ["locked_border", "surface", UI, "locked node dashed border"],
   ["focus_ring", "paper", UI, "focus ring on paper"],
   ["focus_ring", "surface", UI, "focus ring on cards"],
+  ["ink_soft", "paper", UI, "upcoming (dashed) road on paper"],
+  ["border", "success_strong", UI, "ink edge of the travelled road"],
+  ["ink", "wrong", TEXT, "invalid form field"],
 ];
 
 let failed = 0;

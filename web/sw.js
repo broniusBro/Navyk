@@ -1,7 +1,8 @@
 // Navyk service worker: cache-first for the app shell, network-first for /api (lessons work offline
-// once opened), stale-while-revalidate for Google Fonts. /api/review is never cached.
+// once opened), stale-while-revalidate for Google Fonts. /api/review, /api/auth/* and /api/progress
+// are never cached (private, per account).
 
-const VERSION = "navyk-v3";
+const VERSION = "navyk-v4";
 const SHELL = `${VERSION}-shell`;
 const DATA = `${VERSION}-data`;
 const FONTS = `${VERSION}-fonts`;
@@ -17,6 +18,7 @@ const SHELL_FILES = [
   "./i18n/uk.json",
   "./i18n/en.json",
   "./js/app.js",
+  "./js/engine/auth.js",
   "./js/engine/course.js",
   "./js/engine/dates.js",
   "./js/engine/exercises.js",
@@ -25,19 +27,25 @@ const SHELL_FILES = [
   "./js/engine/progress.js",
   "./js/engine/review.js",
   "./js/engine/rng.js",
+  "./js/engine/road.js",
   "./js/engine/session.js",
+  "./js/engine/sync.js",
   "./js/platform/api.js",
   "./js/platform/clipboard.js",
   "./js/platform/device.js",
   "./js/platform/http.js",
   "./js/platform/storage.js",
   "./js/platform/sw.js",
+  "./js/ui/account.js",
+  "./js/ui/auth.js",
   "./js/ui/chrome.js",
   "./js/ui/complete.js",
   "./js/ui/dom.js",
   "./js/ui/i18n.js",
   "./js/ui/lesson.js",
+  "./js/ui/motion.js",
   "./js/ui/path.js",
+  "./js/ui/sheet.js",
   "./js/ui/store.js",
   "./js/ui/exercises/choice.js",
   "./js/ui/exercises/fill_gap.js",
@@ -108,6 +116,7 @@ self.addEventListener("fetch", (event) => {
     return;
   }
   if (url.origin !== self.location.origin) return;
+  if (url.pathname.startsWith("/api/auth/") || url.pathname === "/api/progress") return; // never cache account data
   if (url.pathname.startsWith("/api/")) {
     event.respondWith(networkFirst(req));
     return;

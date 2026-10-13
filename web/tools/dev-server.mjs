@@ -4,8 +4,12 @@
 // Mock /api/review: the reply depends on markers in the prompt text, so every state can be tried by hand:
 //   "#limit" -> 429, "#down" -> 503, "#offtask" -> off_task, a 16-digit number -> privacy issue,
 //   shorter than 60 chars -> draft, otherwise working/strong.
+// Mock accounts (in memory, lost on restart; same contract as server/): /api/auth/* and /api/progress.
+// E-mails are not sent: confirmation and reset links are printed to the console.
+// Dev shortcuts: password "locked-me" -> 429 on login; e-mail containing "+weak" -> 400 weak_password.
 
 import { createServer } from "node:http";
+import { randomBytes, scryptSync, timingSafeEqual } from "node:crypto";
 import { readFile, stat } from "node:fs/promises";
 import { extname, join, normalize } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -83,9 +87,151 @@ async function mockReview(body) {
   ];
 }
 
+// ---- mock accounts -------------------------------------------------------------------------
+
+const users = new Map(); // email -> { id, email, lang, salt, hash, confirmed, progress, updatedAt }
+const sessions = new Map(); // sid -> email
+const tokens = new Map(); // token -> { kind: "confirm" | "reset", email, exp }
+const fails = new Map(); // email -> { n, until }
+const TOKEN_TTL = 30 * 60 * 1000;
+const isEmail = (s) => typeof s === "string" && /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(s.trim()) && s.length <= 254;
+const norm = (s) => String(s ?? "").trim().toLowerCase();
+const hashPw = (pw, salt) => scryptSync(pw, salt, 32);
+const publicUser = (u) => ({ id: u.id, email: u.email, lang: u.lang });
+
+function issueToken(kind, email, origin) {
+  for (const [k, v] of tokens) if (v.kind === kind && v.email === email) tokens.delete(k); // one live link per purpose
+  const token = randomBytes(24).toString("base64url");
+  tokens.set(token, { kind, email, exp: Date.now() + TOKEN_TTL });
+  console.log(`\n[mail to ${email}] ${kind === "confirm" ? "Confirm your email" : "Reset your password"}: ${origin}/#/${kind}/${token}\n`);
+}
+
+function takeToken(token, kind) {
+  const t = tokens.get(String(token ?? ""));
+  if (!t || t.kind !== kind || t.exp < Date.now()) return null;
+  tokens.delete(token);
+  return t;
+}
+
+function cookieSid(req) {
+  const m = /(?:^|;\s*)navyk_sid=([\w-]+)/.exec(req.headers.cookie ?? "");
+  return m ? m[1] : null;
+}
+
+function startSession(res, email) {
+  const sid = randomBytes(24).toString("base64url");
+  sessions.set(sid, email);
+  res.setHeader("Set-Cookie", `navyk_sid=${sid}; Path=/; HttpOnly; SameSite=Lax; Max-Age=${60 * 60 * 24 * 30}`);
+}
+
+const sessionUser = (req) => users.get(sessions.get(cookieSid(req)) ?? "") ?? null;
+
+async function mockAuth(req, res, path, origin) {
+  const method = req.method;
+  if (method !== "GET") {
+    const o = req.headers.origin;
+    if (o && o !== origin) return [403, { error: "bad_origin" }];
+  }
+  const body = method === "GET" ? null : ((await readBody(req)) ?? {});
+  await new Promise((r) => setTimeout(r, 250)); // feel the busy state
+  if (path === "/api/auth/me" && method === "GET") {
+    const u = sessionUser(req);
+    return u ? [200, { user: publicUser(u) }] : [401, { error: "unauthorized" }];
+  }
+  if (path === "/api/auth/me" && method === "PATCH") {
+    const u = sessionUser(req);
+    if (!u) return [401, { error: "unauthorized" }];
+    if (["ru", "uk", "en"].includes(body.lang)) u.lang = body.lang;
+    return [200, { user: publicUser(u) }];
+  }
+  if (path === "/api/auth/register" && method === "POST") {
+    const email = norm(body.email);
+    if (!isEmail(email)) return [400, { error: "invalid_email" }];
+    if (String(body.password ?? "").length < 8 || email.includes("+weak")) return [400, { error: "weak_password" }];
+    const u = users.get(email);
+    if (!u) {
+      const salt = randomBytes(16);
+      users.set(email, { id: randomBytes(8).toString("hex"), email, lang: ["ru", "uk", "en"].includes(body.lang) ? body.lang : "en", salt, hash: hashPw(String(body.password), salt), confirmed: false, progress: null, updatedAt: null });
+      issueToken("confirm", email, origin);
+    } else if (!u.confirmed) issueToken("confirm", email, origin);
+    else console.log(`\n[mail to ${email}] Someone tried to sign up with your address. Log in: ${origin}/#/login\n`);
+    return [202, { ok: true }];
+  }
+  if (path === "/api/auth/resend-confirmation" && method === "POST") {
+    const u = users.get(norm(body.email));
+    if (u && !u.confirmed) issueToken("confirm", u.email, origin);
+    return [202, { ok: true }];
+  }
+  if (path === "/api/auth/confirm" && method === "POST") {
+    const t = takeToken(body.token, "confirm");
+    const u = t && users.get(t.email);
+    if (!u) return [400, { error: "invalid_token" }];
+    u.confirmed = true;
+    startSession(res, u.email);
+    return [200, { user: publicUser(u) }];
+  }
+  if (path === "/api/auth/login" && method === "POST") {
+    const email = norm(body.email);
+    const f = fails.get(email);
+    if (String(body.password) === "locked-me" || (f && f.until > Date.now())) return [429, { error: "locked", retryAfter: f?.until ? Math.ceil((f.until - Date.now()) / 1000) : 300 }];
+    const u = users.get(email);
+    const ok = u && timingSafeEqual(hashPw(String(body.password ?? ""), u.salt), u.hash);
+    if (!ok) {
+      const n = (f?.n ?? 0) + 1;
+      fails.set(email, { n, until: n >= 5 ? Date.now() + 5 * 60 * 1000 : 0 });
+      return [401, { error: "invalid_credentials" }];
+    }
+    fails.delete(email);
+    if (!u.confirmed) return [403, { error: "email_not_confirmed" }];
+    startSession(res, u.email);
+    return [200, { user: publicUser(u) }];
+  }
+  if (path === "/api/auth/logout" && method === "POST") {
+    sessions.delete(cookieSid(req));
+    res.setHeader("Set-Cookie", "navyk_sid=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0");
+    return [200, { ok: true }];
+  }
+  if (path === "/api/auth/forgot" && method === "POST") {
+    const u = users.get(norm(body.email));
+    if (u) issueToken("reset", u.email, origin);
+    return [202, { ok: true }];
+  }
+  if (path === "/api/auth/reset" && method === "POST") {
+    if (String(body.password ?? "").length < 8) return [400, { error: "weak_password" }];
+    const t = takeToken(body.token, "reset");
+    const u = t && users.get(t.email);
+    if (!u) return [400, { error: "invalid_token" }];
+    u.salt = randomBytes(16);
+    u.hash = hashPw(String(body.password), u.salt);
+    u.confirmed = true; // the reset link proves the address
+    for (const [sid, e] of sessions) if (e === u.email) sessions.delete(sid);
+    startSession(res, u.email);
+    return [200, { user: publicUser(u) }];
+  }
+  if (path === "/api/progress") {
+    const u = sessionUser(req);
+    if (!u) return [401, { error: "unauthorized" }];
+    if (method === "GET") return [200, { data: u.progress, updatedAt: u.updatedAt }];
+    if (method === "PUT") {
+      if (!body.data || typeof body.data !== "object") return [400, { error: "invalid_progress" }];
+      // like server/: last write wins (the client merges before writing); a stale base is only logged
+      if ((body.baseUpdatedAt ?? null) !== u.updatedAt) console.log("[progress] base mismatch (client merged against an older copy)");
+      u.progress = body.data;
+      u.updatedAt = new Date().toISOString();
+      return [200, { data: u.progress, updatedAt: u.updatedAt }];
+    }
+  }
+  return [404, { error: "not_found" }];
+}
+
 createServer(async (req, res) => {
   const url = new URL(req.url, "http://localhost");
+  const origin = `http://${req.headers.host ?? `localhost:${PORT}`}`;
   try {
+    if (url.pathname.startsWith("/api/auth/") || url.pathname === "/api/progress") {
+      const [status, body] = await mockAuth(req, res, url.pathname, origin);
+      return send(res, status, body);
+    }
     if (url.pathname === "/api/course") {
       return send(res, 200, await readFile(join(ROOT, "content/course.json")));
     }

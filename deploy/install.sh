@@ -24,7 +24,7 @@ if ss -ltnH "sport = :$APP_PORT" | grep -q . && ! docker compose ps -q app 2>/de
   die "port $APP_PORT is already used by something else"
 fi
 
-say "1/5 secrets ($ENV_FILE)"
+say "1/6 secrets ($ENV_FILE)"
 install -d -m 700 /etc/navyk
 if [ ! -f "$ENV_FILE" ]; then
   key=""
@@ -32,14 +32,19 @@ if [ ! -f "$ENV_FILE" ]; then
     read -r -s -p "Claude API key (sk-ant-api03-…), Enter to skip — the app then shows the self-check list instead of AI review: " key; echo
   fi
   umask 077
-  printf 'ANTHROPIC_API_KEY=%s\nFREE_REVIEWS_PER_DAY=10\nIP_REVIEWS_PER_DAY=50\n' "$key" > "$ENV_FILE"
+  printf 'ANTHROPIC_API_KEY=%s\nFREE_REVIEWS_PER_DAY=10\nIP_REVIEWS_PER_DAY=50\nEMAIL_PROVIDER=log\n' "$key" > "$ENV_FILE"
   echo "created (the key is not printed)"
 else
   echo "kept existing"
 fi
+# the site address: email links and the CSRF origin check (POST/PUT/PATCH only from this origin)
+grep -v '^PUBLIC_ORIGIN=' "$ENV_FILE" > "$ENV_FILE.new" || true
+printf 'PUBLIC_ORIGIN=https://%s\n' "$SITE" >> "$ENV_FILE.new"
+mv "$ENV_FILE.new" "$ENV_FILE"
 chmod 600 "$ENV_FILE"
+grep -qE '^EMAIL_PROVIDER=(brevo|resend)$' "$ENV_FILE" || echo "email: not configured yet (confirmation links are not sent) — run deploy/set-email.sh"
 
-say "2/5 build and start (first time 2–4 minutes)"
+say "2/6 build and start (first time 2–4 minutes)"
 APP_PORT="$APP_PORT" docker compose build --pull app
 APP_PORT="$APP_PORT" docker compose up -d app
 for i in $(seq 1 60); do
@@ -49,7 +54,7 @@ for i in $(seq 1 60); do
 done
 curl -fsS "http://127.0.0.1:$APP_PORT/api/health"; echo
 
-say "3/5 Caddy site $SITE"
+say "3/6 Caddy site $SITE"
 NEW="$(printf '%s {\n\tencode zstd gzip\n\treverse_proxy 127.0.0.1:%s\n}\n' "$SITE" "$APP_PORT")"
 if [ "$(cat "$CADDY_SITE" 2>/dev/null)" != "$NEW" ]; then
   BK=""; [ -f "$CADDY_SITE" ] && { BK="$CADDY_SITE.bak-$(date +%Y%m%d-%H%M%S)"; cp -a "$CADDY_SITE" "$BK"; }
@@ -71,7 +76,7 @@ else
   echo "unchanged"
 fi
 
-say "4/5 automatic updates from GitHub (every 5 minutes, only when main changed)"
+say "4/6 automatic updates from GitHub (every 5 minutes, only when main changed)"
 cat > /etc/systemd/system/navyk-autoupdate.service <<EOF
 [Unit]
 Description=Navyk: update from GitHub if main changed
@@ -99,7 +104,36 @@ systemctl daemon-reload
 systemctl enable --now navyk-autoupdate.timer >/dev/null
 echo "enabled"
 
-say "5/5 check through HTTPS"
+say "5/6 daily backup of the accounts database (03:30 UTC, 14 days in /var/backups/navyk)"
+cat > /etc/systemd/system/navyk-backup.service <<EOF
+[Unit]
+Description=Navyk: back up the accounts database
+After=docker.service
+
+[Service]
+Type=oneshot
+WorkingDirectory=$REPO
+Environment=APP_PORT=$APP_PORT
+ExecStart=$REPO/deploy/backup.sh
+EOF
+cat > /etc/systemd/system/navyk-backup.timer <<'EOF'
+[Unit]
+Description=Navyk: daily database backup
+
+[Timer]
+OnCalendar=*-*-* 03:30:00
+Persistent=true
+RandomizedDelaySec=5min
+
+[Install]
+WantedBy=timers.target
+EOF
+install -d -m 700 /var/backups/navyk
+systemctl daemon-reload
+systemctl enable --now navyk-backup.timer >/dev/null
+echo "enabled"
+
+say "6/6 check through HTTPS"
 for i in $(seq 1 30); do
   if curl -fsS -m 5 "https://$SITE/api/health" >/dev/null 2>&1; then echo "https://$SITE ok"; break; fi
   [ "$i" = 30 ] && echo "https://$SITE not answering yet (DNS or certificate). The app itself is running; run this script again later."

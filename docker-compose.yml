@@ -1,5 +1,7 @@
 # Navyk on the shared application server (see bronus-core/host/README.md).
-# Secrets: /etc/navyk/navyk.env (ANTHROPIC_API_KEY=...). Port 8100 is reserved for navyk in /etc/host/projects.
+# Secrets: /etc/navyk/navyk.env (ANTHROPIC_API_KEY, EMAIL_PROVIDER, EMAIL_API_KEY, PUBLIC_ORIGIN ...).
+# Port 8100 is reserved for navyk in /etc/host/projects.
+# Accounts database: named volume navyk-data → /data/navyk.sqlite (daily copies: deploy/backup.sh).
 name: navyk
 
 services:
@@ -8,6 +10,10 @@ services:
     image: navyk:latest
     restart: unless-stopped
     env_file: /etc/navyk/navyk.env
+    environment:
+      DATA_DIR: /data
+    volumes:
+      - navyk-data:/data
     # only reachable from the server itself; Caddy terminates HTTPS
     ports:
       - "127.0.0.1:${APP_PORT:-8100}:8080"
@@ -16,3 +22,8 @@ services:
     security_opt: ["no-new-privileges:true"]
     cap_drop: [ALL]
     mem_limit: 512m
+    # SIGTERM → the server finishes requests and closes the database
+    stop_grace_period: 15s
+
+volumes:
+  navyk-data:

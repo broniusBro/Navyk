@@ -1,29 +1,40 @@
-// Home: levels -> modules -> lessons as a zigzag path, with daily goal and repeat cards.
+// Home: levels -> modules -> lessons as a zigzag path joined by one continuous "road".
+// Module headers stand on the road like signposts. The road is an SVG overlay computed from the
+// real positions of the circles (engine/road.js), recomputed on resize and font load.
 
 import { h, icon } from "./dom.js";
 import { t, getLang } from "./i18n.js";
-import { langPicker, statChips, footer, wordmark } from "./chrome.js";
+import { langPicker, statChips, footer, wordmark, accountButton } from "./chrome.js";
+import { popIn, drawStroke, reduced } from "./motion.js";
 import { localized, pathStatus } from "../engine/course.js";
+import { canOpenLesson } from "../engine/auth.js";
+import { splitRoad, travelledIndex } from "../engine/road.js";
+
+const SVG = "http://www.w3.org/2000/svg";
 
 /**
- * renderPath({ course, available: Set|null, progress, streak, activeToday, due, onOpen(lessonId), onReview() })
- * available === null means "still checking".
+ * renderPath({ course, available: Set|null, progress, streak, activeToday, due, user, animate,
+ *              onOpen(lesson), onReview(), onAccount() })
+ * available === null means "still checking". animate: play the entrance (nodes pop in, road draws).
  */
 export function renderPath(p) {
   const lang = getLang();
   const completed = new Set(Object.keys(p.progress.lessons));
   const status = p.course ? pathStatus(p.course, p.available ?? new Set(), completed) : {};
+  const signedIn = Boolean(p.user);
 
-  const top = h("header.topbar", wordmark(), statChips({ xp: p.progress.xp, streak: p.streak, activeToday: p.activeToday }), langPicker());
+  const top = h("header.topbar", wordmark(), statChips({ xp: p.progress.xp, streak: p.streak, activeToday: p.activeToday }), langPicker(), accountButton(p.user, p.onAccount));
 
   const main = h("main.path", { id: "main" });
   main.append(h("h1.path__title.sr-only", { tabindex: "-1" }, t("path.title")));
   main.append(dayCards(p));
+  if (!signedIn && completed.size > 0) main.append(saveBanner(p));
 
   if (!p.course) {
     main.append(h("p.alert.alert--info", { role: "status" }, t(p.loading ? "path.loading" : "path.offline")));
   } else {
     if (p.available === null) main.append(h("p.path__checking", { role: "status" }, t("path.checking")));
+    const road = h("div.road");
     let side = 0;
     for (const level of p.course.levels ?? []) {
       const levelTitle = localized(level.title, lang);
@@ -33,17 +44,20 @@ export function renderPath(p) {
         const items = mod.lessons.map((lesson) => {
           const st = status[lesson.id] ?? "soon";
           const pos = st === "current" ? "c" : side++ % 2 ? "r" : "l";
-          return lessonNode(lesson, st, pos, lang, p.onOpen);
+          const gated = st !== "soon" && st !== "done" && !canOpenLesson(lesson, signedIn);
+          return lessonNode(lesson, st, pos, lang, gated, p.onOpen);
         });
         const doneCount = mod.lessons.filter((l) => completed.has(l.id)).length;
         const count = t("path.module_count", { done: doneCount, total: mod.lessons.length });
+        const allDone = doneCount === mod.lessons.length && doneCount > 0;
         levelEl.append(
           h(
             "section.module",
             h(
-              "header.module__head",
+              `header.module__head${allDone ? ".is-done" : ""}`,
+              { data: { road: "sign" } },
               h("p.module__kicker", t("path.module_kicker", { level: levelTitle, n: mi + 1, total: mods.length })),
-              h("h3.module__title", h("span.hl.hl--ok", localized(mod.title, lang))),
+              h("h3.module__title", localized(mod.title, lang)),
               h(
                 "p.segments",
                 { role: "img", aria: { label: count } },
@@ -54,8 +68,10 @@ export function renderPath(p) {
           ),
         );
       });
-      main.append(levelEl);
+      road.append(levelEl);
     }
+    mountRoad(road, { animate: p.animate });
+    main.append(road);
   }
   return h("div.screen.screen--path", top, main, footer());
 }
@@ -74,15 +90,95 @@ function dayCards(p) {
   return h("div.daycards", goal, repeat);
 }
 
-function lessonNode(lesson, st, pos, lang, onOpen) {
+/** Logged out with some progress: gentle reminder that it lives only on this device. */
+function saveBanner(p) {
+  return h(
+    "div.save-banner",
+    icon("cloud", "icon save-banner__icon"),
+    h("p.save-banner__text", t("path.save_progress")),
+    h("a.btn.btn--small.btn--ghost.save-banner__btn", { href: "#/register" }, t("path.save_progress_cta")),
+  );
+}
+
+function lessonNode(lesson, st, pos, lang, gated, onOpen) {
   const title = localized(lesson.title, lang);
   const playable = st !== "soon";
   const glyph = st === "done" ? icon("check", "icon node__icon") : st === "soon" ? icon("lock", "icon node__icon") : icon("play", "icon node__icon");
-  const label = h("span.node__label", h("span.node__title", title), h("span.node__meta.sr-only", t(`path.status_${st}`)));
-  const sticker = st === "current" ? h("span.sticker", { aria: { hidden: "true" } }, t("path.you_are_here")) : null;
-  const inner = [sticker, h("span.node__dot", glyph), label];
+  const statusText = t(`path.status_${st}`);
+  const label = h("span.node__label", h("span.node__title", title), gated ? h("span.node__meta", icon("user"), h("span", t("path.needs_account"))) : null);
+  const sticker = st === "current" ? h("span.sticker.node__sticker", { aria: { hidden: "true" } }, t("path.you_are_here")) : null;
+  const badge = gated ? h("span.node__badge", { aria: { hidden: "true" } }, icon("user")) : null;
+  const inner = [sticker, h("span.node__dot", { data: { road: st } }, glyph, badge), label];
+  const aria = `${title}. ${statusText}${gated ? `. ${t("path.needs_account")}` : ""}`;
   const el = playable
-    ? h(`button.node.node--${st}`, { type: "button", onclick: () => onOpen(lesson.id), aria: { label: `${title}. ${t(`path.status_${st}`)}` } }, inner)
+    ? h(`button.node.node--${st}${gated ? ".node--gated" : ""}`, { type: "button", onclick: () => onOpen(lesson), aria: { label: aria } }, inner)
     : h(`div.node.node--${st}`, { aria: { disabled: "true", label: `${title}. ${t("path.status_soon")}` }, role: "group" }, inner);
   return h(`li.nodes__item.nodes__item--${pos}${lesson.checkpoint ? ".nodes__item--checkpoint" : ""}`, el);
+}
+
+// ---- the road ---------------------------------------------------------------------------------
+
+function svgEl(tag, attrs) {
+  const el = document.createElementNS(SVG, tag);
+  for (const [k, v] of Object.entries(attrs)) el.setAttribute(k, v);
+  return el;
+}
+
+/**
+ * Draw the road behind the content of `road` once it is in the document, and keep it in sync with
+ * layout changes. The first draw can animate (pop-in + travelled part draws itself).
+ */
+function mountRoad(road, { animate }) {
+  const svg = svgEl("svg", { class: "road__svg", "aria-hidden": "true", focusable: "false" });
+  const todo = svgEl("path", { class: "road__todo" });
+  const doneEdge = svgEl("path", { class: "road__done-edge" });
+  const done = svgEl("path", { class: "road__done" });
+  svg.append(todo, doneEdge, done);
+  road.prepend(svg);
+
+  let first = true;
+  let lastKey = "";
+  const draw = () => {
+    if (!road.isConnected) return false;
+    const box = road.getBoundingClientRect();
+    if (!box.width) return true;
+    const stops = [...road.querySelectorAll("[data-road]")];
+    const points = stops.map((el) => {
+      const r = el.getBoundingClientRect();
+      // signposts: the road meets the card's top edge centre and leaves from the bottom centre
+      return { x: r.left + r.width / 2 - box.left, y: r.top + r.height / 2 - box.top };
+    });
+    const kinds = stops.map((el) => el.dataset.road);
+    const key = `${Math.round(box.width)}x${Math.round(box.height)}:${points.map((q) => `${Math.round(q.x)},${Math.round(q.y)}`).join(";")}`;
+    if (key === lastKey) return true;
+    lastKey = key;
+    svg.setAttribute("viewBox", `0 0 ${box.width} ${box.height}`);
+    svg.setAttribute("width", String(box.width));
+    svg.setAttribute("height", String(box.height));
+    const parts = splitRoad(points, travelledIndex(kinds));
+    todo.setAttribute("d", parts.todo);
+    done.setAttribute("d", parts.done);
+    doneEdge.setAttribute("d", parts.done);
+    if (first) {
+      first = false;
+      if (animate && !reduced()) {
+        popIn([...road.querySelectorAll(".node__dot, .module__head")]);
+        drawStroke(done, { duration: 1100, delay: 250 });
+        drawStroke(doneEdge, { duration: 1100, delay: 250 });
+        road.classList.add("is-entering");
+      }
+    }
+    return true;
+  };
+
+  if (typeof ResizeObserver === "function") {
+    const ro = new ResizeObserver(() => {
+      if (draw() === false) ro.disconnect();
+    });
+    ro.observe(road);
+  } else {
+    requestAnimationFrame(draw);
+    globalThis.addEventListener?.("resize", draw);
+  }
+  document.fonts?.ready?.then(() => road.isConnected && draw());
 }

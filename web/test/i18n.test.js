@@ -128,3 +128,20 @@ test("every i18n key used in UI code exists", () => {
     assert.ok(keys.has(k), k);
   }
 });
+
+test("service worker precaches every client module", () => {
+  const sw = readFileSync(join(webDir, "sw.js"), "utf8");
+  for (const f of jsFiles(join(webDir, "js"))) {
+    const rel = `./${f.slice(webDir.length).replace(/\\/g, "/").replace(/^\//, "")}`;
+    assert.ok(sw.includes(`"${rel}"`), `sw.js SHELL_FILES lacks ${rel}`);
+  }
+});
+
+test("auth error codes and screens have strings in every locale", () => {
+  for (const l of Object.keys(dicts)) {
+    for (const code of ["email_required", "invalid_email", "password_required", "weak_password", "password_mismatch", "invalid_credentials", "locked", "network", "generic"]) {
+      assert.ok(dicts[l].auth.error[code], `${l} auth.error.${code}`);
+    }
+    assert.match(dicts[l].auth.privacy_text, /Anthropic/, `${l}: privacy note mentions no affiliation`);
+  }
+});

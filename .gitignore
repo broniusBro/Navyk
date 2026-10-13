@@ -10,3 +10,7 @@ web-build/
 !.env.example
 content/dist/
 server/eval/results/*.json
+
+# SQLite data (accounts) — local dev
+server/data/
+data/

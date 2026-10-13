@@ -1,10 +1,17 @@
 import { test, before, after } from "node:test";
 import assert from "node:assert/strict";
 import type { AddressInfo } from "node:net";
+import { mkdtempSync, rmSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import { createApp } from "../src/http.ts";
 import { DailyLimiter } from "../src/limits.ts";
 
 delete process.env.ANTHROPIC_API_KEY;
+const dataDir = mkdtempSync(join(tmpdir(), "navyk-http-"));
+process.env.DATA_DIR = dataDir;
+process.env.PUBLIC_ORIGIN = "http://localhost:8080";
+const ORIGIN = "http://localhost:8080";
 const server = createApp();
 let base = "";
 
@@ -12,14 +19,19 @@ before(async () => {
   await new Promise<void>((r) => server.listen(0, r));
   base = `http://localhost:${(server.address() as AddressInfo).port}`;
 });
-after(() => server.close());
+after(() => {
+  server.close();
+  rmSync(dataDir, { recursive: true, force: true });
+});
 
 test("health and course", async () => {
-  assert.deepEqual(await (await fetch(`${base}/api/health`)).json(), { ok: true, reviewer: false });
+  assert.deepEqual(await (await fetch(`${base}/api/health`)).json(), { ok: true, reviewer: false, db: true });
   const course = await (await fetch(`${base}/api/course`)).json();
   assert.equal(course.levels[0].id, "beginner");
   assert.ok(course.available.uk.includes("b2.1"));
-  assert.ok(!course.available.ru.includes("b3.1"));
+  // every beginner lesson listed in course.json is built in all three languages
+  const ids = course.levels[0].modules.flatMap((m: any) => m.lessons.map((l: any) => l.id));
+  for (const lang of ["ru", "uk", "en"]) assert.deepEqual([...course.available[lang]].sort(), [...ids].sort());
 });
 
 test("lessons: existing, missing, bad language", async () => {
@@ -37,7 +49,7 @@ test("static files, SPA fallback, security headers", async () => {
 });
 
 const review = (body: unknown) =>
-  fetch(`${base}/api/review`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body) });
+  fetch(`${base}/api/review`, { method: "POST", headers: { "content-type": "application/json", origin: ORIGIN }, body: JSON.stringify(body) });
 
 test("review: validation and graceful 503 without API key", async () => {
   assert.equal((await review({ lessonId: "x" })).status, 400);
@@ -45,6 +57,11 @@ test("review: validation and graceful 503 without API key", async () => {
   const r = await review({ lessonId: "b2.1", exerciseId: "b2.1.e5", lang: "ru", prompt: "Напиши пост для Instagram про скидки", deviceId: "device-123456" });
   assert.equal(r.status, 503);
   assert.deepEqual(await r.json(), { error: "unavailable" });
+});
+
+test("review without Origin is rejected (CSRF)", async () => {
+  const r = await fetch(`${base}/api/review`, { method: "POST", headers: { "content-type": "application/json" }, body: "{}" });
+  assert.equal(r.status, 403);
 });
 
 test("daily limiter resets at UTC midnight", () => {

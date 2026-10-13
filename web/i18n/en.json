@@ -7,13 +7,17 @@
   },
   "common": {
     "next": "Continue",
-    "quote": "“{text}”"
+    "quote": "“{text}”",
+    "close": "Close"
   },
   "lang": {
     "label": "Language for the app and lessons",
     "ru": "Русский",
     "uk": "Українська",
-    "en": "English"
+    "en": "English",
+    "short_ru": "RU",
+    "short_uk": "UA",
+    "short_en": "EN"
   },
   "stats": {
     "streak_label": {
@@ -56,7 +60,10 @@
       "one": "{count} topic",
       "other": "{count} topics"
     },
-    "repeat_none": "Nothing to review yet"
+    "repeat_none": "Nothing to review yet",
+    "needs_account": "Account needed",
+    "save_progress": "Your progress lives only on this device. Create an account so you don't lose it.",
+    "save_progress_cta": "Save it"
   },
   "lesson": {
     "loading": "Opening the lesson…",
@@ -210,15 +217,33 @@
     "off_task": "Off task"
   },
   "criteria": {
-    "R1": { "name": "Goal" },
-    "R2": { "name": "Context" },
-    "R3": { "name": "Format" },
-    "R4": { "name": "Success criteria" },
-    "R5": { "name": "Steps" },
-    "R6": { "name": "Examples" },
-    "R7": { "name": "Structure" },
-    "R8": { "name": "Grounding" },
-    "R9": { "name": "Scope and safety" }
+    "R1": {
+      "name": "Goal"
+    },
+    "R2": {
+      "name": "Context"
+    },
+    "R3": {
+      "name": "Format"
+    },
+    "R4": {
+      "name": "Success criteria"
+    },
+    "R5": {
+      "name": "Steps"
+    },
+    "R6": {
+      "name": "Examples"
+    },
+    "R7": {
+      "name": "Structure"
+    },
+    "R8": {
+      "name": "Grounding"
+    },
+    "R9": {
+      "name": "Scope and safety"
+    }
   },
   "criteria_level": {
     "good": "Good",
@@ -250,5 +275,91 @@
     "title": "Review",
     "result": "Correct: {correct} of {total}",
     "unavailable": "We couldn't load the review tasks. Try again later."
+  },
+  "auth": {
+    "back": "Back",
+    "email": "Email",
+    "password": "Password",
+    "new_password": "New password",
+    "confirm_password": "Repeat password",
+    "show_password": "Show password",
+    "password_hint": {
+      "one": "At least {count} character",
+      "other": "At least {count} characters"
+    },
+    "password_hint_ok": "Long enough",
+    "login_title": "Welcome back!",
+    "login_lead": "Log in and your progress follows you to any device.",
+    "login_submit": "Log in",
+    "login_short": "Log in",
+    "forgot_link": "Forgot your password?",
+    "no_account": "No account yet?",
+    "register_link": "Sign up",
+    "have_account": "Already have an account?",
+    "login_link": "Log in",
+    "login_link_short": "Back to log in",
+    "register_title": "Save your progress",
+    "register_lead": "An account unlocks the whole course and keeps your streak, XP and reviews on every device.",
+    "register_submit": "Create account",
+    "consent_before": "By tapping “Create account” you agree to how we store your data.",
+    "privacy_link": "What do we store?",
+    "privacy_text": "Just your email and course progress: we need them to run the course and keep your progress safe. We don't sell data or send marketing emails. Navyk is an independent project, not affiliated with Anthropic.",
+    "check_title": "Check your inbox",
+    "check_lead_before": "We sent a link to",
+    "check_lead_after": ".",
+    "check_lead_generic": "We sent a confirmation link to your email.",
+    "check_step_open": "Open the email from Navyk.",
+    "check_step_click": "Tap the link and your account is ready.",
+    "check_step_spam": "Nothing after a couple of minutes? Check Spam or Promotions.",
+    "resend": "Send the email again",
+    "resent": "Done, we sent a new email. The old link no longer works.",
+    "wrong_email": "Typo in the address?",
+    "register_again": "Use another one",
+    "confirm_title": "Confirming your email",
+    "confirming": "One moment, checking the link…",
+    "confirmed_title": "Email confirmed!",
+    "confirmed_text": "Your account is ready and already has the progress from this device. The whole course is open.",
+    "to_path": "To the path",
+    "link_expired_title": "That link didn't work",
+    "link_expired_text": "It may have expired or been used already. Enter your email and we'll send a fresh one.",
+    "try_again": "Try again",
+    "forgot_title": "Let's get you back in",
+    "forgot_lead": "Enter the email you signed up with. We'll send you a link to set a new password.",
+    "forgot_submit": "Send link",
+    "forgot_sent_title": "On its way",
+    "forgot_sent_text": "If an account with {email} exists, we've sent a link to it. It's only valid for a limited time.",
+    "forgot_again": "Get a new link",
+    "reset_title": "New password",
+    "reset_lead": "Pick one you don't use on other sites.",
+    "reset_submit": "Save and log in",
+    "reset_expired_text": "This reset link has expired or was already used. Request a new one.",
+    "not_confirmed_title": "Email not confirmed yet",
+    "not_confirmed_text": "Find the email from Navyk and tap the link. Didn't get it? We'll send it again.",
+    "gate_title": "Save your progress and unlock the full course",
+    "gate_perk_course": "Every lesson, not just the free ones",
+    "gate_perk_sync": "Streak, XP and reviews on your phone and computer",
+    "gate_perk_keep": "Everything you've done so far stays with you",
+    "gate_register": "Create account",
+    "gate_login": "I already have an account",
+    "gate_note": "Free. All you need is an email.",
+    "account_title": "Account",
+    "account_label": "Account: {email}",
+    "signed_in_as": "Logged in as",
+    "synced_note": "Your progress is saved to your account and available on all your devices.",
+    "logout": "Log out",
+    "error": {
+      "email_required": "Enter your email.",
+      "invalid_email": "That address looks off. Example: name@mail.com",
+      "password_required": "Enter your password.",
+      "weak_password": "That password is too easy: use at least 8 characters, ideally a few words.",
+      "password_mismatch": "The passwords don't match.",
+      "invalid_credentials": "That email and password don't match. Check your keyboard layout and try again.",
+      "locked": {
+        "one": "Too many attempts. Try again in {count} minute.",
+        "other": "Too many attempts. Try again in {count} minutes."
+      },
+      "network": "Can't reach the server. Check your connection and try again.",
+      "generic": "Something went wrong. Please try again a bit later."
+    }
   }
 }

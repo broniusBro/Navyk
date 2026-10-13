@@ -8,6 +8,7 @@ import { validatePrompt, interpretReview, criterionLevel, MAX_PROMPT_CHARS } fro
 import { XP } from "../../engine/progress.js";
 import { requestReview } from "../../platform/api.js";
 import { copyText } from "../../platform/clipboard.js";
+import { burst } from "../motion.js";
 import { questionHeading, hintBox } from "./frame.js";
 
 export function renderPractice(ex, ctx) {
@@ -168,6 +169,7 @@ export function renderPractice(ex, ctx) {
     result.replaceChildren(...parts);
     result.querySelector(".alert, .verdict")?.setAttribute("tabindex", "-1");
     result.querySelector(".alert, .verdict")?.focus();
+    if (r.passed) setTimeout(() => burst(result.querySelector(".verdict__score") ?? result.querySelector(".verdict"), { count: 20, spread: 1.2 }), 120);
     ctx.setPrimary(t("common.next"), ctx.next);
     ctx.setSecondary(t("practice.try_again"), editAgain);
   }

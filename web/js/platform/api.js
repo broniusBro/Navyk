@@ -1,6 +1,6 @@
 // Client for the Navyk backend (same origin). The only network surface of the app.
 
-import { getJson, postJson } from "./http.js";
+import { getJson, postJson, request } from "./http.js";
 import { getItem, setItem } from "./storage.js";
 
 const lessonCache = new Map();
@@ -72,3 +72,19 @@ export async function probeAvailable(lang, ids, onUpdate, concurrency = 4) {
 export function requestReview({ lessonId, exerciseId, lang, prompt, deviceId }) {
   return postJson("/api/review", { lessonId, exerciseId, lang, prompt, deviceId }, { timeout: 45000 });
 }
+
+// ---- accounts and progress sync -----------------------------------------------------------
+// The session lives in an HttpOnly cookie set by the server; the client never sees a token.
+
+export const authMe = () => getJson("/api/auth/me");
+export const authRegister = ({ email, password, lang }) => postJson("/api/auth/register", { email, password, lang });
+export const authResend = ({ email }) => postJson("/api/auth/resend-confirmation", { email });
+export const authConfirm = ({ token }) => postJson("/api/auth/confirm", { token });
+export const authLogin = ({ email, password }) => postJson("/api/auth/login", { email, password });
+export const authForgot = ({ email, lang }) => postJson("/api/auth/forgot", { email, lang });
+export const authReset = ({ token, password }) => postJson("/api/auth/reset", { token, password });
+export const authLogout = () => postJson("/api/auth/logout", {});
+export const authUpdate = (patch) => request("/api/auth/me", { method: "PATCH", json: patch });
+
+export const getRemoteProgress = () => getJson("/api/progress");
+export const putRemoteProgress = (data, baseUpdatedAt) => request("/api/progress", { method: "PUT", json: { data, baseUpdatedAt } });

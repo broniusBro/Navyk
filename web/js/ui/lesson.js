@@ -2,6 +2,7 @@
 
 import { h, icon, markdown, focusFirst } from "./dom.js";
 import { t } from "./i18n.js";
+import { enter } from "./motion.js";
 import { renderExercise } from "./exercises/index.js";
 import { startSession, currentBlock, recordAttempt, recordPractice, next, isFinished, progressRatio } from "../engine/session.js";
 import { resolveDataRefs } from "../engine/course.js";
@@ -56,6 +57,7 @@ export function mountLesson(container, opts) {
       session = recordPractice(session, exerciseId, result);
     },
     next: () => advance(),
+    primaryButton: () => primary,
   };
 
   function confirmLeave() {
@@ -74,7 +76,7 @@ export function mountLesson(container, opts) {
   function show() {
     const block = currentBlock(session);
     const ratio = progressRatio(session);
-    bar.firstChild.style.width = `${Math.max(4, ratio * 100)}%`;
+    bar.firstChild.style.transform = `translateX(${-(100 - Math.max(4, ratio * 100))}%)`;
     bar.setAttribute("aria-valuenow", String(session.index + 1));
     bar.setAttribute("aria-valuetext", t("lesson.progress_text", { n: session.index + 1, total: session.blocks.length }));
     let el;
@@ -88,6 +90,7 @@ export function mountLesson(container, opts) {
       }
     }
     stage.replaceChildren(el);
+    enter(el, session.index > 0 ? 1 : 0);
     stage.scrollTop = 0;
     globalThis.scrollTo?.(0, 0);
     focusFirst(stage);
@@ -96,7 +99,7 @@ export function mountLesson(container, opts) {
   function advance() {
     session = next(session);
     if (isFinished(session)) {
-      bar.firstChild.style.width = "100%";
+      bar.firstChild.style.transform = "none";
       opts.onFinish(session);
       return;
     }

@@ -38,3 +38,12 @@ export function onConnectivityChange(cb) {
   globalThis.addEventListener?.("online", () => cb(true));
   globalThis.addEventListener?.("offline", () => cb(false));
 }
+
+/** User asked the OS for less motion. Expo: AccessibilityInfo.isReduceMotionEnabled(). */
+export function prefersReducedMotion() {
+  try {
+    return Boolean(globalThis.matchMedia?.("(prefers-reduced-motion: reduce)").matches);
+  } catch {
+    return false;
+  }
+}

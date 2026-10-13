@@ -1,7 +1,8 @@
-// App entry: routing between path, lesson, review and completion screens.
-// Routes (hash): #/  |  #/lesson/<id>  |  #/review
+// App entry: routing between path, lesson, review, completion and account screens.
+// Routes (hash): #/  |  #/lesson/<id>  |  #/review  |  #/login  |  #/register  |  #/check-email
+//                #/forgot  |  #/confirm/<token>  |  #/reset/<token>
 
-import { initI18n, t, getLang, onLangChange, applyStatic } from "./ui/i18n.js";
+import { initI18n, t, getLang, setLang, onLangChange, applyStatic } from "./ui/i18n.js";
 import { h } from "./ui/dom.js";
 import { footer } from "./ui/chrome.js";
 import { renderPath } from "./ui/path.js";
@@ -12,12 +13,17 @@ import { fetchCourse, fetchLesson, probeAvailable } from "./platform/api.js";
 import { deviceId, now, onConnectivityChange } from "./platform/device.js";
 import { registerServiceWorker } from "./platform/sw.js";
 import { dayKey } from "./engine/dates.js";
-import { flattenCourse, sourcesBlock, normalizeExercise } from "./engine/course.js";
+import { flattenCourse, sourcesBlock, normalizeExercise, localized, LANGS } from "./engine/course.js";
 import { completeLesson, streak, activeToday, dueItems, nextDue, applyReviews, pickReviewExercise } from "./engine/progress.js";
 import { sessionResults } from "./engine/session.js";
+import { canOpenLesson, parseTokenRoute } from "./engine/auth.js";
+import { enter } from "./ui/motion.js";
+import { closeSheet } from "./ui/sheet.js";
+import { initAccount, currentUser, isSignedIn, accountChecked, onAccountChange, progressChanged, updateLanguage } from "./ui/account.js";
+import { renderLogin, renderRegister, renderCheckEmail, renderConfirm, renderForgot, renderReset, openSignupSheet, openAccountSheet } from "./ui/auth.js";
 
 const app = document.getElementById("app");
-const state = { course: null, available: null, loading: true, devId: deviceId(), seed: shuffleSeed() };
+const state = { course: null, available: null, loading: true, devId: deviceId(), seed: shuffleSeed(), roadAnimated: false };
 let screenToken = 0;
 
 const today = () => dayKey(now());
@@ -43,25 +49,41 @@ function go(hash) {
 
 // ---- screens ----------------------------------------------------------------------------
 
-function showPath() {
+function openLesson(lesson) {
+  const hash = `#/lesson/${encodeURIComponent(lesson.id)}`;
+  if (canOpenLesson(lesson, isSignedIn()) || isCompleted(lesson.id)) return go(hash);
+  openSignupSheet({ go, lessonHash: hash, lessonTitle: localized(lesson.title, getLang()) });
+}
+
+const isCompleted = (id) => Boolean(getProgress().lessons[id]);
+
+function showPath({ refresh = false } = {}) {
   const p = getProgress();
   const d = today();
   setTitle("path.title");
   const due = dueItems(p.repeat, d).filter((it) => state.available === null || state.available.has(it.lessonId));
+  const ready = Boolean(state.course && state.available);
+  const animate = ready && !state.roadAnimated;
+  if (ready) state.roadAnimated = true;
+  const scroll = refresh ? globalThis.scrollY : 0;
   app.replaceChildren(
     renderPath({
       course: state.course,
       available: state.available,
       loading: state.loading,
       progress: p,
+      user: currentUser(),
+      animate,
       streak: streak(p.days, d),
       activeToday: activeToday(p.days, d),
       due: due.length,
-      onOpen: (id) => go(`#/lesson/${encodeURIComponent(id)}`),
+      onOpen: openLesson,
       onReview: () => go("#/review"),
+      onAccount: () => openAccountSheet({ go }),
     }),
   );
-  app.querySelector("h1")?.focus({ preventScroll: true });
+  if (refresh) globalThis.scrollTo?.(0, scroll);
+  else app.querySelector("h1")?.focus({ preventScroll: true });
 }
 
 async function showLesson(lessonId, token) {
@@ -70,6 +92,13 @@ async function showLesson(lessonId, token) {
   const lesson = await fetchLesson(lang, lessonId);
   if (token !== screenToken) return;
   if (!lesson) return showError("lesson.not_found");
+  if (!canOpenLesson(lesson.meta, isSignedIn()) && !isCompleted(lessonId)) {
+    // deep link to a members-only lesson: back to the path with the friendly sign-up sheet
+    history.replaceState(null, "", "#/");
+    showPath();
+    openSignupSheet({ go, lessonHash: `#/lesson/${encodeURIComponent(lessonId)}`, lessonTitle: lesson.meta.title });
+    return;
+  }
   setTitle("lesson.doc_title", { title: lesson.meta.title });
   mountLesson(app, {
     lesson,
@@ -81,6 +110,7 @@ async function showLesson(lessonId, token) {
     onFinish: (session) => {
       const r = completeLesson(getProgress(), { lessonId, results: sessionResults(session), meta: lesson.meta, today: today() });
       saveProgress(r.progress);
+      progressChanged();
       const src = sourcesBlock(lesson);
       setTitle("complete.title");
       app.replaceChildren(
@@ -137,6 +167,7 @@ async function showReview(token) {
       const streakBefore = streak(next.days, d);
       next = { ...next, xp: next.xp + xp };
       saveProgress(next);
+      progressChanged();
       app.replaceChildren(
         renderComplete({
           isReview: true,
@@ -156,12 +187,35 @@ async function showReview(token) {
 
 // ---- routing ----------------------------------------------------------------------------
 
+const AUTH_SCREENS = {
+  "#/login": [renderLogin, "auth.login_title"],
+  "#/register": [renderRegister, "auth.register_title"],
+  "#/check-email": [renderCheckEmail, "auth.check_title"],
+  "#/forgot": [renderForgot, "auth.forgot_title"],
+};
+
+function showScreen(el, titleKey) {
+  setTitle(titleKey);
+  app.replaceChildren(el);
+  enter(el, 0);
+}
+
 function route() {
   const token = ++screenToken;
+  closeSheet();
   const hash = location.hash || "#/";
   const lessonMatch = /^#\/lesson\/([\w.-]+)$/.exec(hash);
   if (lessonMatch) return showLesson(decodeURIComponent(lessonMatch[1]), token);
   if (hash === "#/review") return showReview(token);
+  const tokenRoute = parseTokenRoute(hash);
+  if (tokenRoute?.kind === "confirm") return showScreen(renderConfirm({ token: tokenRoute.token, go }), "auth.confirm_title");
+  if (tokenRoute?.kind === "reset") return showScreen(renderReset({ token: tokenRoute.token, go }), "auth.reset_title");
+  const screen = AUTH_SCREENS[hash];
+  if (screen) {
+    // redirect only once the server confirmed the session (a cached user may be stale: expired or logged out elsewhere)
+    if (isSignedIn() && accountChecked() && hash !== "#/check-email") return go("#/");
+    return showScreen(screen[0]({ go }), screen[1]);
+  }
   return showPath();
 }
 
@@ -184,19 +238,28 @@ async function refreshAvailability() {
   await probeAvailable(lang, ids, (set) => {
     if (lang !== getLang()) return;
     state.available = set;
-    if (isPathVisible()) showPath();
+    if (isPathVisible()) showPath({ refresh: state.roadAnimated });
   });
 }
 
-const isPathVisible = () => !/^#\/(lesson|review)/.test(location.hash);
+const isPathVisible = () => location.hash === "" || location.hash === "#/" || location.hash === "#";
 
 async function main() {
   await initI18n();
   applyStatic(document);
-  onLangChange(() => {
+  onLangChange((lang) => {
     state.available = null;
+    updateLanguage(lang);
     if (isPathVisible()) showPath();
+    else if (AUTH_SCREENS[location.hash]) route();
     refreshAvailability();
+  });
+  onAccountChange(({ user, reason }) => {
+    // language comes from the account
+    if (reason === "user" && user?.lang && LANGS.includes(user.lang) && user.lang !== getLang()) setLang(user.lang);
+    // a confirmed session makes the login/register/forgot screens pointless
+    if (reason === "user" && user && AUTH_SCREENS[location.hash] && location.hash !== "#/check-email") return go("#/");
+    if (isPathVisible()) showPath({ refresh: true });
   });
   globalThis.addEventListener("hashchange", route);
   onConnectivityChange((online) => {
@@ -205,6 +268,7 @@ async function main() {
   });
   route();
   loadCourse();
+  initAccount();
   registerServiceWorker();
 }
 

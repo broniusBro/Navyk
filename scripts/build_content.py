@@ -22,6 +22,38 @@ TYPES = course["exercise_types"]
 COURSE_LESSONS = {l["id"]: l for lvl in course["levels"] for m in lvl["modules"] for l in m["lessons"]}
 RUBRIC_IDS = {c["id"] for c in json.loads((CONTENT / "reviewer" / "rubric.json").read_text())["criteria"]}
 
+UI_DATA = json.loads((CONTENT / "data" / "ui.json").read_text(encoding="utf-8"))
+DATA_RE = re.compile(r"\{\{\s*data\.([a-z_]+)\.([a-z_]+)\s*\}\}")
+
+
+def data_value(section: str, key: str, lang: str, markdown: bool, where: str) -> str:
+    """Значение {{data.section.key}} для языка урока. В Markdown-блоках название элемента выделяется жирным."""
+    v = UI_DATA.get(section, {}).get(key)
+    if v is None:
+        err(where, f"нет значения для {{{{data.{section}.{key}}}}} в content/data/ui.json")
+        return key
+    if "label" in v:
+        label = f"**{v['label']}**" if markdown else v["label"]
+        hint = (v.get("hint") or {}).get(lang, "")
+        return f"{label} ({hint})" if hint else label
+    if lang not in v:
+        err(where, f"нет перевода {lang} для data.{section}.{key}")
+        return key
+    return v[lang]
+
+
+def resolve_data(node, lang: str, where: str, markdown: bool = False):
+    """Подставляет {{data.*}} во все строки урока (шапка, шаги, упражнения)."""
+    if isinstance(node, str):
+        return DATA_RE.sub(lambda m: data_value(m.group(1), m.group(2), lang, markdown, where), node)
+    if isinstance(node, list):
+        return [resolve_data(x, lang, where, markdown) for x in node]
+    if isinstance(node, dict):
+        md = markdown or node.get("kind") in ("step", "sources")
+        return {k: resolve_data(v, lang, where, md and k == "markdown") for k, v in node.items()}
+    return node
+
+
 BLOCK_RE = re.compile(r"^::: *(\w+)(?: +(\w+))?\s*\n(.*?)^:::\s*$", re.S | re.M)
 errors: list[str] = []
 
@@ -119,6 +151,7 @@ def main() -> int:
         lesson = parse_lesson(path)
         if not lesson:
             continue
+        lesson = resolve_data(lesson, lang, where)
         meta = lesson["meta"]
         if meta.get("id") != lesson_id or meta.get("lang") != lang:
             err(where, "id/lang в шапке не совпадают с именем файла")

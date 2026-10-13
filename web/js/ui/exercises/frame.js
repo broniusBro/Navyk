@@ -5,6 +5,7 @@
 import { h, icon } from "../dom.js";
 import { t } from "../i18n.js";
 import { check, canCheck } from "../../engine/exercises.js";
+import { burst, shake, reduced } from "../motion.js";
 
 export function questionHeading(ex) {
   return [h("p.ex__tag", t(`exercise.type.${ex.type}`)), h("h2.ex__question", { tabindex: "-1", data: { autofocus: "1" } }, ex.question)];
@@ -32,6 +33,14 @@ export function whyNote(text, kind = "info", lead = null) {
   return h(`p.why.why--${kind}`, lead ? h("strong.why__lead", lead) : null, lead && text ? " " : null, text ?? "");
 }
 
+/** Scroll so that el is not hidden under the sticky action bar at the bottom of the lesson. */
+function revealAboveBar(el) {
+  const bar = document.querySelector(".lesson__bar");
+  const limit = (globalThis.innerHeight ?? 0) - (bar?.getBoundingClientRect().height ?? 0) - 12;
+  const over = el.getBoundingClientRect().bottom - limit;
+  if (over > 0) globalThis.scrollBy?.({ top: over, behavior: reduced() ? "auto" : "smooth" });
+}
+
 export function mountAutoExercise(ex, ctx, impl) {
   const feedback = h("div.feedback", { role: "status", aria: { live: "polite" } });
   const root = h("section.ex", { data: { type: ex.type } }, questionHeading(ex), impl.el, feedback, hintBox(ex));
@@ -51,6 +60,16 @@ export function mountAutoExercise(ex, ctx, impl) {
     feedback.replaceChildren(icon(correct ? "check" : "cross", "icon feedback__icon"), h("p.feedback__title", title));
   }
 
+  /** Correct: green flash on the answer + confetti from the check button. Wrong: a short shake. */
+  function celebrate(correct) {
+    root.classList.remove("is-correct", "is-wrong");
+    void root.offsetWidth; // restart the CSS animation on a second success
+    root.classList.add(correct ? "is-correct" : "is-wrong");
+    if (correct) burst(ctx.primaryButton?.() ?? feedback, { count: 14 });
+    else shake(impl.el);
+    revealAboveBar(feedback);
+  }
+
   function doCheck() {
     const answer = impl.answer();
     if (!canCheck(ex, answer)) return;
@@ -59,6 +78,7 @@ export function mountAutoExercise(ex, ctx, impl) {
     state = outcome.done ? "done" : "retry";
     impl.showResult(result, { reveal: outcome.reveal });
     showFeedback(result.correct, outcome);
+    celebrate(result.correct);
     if (outcome.canRetry) {
       ctx.setPrimary(t("exercise.retry"), () => {
         state = "answering";
