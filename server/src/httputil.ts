@@ -72,6 +72,31 @@ export function log(entry: Record<string, unknown>) {
   console.log(JSON.stringify({ t: new Date().toISOString(), ...entry }));
 }
 
+let derivedOrigin: string | null = null;
+
+/** Адрес сайта для ссылок в письмах: PUBLIC_ORIGIN, иначе адрес, с которого реально пришёл браузер (см. isSameSite). */
 export function publicOrigin(): string {
-  return (process.env.PUBLIC_ORIGIN ?? "http://localhost:8080").replace(/\/+$/, "");
+  return (process.env.PUBLIC_ORIGIN ?? derivedOrigin ?? "http://localhost:8080").replace(/\/+$/, "");
+}
+
+/**
+ * CSRF: изменяющий запрос принимается только со своего сайта.
+ * Если PUBLIC_ORIGIN задан — сравниваем с ним. Если нет (сервер, обновлённый без этой настройки),
+ * сравниваем Origin с Host запроса: чужой сайт не может подделать оба заголовка в браузере.
+ */
+export function isSameSite(origin: string | undefined, host: string | undefined): boolean {
+  if (!origin) return false;
+  const configured = process.env.PUBLIC_ORIGIN?.replace(/\/+$/, "");
+  if (configured) return origin === configured;
+  if (!host) return false;
+  let u: URL;
+  try {
+    u = new URL(origin);
+  } catch {
+    return false;
+  }
+  const local = /^(localhost|127\.0\.0\.1)(:\d+)?$/.test(host);
+  const ok = u.host === host && (u.protocol === "https:" || (local && u.protocol === "http:"));
+  if (ok && !derivedOrigin && u.protocol === "https:") derivedOrigin = u.origin;
+  return ok;
 }

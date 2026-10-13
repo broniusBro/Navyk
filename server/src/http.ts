@@ -8,7 +8,7 @@ import { fileURLToPath } from "node:url";
 import { reviewPrompt, ReviewError, MAX_CHARS, type ReviewOptions } from "./reviewer/review.ts";
 import { loadReviewContext } from "./reviewer/lesson.ts";
 import { DailyLimiter } from "./limits.ts";
-import { send, readJsonBody, clientIp, log, publicOrigin } from "./httputil.ts";
+import { send, readJsonBody, clientIp, log, isSameSite } from "./httputil.ts";
 import { openDb, dbHealthy, cleanup, type Db } from "./db.ts";
 import { createAuth } from "./auth/routes.ts";
 
@@ -168,14 +168,13 @@ export function createApp(opts: AppOptions = {}) {
     sweep();
     setInterval(sweep, 6 * 3600_000).unref();
   }
-  const origin = publicOrigin();
 
   const server = createServer(async (req, res) => {
     const url = new URL(req.url ?? "/", "http://localhost");
     const p = url.pathname;
     try {
       // CSRF: любой изменяющий запрос к API — только со своего сайта (заголовок Origin обязателен).
-      if (p.startsWith("/api/") && !SAFE_METHODS.has(req.method ?? "GET") && req.headers.origin !== origin) {
+      if (p.startsWith("/api/") && !SAFE_METHODS.has(req.method ?? "GET") && !isSameSite(req.headers.origin, req.headers.host)) {
         return send(res, 403, { error: "forbidden_origin" });
       }
       if (req.method === "GET" && p === "/api/health")

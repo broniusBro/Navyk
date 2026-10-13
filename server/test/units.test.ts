@@ -203,3 +203,18 @@ test("window limiter", () => {
   assert.equal(l.hit("b", 2), 0);
   assert.equal(l.hit("a", 60_001), 0);
 });
+
+test("same-site check without PUBLIC_ORIGIN compares Origin with Host", async () => {
+  const { isSameSite } = await import("../src/httputil.ts");
+  const saved = process.env.PUBLIC_ORIGIN;
+  delete process.env.PUBLIC_ORIGIN;
+  try {
+    assert.equal(isSameSite("https://navyk.app", "navyk.app"), true);
+    assert.equal(isSameSite("https://evil.example", "navyk.app"), false);
+    assert.equal(isSameSite("http://navyk.app", "navyk.app"), false);
+    assert.equal(isSameSite(undefined, "navyk.app"), false);
+    assert.equal(isSameSite("http://localhost:8080", "localhost:8080"), true);
+  } finally {
+    if (saved !== undefined) process.env.PUBLIC_ORIGIN = saved;
+  }
+});
