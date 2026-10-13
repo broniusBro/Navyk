@@ -1,4 +1,4 @@
-// Home: levels -> modules -> lessons as a zigzag path joined by one continuous "road".
+// Home: levels -> modules -> lessons as a winding path joined by one continuous "road".
 // Module headers stand on the road like signposts. The road is an SVG overlay computed from the
 // real positions of the circles (engine/road.js), recomputed on resize and font load.
 
@@ -8,7 +8,7 @@ import { langPicker, statChips, footer, wordmark, accountButton } from "./chrome
 import { popIn, drawStroke, reduced } from "./motion.js";
 import { localized, pathStatus } from "../engine/course.js";
 import { canOpenLesson } from "../engine/auth.js";
-import { splitRoad, travelledIndex } from "../engine/road.js";
+import { splitRoad, travelledIndex, waveOffset } from "../engine/road.js";
 
 const SVG = "http://www.w3.org/2000/svg";
 
@@ -35,17 +35,15 @@ export function renderPath(p) {
   } else {
     if (p.available === null) main.append(h("p.path__checking", { role: "status" }, t("path.checking")));
     const road = h("div.road");
-    let side = 0;
     for (const level of p.course.levels ?? []) {
       const levelTitle = localized(level.title, lang);
       const levelEl = h("section.level", h("h2.level__title.sr-only", levelTitle));
       const mods = level.modules ?? [];
       mods.forEach((mod, mi) => {
-        const items = mod.lessons.map((lesson) => {
+        const items = mod.lessons.map((lesson, li) => {
           const st = status[lesson.id] ?? "soon";
-          const pos = st === "current" ? "c" : side++ % 2 ? "r" : "l";
           const gated = st !== "soon" && st !== "done" && !canOpenLesson(lesson, signedIn);
-          return lessonNode(lesson, st, pos, lang, gated, p.onOpen);
+          return lessonNode(lesson, st, waveOffset(li, mi), lang, gated, p.onOpen);
         });
         const doneCount = mod.lessons.filter((l) => completed.has(l.id)).length;
         const count = t("path.module_count", { done: doneCount, total: mod.lessons.length });
@@ -100,7 +98,7 @@ function saveBanner(p) {
   );
 }
 
-function lessonNode(lesson, st, pos, lang, gated, onOpen) {
+function lessonNode(lesson, st, wave, lang, gated, onOpen) {
   const title = localized(lesson.title, lang);
   const playable = st !== "soon";
   const glyph = st === "done" ? icon("check", "icon node__icon") : st === "soon" ? icon("lock", "icon node__icon") : icon("play", "icon node__icon");
@@ -113,7 +111,9 @@ function lessonNode(lesson, st, pos, lang, gated, onOpen) {
   const el = playable
     ? h(`button.node.node--${st}${gated ? ".node--gated" : ""}`, { type: "button", onclick: () => onOpen(lesson), aria: { label: aria } }, inner)
     : h(`div.node.node--${st}`, { aria: { disabled: "true", label: `${title}. ${t("path.status_soon")}` }, role: "group" }, inner);
-  return h(`li.nodes__item.nodes__item--${pos}${lesson.checkpoint ? ".nodes__item--checkpoint" : ""}`, el);
+  // --wave in [-1, 1]: how far the lesson sits from the centre line; CSS turns it into a shift.
+  el.style.setProperty("--wave", String(wave));
+  return h(`li.nodes__item${lesson.checkpoint ? ".nodes__item--checkpoint" : ""}`, el);
 }
 
 // ---- the road ---------------------------------------------------------------------------------

@@ -15,7 +15,7 @@ import { createAuth } from "./auth/routes.ts";
 const ROOT = fileURLToPath(new URL("../../", import.meta.url));
 const WEB = join(ROOT, "web");
 const DIST = join(ROOT, "content", "dist");
-const LANGS = new Set(["ru", "uk", "en"]);
+const LANGS = new Set(["ru", "uk", "en", "pl"]);
 const ID_RE = /^[a-z]\d+\.\d+$/;
 const EX_RE = /^[a-z]\d+\.\d+\.e\d+$/;
 

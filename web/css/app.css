@@ -236,20 +236,57 @@ strong, b { font-weight: 800; }
 .stat--xp .icon { display: none; }
 .stat__unit { font-weight: 800; }
 
-.lang__select {
-  min-height: var(--touch); max-width: 9rem; padding: 0 0.4rem;
-  border-radius: var(--r-chip); border: var(--bw) solid var(--border);
-  background: var(--surface); font-size: var(--fs-small); font-weight: 700;
-}
-/* compact chip: the real <select> lies transparently on top, so the system picker opens on tap */
-.lang--compact { position: relative; flex: none; width: var(--touch); height: var(--touch); display: grid; place-items: center; }
+/* language picker: chip + a small notebook card (ui/chrome.js) */
+.lang { position: relative; flex: none; }
 .lang__chip {
-  display: grid; place-items: center; width: 40px; height: 36px; border-radius: var(--r-chip);
-  border: var(--bw) solid var(--border); background: var(--surface); font-size: var(--fs-caption); font-weight: 900; letter-spacing: 0.02em;
+  display: grid; place-items: center; width: var(--touch); height: var(--touch); padding: 0; margin: 0;
+  border: 0; background: none; color: var(--ink); cursor: pointer; font: inherit;
+  font-size: var(--fs-caption); font-weight: 900; letter-spacing: 0.02em;
 }
-.lang--compact .lang__select { position: absolute; inset: 0; width: 100%; max-width: none; opacity: 0.001; cursor: pointer; font-size: 16px; }
-.lang--compact:focus-within .lang__chip { outline: 3px solid var(--focus-ring); outline-offset: 2px; }
-.lang--full { display: flex; flex-direction: column; gap: 6px; }
+.lang__chip::before {
+  content: ""; position: absolute; left: 2px; top: 4px; width: 40px; height: 36px; z-index: -1;
+  border-radius: var(--r-chip); border: var(--bw) solid var(--border); background: var(--surface);
+  box-shadow: 0 3px 0 var(--border); transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+.lang__chip { position: relative; z-index: 0; }
+.lang__chip:active::before, .lang.is-open .lang__chip::before { transform: translateY(2px); box-shadow: 0 1px 0 var(--border); background: var(--highlight); }
+.lang__chip:focus-visible { outline: none; }
+.lang__chip:focus-visible::before { outline: 3px solid var(--focus-ring); outline-offset: 2px; }
+
+.lang-menu {
+  position: absolute; right: 0; top: calc(100% + 8px); z-index: 30; width: 236px; padding: 12px 10px 10px;
+  background: var(--paper-pattern); border: var(--bw) solid var(--border); border-radius: var(--r-card);
+  box-shadow: var(--press-card); transform-origin: top right;
+}
+.lang-menu[hidden] { display: none; }
+.lang-menu::before { /* little tab pointing at the chip */
+  content: ""; position: absolute; right: 16px; top: -8px; width: 12px; height: 12px; transform: rotate(45deg);
+  background: var(--paper); border-left: var(--bw) solid var(--border); border-top: var(--bw) solid var(--border);
+}
+.lang-menu__title { margin: 0 6px 8px; font-size: var(--fs-caption); font-weight: 800; color: var(--ink-muted); }
+.lang-menu__list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.lang-menu__option {
+  display: flex; align-items: center; gap: 10px; min-height: var(--touch); padding: 6px 10px 6px 6px;
+  border: var(--bw) solid transparent; border-radius: var(--r-control); cursor: pointer;
+  font-weight: 800; background: var(--surface);
+}
+.lang-menu__option:hover { border-color: var(--border-soft); }
+.lang-menu__option:focus-visible { outline: 3px solid var(--focus-ring); outline-offset: 1px; }
+.lang-menu__option.is-current { border-color: var(--border); background: var(--highlight); }
+.lang-menu__code {
+  display: grid; place-items: center; flex: none; width: 34px; height: 30px; border-radius: 10px;
+  border: var(--bw) solid var(--border); font-size: var(--fs-caption); font-weight: 900; letter-spacing: 0.02em;
+}
+.lang-menu__code--ru { background: var(--info); }
+.lang-menu__code--uk { background: var(--highlight); }
+.lang-menu__code--en { background: var(--success); }
+.lang-menu__code--pl { background: var(--streak); }
+.lang-menu__name { flex: 1; }
+.lang-menu__check { width: 20px; height: 20px; stroke-width: 3; }
+@media (prefers-reduced-motion: no-preference) {
+  .lang.is-open .lang-menu { animation: lang-pop 0.18s cubic-bezier(0.2, 0.9, 0.3, 1.3) both; }
+  @keyframes lang-pop { from { opacity: 0; transform: translateY(-6px) scale(0.92); } to { opacity: 1; transform: none; } }
+}
 
 .avatar-btn {
   flex: none; display: grid; place-items: center; width: var(--touch); height: var(--touch);
@@ -285,7 +322,11 @@ strong, b { font-weight: 800; }
 .path__checking { color: var(--ink-muted); font-size: var(--fs-small); margin-bottom: var(--s-l); }
 
 /* the road: one SVG line behind every node and signpost (geometry in engine/road.js) */
-.road { position: relative; padding-bottom: var(--s-xl); }
+.road {
+  position: relative; padding-bottom: var(--s-xl);
+  /* lessons swing left and right of the centre line by up to --amp (keeps a 184px node inside the column) */
+  container-type: inline-size; --amp: clamp(0px, (100cqw - 176px) / 2, 130px);
+}
 .road__svg { position: absolute; left: 0; top: 0; z-index: 0; overflow: visible; pointer-events: none; }
 .road__svg path { fill: none; stroke-linecap: round; stroke-linejoin: round; }
 .road__todo { stroke: var(--ink-soft); stroke-width: 4; stroke-dasharray: 2 13; }
@@ -322,22 +363,16 @@ strong, b { font-weight: 800; }
 .save-banner__text { flex: 1; font-size: var(--fs-small); font-weight: 700; line-height: 1.35; }
 .save-banner__btn { flex: none; }
 
-/* the path: snake layout like the artboard; label beside the circle, current node centred */
-.nodes { list-style: none; margin: 0; padding: 0 0 var(--s-s); display: flex; flex-direction: column; gap: 22px; }
-.nodes__item { display: flex; }
-.nodes__item--l { justify-content: flex-start; padding-left: 36px; }
-.nodes__item--l:nth-child(4n + 1) { padding-left: 56px; }
-.nodes__item--r { justify-content: flex-end; padding-right: 26px; }
-.nodes__item--r:nth-child(4n + 2) { padding-right: 46px; }
-.nodes__item--c { justify-content: center; padding: var(--s-s) 0; }
+/* the path: lessons on a smooth wave (--wave from engine/road.js), title centred under each circle */
+.nodes { list-style: none; margin: 0; padding: 0 0 var(--s-s); display: flex; flex-direction: column; gap: 30px; }
+.nodes__item { display: flex; justify-content: center; }
 
 .node {
-  display: flex; align-items: center; gap: var(--s-m);
-  max-width: 100%; padding: 0; margin: 0;
-  background: none; border: 0; color: var(--ink); text-align: left;
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  width: 176px; max-width: 100%; padding: 0; margin: 0;
+  background: none; border: 0; color: var(--ink); text-align: center;
+  transform: translateX(calc(var(--wave, 0) * var(--amp, 0px)));
 }
-.nodes__item--r .node { flex-direction: row-reverse; text-align: right; }
-.nodes__item--c .node { flex-direction: column; gap: 6px; text-align: center; }
 button.node { cursor: pointer; }
 .node__dot {
   flex: none; display: grid; place-items: center;
@@ -348,12 +383,14 @@ button.node { cursor: pointer; }
 .node__icon { width: 26px; height: 26px; }
 .node__dot { position: relative; }
 .node__label {
-  display: flex; flex-direction: column; min-width: 0; padding: 2px 6px; border-radius: 10px;
-  background: var(--paper); /* keeps the title readable where the road passes under it */
+  display: flex; flex-direction: column; align-items: center; min-width: 0; max-width: 100%; padding: 5px 10px 6px;
+  /* a little signboard: the road visibly runs under it instead of vanishing behind the text */
+  background: var(--surface); border: var(--bw) solid var(--border-soft); border-radius: 12px;
 }
+.node--current .node__label { border-color: var(--border); box-shadow: 0 3px 0 var(--border); }
+.node--soon .node__label { border-style: dashed; background: var(--paper); }
 .node__title { font-size: 0.9375rem; font-weight: 800; line-height: 1.25; }
 .node__meta { display: inline-flex; align-items: center; gap: 4px; margin-top: 2px; font-size: var(--fs-caption); font-weight: 700; color: var(--ink-muted); }
-.nodes__item--r .node__meta { justify-content: flex-end; }
 .node__meta .icon { width: 14px; height: 14px; }
 .node__badge {
   position: absolute; right: -6px; bottom: -6px; display: grid; place-items: center;
@@ -373,7 +410,7 @@ button.node--open:active .node__dot { transform: translateY(3px); box-shadow: 0 
   box-shadow: 0 6px 0 var(--action-shadow);
 }
 .node--current .node__icon { width: 32px; height: 32px; fill: currentColor; stroke-width: 1.5; }
-.node--current .node__title { font-size: var(--fs-lead); font-weight: 900; margin-top: 6px; }
+.node--current .node__title { font-size: var(--fs-lead); font-weight: 900; margin-top: 4px; }
 button.node--current:active .node__dot { transform: translateY(4px); box-shadow: 0 2px 0 var(--action-shadow); }
 
 .node--soon .node__dot { width: 54px; height: 54px; border: var(--bw-strong) dashed var(--locked-border); color: var(--ink-soft); }
@@ -678,8 +715,8 @@ button.daycard:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--bo
 .weak__title, .ideas__title { font-size: var(--fs-small); color: var(--ink-muted); font-weight: 800; margin-bottom: 6px; }
 .weak .bubble { margin-left: 0; }
 .prompt-label { font-weight: 900; font-size: var(--fs-lead); margin-top: var(--s-xs); }
-.ideas__list { display: flex; gap: var(--s-s); overflow-x: auto; padding: 2px 2px 6px; scrollbar-width: thin; }
-.chip--idea { flex: none; font-size: var(--fs-small); background: var(--highlight); white-space: nowrap; }
+.ideas__list { display: flex; flex-wrap: wrap; gap: var(--s-s); padding: 2px 2px 6px; }
+.chip--idea { flex: 0 1 auto; max-width: 100%; font-size: var(--fs-small); background: var(--highlight); white-space: normal; text-align: left; line-height: 1.3; }
 .prompt-input {
   width: 100%; min-height: 9.5rem; resize: vertical; padding: 14px 16px;
   border: var(--bw) solid var(--border); border-radius: var(--r-control);

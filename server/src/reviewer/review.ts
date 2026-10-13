@@ -8,7 +8,7 @@ const ROOT = new URL("../../../", import.meta.url);
 const read = (path: string) => readFileSync(new URL(path, ROOT), "utf8");
 
 export type Level = "beginner" | "advanced" | "pro";
-export type Lang = "ru" | "uk" | "en";
+export type Lang = "ru" | "uk" | "en" | "pl";
 
 export interface LessonReviewContext {
   lessonId: string;

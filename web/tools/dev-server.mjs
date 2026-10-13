@@ -141,7 +141,7 @@ async function mockAuth(req, res, path, origin) {
   if (path === "/api/auth/me" && method === "PATCH") {
     const u = sessionUser(req);
     if (!u) return [401, { error: "unauthorized" }];
-    if (["ru", "uk", "en"].includes(body.lang)) u.lang = body.lang;
+    if (["ru", "uk", "en", "pl"].includes(body.lang)) u.lang = body.lang;
     return [200, { user: publicUser(u) }];
   }
   if (path === "/api/auth/register" && method === "POST") {
@@ -151,7 +151,7 @@ async function mockAuth(req, res, path, origin) {
     const u = users.get(email);
     if (!u) {
       const salt = randomBytes(16);
-      users.set(email, { id: randomBytes(8).toString("hex"), email, lang: ["ru", "uk", "en"].includes(body.lang) ? body.lang : "en", salt, hash: hashPw(String(body.password), salt), confirmed: false, progress: null, updatedAt: null });
+      users.set(email, { id: randomBytes(8).toString("hex"), email, lang: ["ru", "uk", "en", "pl"].includes(body.lang) ? body.lang : "en", salt, hash: hashPw(String(body.password), salt), confirmed: false, progress: null, updatedAt: null });
       issueToken("confirm", email, origin);
     } else if (!u.confirmed) issueToken("confirm", email, origin);
     else console.log(`\n[mail to ${email}] Someone tried to sign up with your address. Log in: ${origin}/#/login\n`);
@@ -235,7 +235,7 @@ createServer(async (req, res) => {
     if (url.pathname === "/api/course") {
       return send(res, 200, await readFile(join(ROOT, "content/course.json")));
     }
-    const m = /^\/api\/lessons\/(ru|uk|en)\/([\w.]+)$/.exec(url.pathname);
+    const m = /^\/api\/lessons\/(ru|uk|en|pl)\/([\w.]+)$/.exec(url.pathname);
     if (m) {
       try {
         return send(res, 200, await readFile(join(ROOT, "content/dist", m[1], `${m[2]}.json`)));

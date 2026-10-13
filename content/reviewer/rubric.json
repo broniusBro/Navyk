@@ -2,9 +2,9 @@
   "version": "0.1.0",
   "scale": { "0": "нет", "1": "частично", "2": "хорошо" },
   "verdicts": [
-    { "id": "draft", "min": 0, "ru": "Черновик", "uk": "Чернетка", "en": "Draft" },
-    { "id": "working", "min": 50, "ru": "Рабочий", "uk": "Робочий", "en": "Working" },
-    { "id": "strong", "min": 80, "ru": "Сильный", "uk": "Сильний", "en": "Strong" }
+    { "id": "draft", "min": 0, "ru": "Черновик", "uk": "Чернетка", "en": "Draft", "pl": "Szkic" },
+    { "id": "working", "min": 50, "ru": "Рабочий", "uk": "Робочий", "en": "Working", "pl": "Roboczy" },
+    { "id": "strong", "min": 80, "ru": "Сильный", "uk": "Сильний", "en": "Strong", "pl": "Mocny" }
   ],
   "criteria": [
     { "id": "R1", "name": "goal", "question": "Is the desired result and its purpose clear? Would a colleague without context understand it?", "weights": { "beginner": 3, "advanced": 3, "pro": 2 } },

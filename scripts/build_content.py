@@ -16,7 +16,7 @@ import yaml
 ROOT = Path(__file__).resolve().parent.parent
 CONTENT = ROOT / "content"
 DIST = CONTENT / "dist"
-LANGS = ("ru", "uk", "en")
+LANGS = ("ru", "uk", "en", "pl")
 course = json.loads((CONTENT / "course.json").read_text(encoding="utf-8"))
 TYPES = course["exercise_types"]
 COURSE_LESSONS = {l["id"]: l for lvl in course["levels"] for m in lvl["modules"] for l in m["lessons"]}

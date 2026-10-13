@@ -31,7 +31,7 @@ test("health and course", async () => {
   assert.ok(course.available.uk.includes("b2.1"));
   // every beginner lesson listed in course.json is built in all three languages
   const ids = course.levels[0].modules.flatMap((m: any) => m.lessons.map((l: any) => l.id));
-  for (const lang of ["ru", "uk", "en"]) assert.deepEqual([...course.available[lang]].sort(), [...ids].sort());
+  for (const lang of ["ru", "uk", "en", "pl"]) assert.deepEqual([...course.available[lang]].sort(), [...ids].sort());
 });
 
 test("lessons: existing, missing, bad language", async () => {

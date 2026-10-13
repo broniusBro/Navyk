@@ -15,9 +15,11 @@
     "ru": "Русский",
     "uk": "Українська",
     "en": "English",
+    "pl": "Polski",
     "short_ru": "RU",
     "short_uk": "UA",
-    "short_en": "EN"
+    "short_en": "EN",
+    "short_pl": "PL"
   },
   "stats": {
     "streak_label": {

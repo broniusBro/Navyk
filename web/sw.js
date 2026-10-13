@@ -18,6 +18,7 @@ const SHELL_FILES = [
   "./i18n/ru.json",
   "./i18n/uk.json",
   "./i18n/en.json",
+  "./i18n/pl.json",
   "./js/app.js",
   "./js/engine/auth.js",
   "./js/engine/course.js",

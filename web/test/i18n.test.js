@@ -8,12 +8,13 @@ import { pickLang, resolveDataRefs, pathStatus, localized, normalizeExercise } f
 
 const webDir = fileURLToPath(new URL("..", import.meta.url));
 const load = (l) => JSON.parse(readFileSync(join(webDir, "i18n", `${l}.json`), "utf8"));
-const dicts = { ru: load("ru"), uk: load("uk"), en: load("en") };
+const dicts = { ru: load("ru"), uk: load("uk"), en: load("en"), pl: load("pl") };
 
 test("all locales have identical keys", () => {
   const ru = flatKeys(dicts.ru);
   assert.deepEqual(flatKeys(dicts.uk), ru);
   assert.deepEqual(flatKeys(dicts.en), ru);
+  assert.deepEqual(flatKeys(dicts.pl), ru);
 });
 
 test("plural forms present for ru/uk (one, few, many, other)", () => {
@@ -50,12 +51,13 @@ test("required keys exist: footer notice, R1-R9, verdicts", () => {
   assert.equal(dicts.ru.footer.independent, "Navyk — независимый курс, не связан с Anthropic");
 });
 
-test("pickLang: saved > navigator (uk, ru) > en", () => {
+test("pickLang: saved > navigator (uk, ru, pl) > en", () => {
   assert.equal(pickLang("uk", ["en-US"]), "uk");
   assert.equal(pickLang(null, ["uk-UA", "en"]), "uk");
+  assert.equal(pickLang(null, ["pl-PL", "en"]), "pl");
   assert.equal(pickLang(null, ["ru-RU"]), "ru");
   assert.equal(pickLang(null, ["de-DE", "ru"]), "ru");
-  assert.equal(pickLang(null, ["pl-PL"]), "en");
+  assert.equal(pickLang(null, ["de-DE"]), "en");
   assert.equal(pickLang("fr", []), "en");
 });
 

@@ -1,0 +1,389 @@
+{
+  "app": {
+    "title": "Navyk: naucz się pracować z Claude",
+    "description": "Krótkie lekcje i ćwiczenia z promptów z omówieniem. Niezależny kurs, niezwiązany z Anthropic.",
+    "skip": "Przejdź do treści",
+    "offline": "Brak sieci. Ukończone lekcje są dostępne, a postęp zapisuje się na urządzeniu."
+  },
+  "common": {
+    "next": "Dalej",
+    "quote": "„{text}”",
+    "close": "Zamknij"
+  },
+  "lang": {
+    "label": "Język aplikacji i lekcji",
+    "ru": "Русский",
+    "uk": "Українська",
+    "en": "English",
+    "pl": "Polski",
+    "short_ru": "RU",
+    "short_uk": "UA",
+    "short_en": "EN",
+    "short_pl": "PL"
+  },
+  "stats": {
+    "streak_label": {
+      "one": "Seria: {count} dzień z rzędu",
+      "few": "Seria: {count} dni z rzędu",
+      "many": "Seria: {count} dni z rzędu",
+      "other": "Seria: {count} dnia z rzędu"
+    },
+    "xp_label": {
+      "one": "{count} punkt doświadczenia",
+      "few": "{count} punkty doświadczenia",
+      "many": "{count} punktów doświadczenia",
+      "other": "{count} punktu doświadczenia"
+    },
+    "xp_unit": "XP"
+  },
+  "footer": {
+    "independent": "Navyk to niezależny kurs, niezwiązany z Anthropic",
+    "about": "O projekcie",
+    "about_text": "Navyk to nieoficjalna aplikacja edukacyjna o Claude. Uczymy korzystać z Claude i Claude Code w praktyce. Anthropic nie uczestniczy w projekcie i nie sprawdza jego materiałów.",
+    "trademark": "Claude i Anthropic są znakami towarowymi Anthropic, PBC. Navyk nie używa ich logotypów ani identyfikacji wizualnej."
+  },
+  "path": {
+    "title": "Twoja ścieżka",
+    "loading": "Wczytujemy kurs…",
+    "offline": "Nie udało się wczytać kursu. Sprawdź internet: gdy tylko sieć wróci, ścieżka otworzy się sama.",
+    "checking": "Sprawdzamy, które lekcje są już gotowe…",
+    "module_count": "{done} z {total}",
+    "status_done": "Ukończona",
+    "status_current": "Zacznij tutaj",
+    "status_open": "Dostępna",
+    "status_soon": "Wkrótce",
+    "due": {
+      "one": "{count} temat czeka na powtórkę",
+      "few": "{count} tematy czekają na powtórkę",
+      "many": "{count} tematów czeka na powtórkę",
+      "other": "{count} tematu czeka na powtórkę"
+    },
+    "due_start": "Powtórz",
+    "module_kicker": "{level} · moduł {n} z {total}",
+    "you_are_here": "Jesteś tutaj",
+    "goal_title": "Cel dnia",
+    "goal_todo": "1 lekcja · dasz radę!",
+    "goal_done": "1 lekcja · zrobione!",
+    "repeat_count": {
+      "one": "{count} temat",
+      "few": "{count} tematy",
+      "many": "{count} tematów",
+      "other": "{count} tematu"
+    },
+    "repeat_none": "Na razie nie ma nic do powtórki",
+    "needs_account": "Potrzebne konto",
+    "save_progress": "Postęp jest zapisany tylko na tym urządzeniu. Załóż konto, żeby go nie stracić.",
+    "save_progress_cta": "Zapisz"
+  },
+  "lesson": {
+    "loading": "Otwieramy lekcję…",
+    "not_found": "Ta lekcja nie jest jeszcze dostępna w wybranym języku. Wróć do ścieżki i wybierz inną.",
+    "doc_title": "{title}",
+    "close": "Zamknij lekcję",
+    "leave_confirm": "Wyjść z lekcji? Postęp w tej lekcji nie zostanie zapisany.",
+    "progress": "Postęp lekcji",
+    "progress_text": "Ekran {n} z {total}",
+    "summary": "Najważniejsze",
+    "unsupported": "To zadanie pojawi się w kolejnej wersji aplikacji. Możesz je pominąć."
+  },
+  "chat": {
+    "claude": "Claude"
+  },
+  "exercise": {
+    "hint": "Podpowiedź",
+    "check": "Sprawdź",
+    "retry": "Spróbuj jeszcze raz",
+    "show_answer": "Pokaż odpowiedź",
+    "choose_one": "Wybierz jedną odpowiedź",
+    "choose_many": "Zaznacz wszystkie pasujące",
+    "state_ok": "Dobrze",
+    "state_bad": "Źle",
+    "state_missed": "Prawidłowa odpowiedź",
+    "state_neutral": "Tu wszystko w porządku",
+    "find_error_instruction": "Dotykaj fragmentów promptu. Ponowne dotknięcie usuwa zaznaczenie.",
+    "marked": {
+      "one": "Zaznaczono {count} fragment",
+      "few": "Zaznaczono {count} fragmenty",
+      "many": "Zaznaczono {count} fragmentów",
+      "other": "Zaznaczono {count} fragmentu"
+    },
+    "found_of": "Znalezione słabe punkty: {found} z {total}",
+    "match_instruction": "Wybierz element po lewej, a potem pasujący po prawej.",
+    "match_left": "Lewa kolumna",
+    "match_right": "Prawa kolumna",
+    "match_linked": "{text}, połączono z elementem {n}",
+    "match_pick_left": "Najpierw wybierz element po lewej.",
+    "matched": "Połączono: {count} z {total}",
+    "match_some_wrong": "Część par się nie zgadza. Wyjaśnienia pojawią się, gdy odpowiedź będzie poprawna, albo po drugiej próbie.",
+    "order_instruction": "Zmień kolejność kroków przyciskami ze strzałkami.",
+    "order_list": "Kroki w Twojej kolejności",
+    "move_up": "Przesuń wyżej: {text}",
+    "move_down": "Przesuń niżej: {text}",
+    "moved_to": "Przeniesiono na miejsce {n}",
+    "correct_order": "Prawidłowa kolejność",
+    "build_instruction": "Dotykaj bloków w takiej kolejności, w jakiej powinny stać w prompcie. Zbędnych nie bierz.",
+    "build_pool": "Dostępne bloki",
+    "build_assembled": "Twój prompt",
+    "build_empty": "Tu powstanie prompt",
+    "build_remove": "Usuń z promptu: {text}",
+    "build_ok": "Na swoim miejscu",
+    "build_misplaced": "Potrzebny, ale stoi nie na swoim miejscu",
+    "build_missing": "Ten blok jest potrzebny w prompcie",
+    "build_noise_used": "Ten blok jest zbędny",
+    "build_noise_skipped": "Słusznie pominięty",
+    "fill_instruction": "Wybierz opcję do luki.",
+    "fill_instruction_many": "Dotknij luki i wybierz dla niej opcję.",
+    "gap_label": "Luka {n}: {value}",
+    "gap_empty": "pusto",
+    "gap_options": "Opcje do luki {n}",
+    "gap_correct": "Poprawnie: {text}",
+    "lead_ok": "Hura, dobrze!",
+    "lead_bad": "Nie do końca.",
+    "type": {
+      "single_choice": "Wybierz odpowiedź",
+      "multi_choice": "Kilka odpowiedzi",
+      "compare_answers": "Porównaj odpowiedzi",
+      "find_error": "Znajdź błąd",
+      "match_pairs": "Połącz w pary",
+      "order_steps": "Ułóż po kolei",
+      "build_prompt": "Zbuduj prompt",
+      "fill_gap": "Uzupełnij lukę",
+      "write_prompt": "Napisz prompt",
+      "improve_prompt": "Popraw prompt"
+    }
+  },
+  "feedback": {
+    "correct_first": "Dobrze za pierwszym razem!",
+    "correct": "Teraz dobrze!",
+    "wrong_retry": "Jeszcze nie to. Przeczytaj wyjaśnienie i spróbuj ponownie.",
+    "wrong_final": "Nic się nie stało. Zobacz prawidłową odpowiedź i wyjaśnienia."
+  },
+  "roles": {
+    "goal": "Cel",
+    "context": "Kontekst",
+    "format": "Format",
+    "role": "Rola",
+    "noise": "Zbędne"
+  },
+  "practice": {
+    "label_write": "Twój prompt",
+    "label_improve": "Twoja wersja promptu",
+    "weak_prompt": "Prompt wyjściowy",
+    "ideas": "Pomysły: dotknij, aby dodać",
+    "insert_idea": "Dodaj do promptu: {text}",
+    "chars_left": {
+      "one": "Jeszcze {count} znak do wysłania",
+      "few": "Jeszcze {count} znaki do wysłania",
+      "many": "Jeszcze {count} znaków do wysłania",
+      "other": "Jeszcze {count} znaku do wysłania"
+    },
+    "chars_ok": "{count} zn. Możesz wysłać",
+    "privacy_note": "Nie wpisuj haseł, numerów kart i dokumentów ani cudzych telefonów i adresów.",
+    "send": "Wyślij do analizy",
+    "checking": "Claude czyta Twój prompt. Zwykle trwa to do 15 sekund.",
+    "checking_short": "Sprawdzamy…",
+    "result_region": "Analiza promptu",
+    "error_input_too_short": "Prompt jest za krótki. Dopisz, co trzeba zrobić, i kilka szczegółów.",
+    "error_input_too_long": "Prompt jest za długi. Skróć go do 4000 znaków.",
+    "privacy_title": "W prompcie są dane osobowe",
+    "privacy_default": "Wygląda na to, że w tekście jest hasło, numer karty lub dokumentu albo czyjeś dane kontaktowe. Zastąp je umownymi: „Jan”, „karta ****1234”.",
+    "privacy_not_passed": "Dopóki prompt zawiera takie dane, zadanie nie zostanie zaliczone. Usuń je i wyślij ponownie.",
+    "score": "{score} na 100",
+    "passed": "Zadanie zaliczone.",
+    "not_passed": "Dobry początek. Dodaj to, czego brakuje, i wyślij ponownie, żeby zaliczyć zadanie.",
+    "off_task": "To nie wygląda na prompt do tego zadania. Przeczytaj zadanie jeszcze raz i spróbuj ponownie.",
+    "your_prompt": "Twój prompt",
+    "strengths": "Co już jest dobrze",
+    "gaps": "Co dodać",
+    "criteria": "Punkt po punkcie",
+    "improved": "Jak można to napisać",
+    "reference": "Mocny przykład od autorów lekcji",
+    "copy": "Kopiuj",
+    "copied": "Skopiowano",
+    "copy_failed": "Nie udało się skopiować. Zaznacz tekst i skopiuj ręcznie.",
+    "remaining": {
+      "one": "Na dziś została {count} analiza",
+      "few": "Na dziś zostały {count} analizy",
+      "many": "Na dziś zostało {count} analiz",
+      "other": "Na dziś zostało {count} analizy"
+    },
+    "try_again": "Spróbuj jeszcze raz",
+    "limit_title": "Analizy na dziś się skończyły",
+    "limit_text": "Nowe analizy pojawią się jutro. Teraz sprawdź prompt samodzielnie według checklisty: zadanie zostanie zaliczone.",
+    "limit_text_at": "Nowe analizy pojawią się {time}. Teraz sprawdź prompt samodzielnie według checklisty: zadanie zostanie zaliczone.",
+    "unavailable_title": "Analiza jest teraz niedostępna",
+    "unavailable_text": "Sprawdź prompt samodzielnie według checklisty poniżej, zadanie zostanie zaliczone. Później możesz wysłać prompt ponownie.",
+    "selfcheck_title": "Checklista samosprawdzenia",
+    "selfcheck_lead": "Zaznacz punkty, które już są w prompcie. Czego brakuje, dopisz następnym razem.",
+    "edit_again": "Zmień prompt",
+    "retry_send": "Wyślij ponownie",
+    "passed_xp": "Zaliczone · +{xp} XP",
+    "hero": {
+      "draft": "Dobry początek",
+      "working": "Działający prompt",
+      "strong": "Mocny prompt!",
+      "off_task": "Nie na temat",
+      "not_passed": "Prawie się udało"
+    }
+  },
+  "verdict": {
+    "draft": "Szkic",
+    "working": "Działający",
+    "strong": "Mocny",
+    "off_task": "Nie na temat"
+  },
+  "criteria": {
+    "R1": {
+      "name": "Cel"
+    },
+    "R2": {
+      "name": "Kontekst"
+    },
+    "R3": {
+      "name": "Format"
+    },
+    "R4": {
+      "name": "Kryteria sukcesu"
+    },
+    "R5": {
+      "name": "Kroki"
+    },
+    "R6": {
+      "name": "Przykłady"
+    },
+    "R7": {
+      "name": "Struktura"
+    },
+    "R8": {
+      "name": "Oparcie na faktach"
+    },
+    "R9": {
+      "name": "Granice i bezpieczeństwo"
+    }
+  },
+  "criteria_level": {
+    "good": "Dobrze",
+    "partial": "Częściowo",
+    "missing": "Brakuje"
+  },
+  "complete": {
+    "title": "Lekcja ukończona",
+    "review_title": "Powtórka zakończona",
+    "xp_lesson": "Za lekcję",
+    "xp_first_try": "Dobrze za pierwszym razem",
+    "xp_ai": "Ćwiczenie zaliczone",
+    "replay_note": "Lekcja ukończona ponownie: dostajesz tylko punkty ponad poprzedni wynik.",
+    "streak_days": {
+      "one": "dzień z rzędu",
+      "few": "dni z rzędu",
+      "many": "dni z rzędu",
+      "other": "dnia z rzędu"
+    },
+    "streak_started": "Seria się zaczęła. Zajrzyj jutro, żeby ją kontynuować.",
+    "streak_up": {
+      "one": "Seria: {count} dzień. Tak trzymaj!",
+      "few": "Seria: {count} dni. Tak trzymaj!",
+      "many": "Seria: {count} dni. Tak trzymaj!",
+      "other": "Seria: {count} dnia. Tak trzymaj!"
+    },
+    "next_review": "Powtórka: {date}",
+    "sources": "Źródła",
+    "verified_at": "Fakty sprawdzone: {date}",
+    "back": "Do ścieżki"
+  },
+  "review": {
+    "title": "Powtórka",
+    "result": "Dobrze: {correct} z {total}",
+    "unavailable": "Nie udało się wczytać zadań do powtórki. Spróbuj później."
+  },
+  "auth": {
+    "back": "Wstecz",
+    "email": "E-mail",
+    "password": "Hasło",
+    "new_password": "Nowe hasło",
+    "confirm_password": "Powtórz hasło",
+    "show_password": "Pokaż hasło",
+    "password_hint": {
+      "one": "Co najmniej {count} znak",
+      "few": "Co najmniej {count} znaki",
+      "many": "Co najmniej {count} znaków",
+      "other": "Co najmniej {count} znaku"
+    },
+    "password_hint_ok": "Długość w porządku",
+    "login_title": "Witaj ponownie!",
+    "login_lead": "Zaloguj się, a postęp będzie dostępny na każdym urządzeniu.",
+    "login_submit": "Zaloguj się",
+    "login_short": "Zaloguj",
+    "forgot_link": "Nie pamiętasz hasła?",
+    "no_account": "Nie masz konta?",
+    "register_link": "Zarejestruj się",
+    "have_account": "Masz już konto?",
+    "login_link": "Zaloguj się",
+    "login_link_short": "Wróć do logowania",
+    "register_title": "Zapisz postęp",
+    "register_lead": "Konto odblokowuje cały kurs i przechowuje serię, XP i powtórki na wszystkich urządzeniach.",
+    "register_submit": "Załóż konto",
+    "consent_before": "Klikając „Załóż konto”, akceptujesz sposób, w jaki przechowujemy dane.",
+    "privacy_link": "Co przechowujemy?",
+    "privacy_text": "Tylko e-mail i postęp w kursie: są potrzebne, żeby kurs działał, a postęp się nie gubił. Nie sprzedajemy danych i nie wysyłamy reklam. Navyk to niezależny projekt, niezwiązany z Anthropic.",
+    "check_title": "Sprawdź skrzynkę",
+    "check_lead_before": "Wysłaliśmy link na adres",
+    "check_lead_after": ".",
+    "check_lead_generic": "Wysłaliśmy link potwierdzający na Twój e-mail.",
+    "check_step_open": "Otwórz wiadomość od Navyk.",
+    "check_step_click": "Kliknij link: konto od razu zacznie działać.",
+    "check_step_spam": "Po kilku minutach nadal nic? Zajrzyj do folderu „Spam” lub „Oferty”.",
+    "resend": "Wyślij wiadomość ponownie",
+    "resent": "Gotowe, wysłaliśmy nową wiadomość. Stary link już nie działa.",
+    "wrong_email": "Błąd w adresie?",
+    "register_again": "Podaj inny",
+    "confirm_title": "Potwierdzamy e-mail",
+    "confirming": "Chwileczkę, sprawdzamy link…",
+    "confirmed_title": "E-mail potwierdzony!",
+    "confirmed_text": "Konto jest gotowe, a postęp z tego urządzenia już się w nim znajduje. Cały kurs jest otwarty.",
+    "to_path": "Do ścieżki",
+    "link_expired_title": "Link nie zadziałał",
+    "link_expired_text": "Wygląda na to, że wygasł albo został już użyty. Podaj e-mail, a wyślemy nowy.",
+    "try_again": "Spróbuj jeszcze raz",
+    "forgot_title": "Odzyskajmy dostęp",
+    "forgot_lead": "Podaj e-mail użyty przy rejestracji. Wyślemy link do ustawienia nowego hasła.",
+    "forgot_submit": "Wyślij link",
+    "forgot_sent_title": "Wiadomość w drodze",
+    "forgot_sent_text": "Jeśli istnieje konto z adresem {email}, wysłaliśmy na nie link. Jest ważny przez ograniczony czas.",
+    "forgot_again": "Poproś o nowy link",
+    "reset_title": "Nowe hasło",
+    "reset_lead": "Wymyśl hasło, którego nie używasz na innych stronach.",
+    "reset_submit": "Zapisz i zaloguj",
+    "reset_expired_text": "Link do zmiany hasła wygasł lub został już użyty. Poproś o nowy.",
+    "not_confirmed_title": "E-mail nie jest jeszcze potwierdzony",
+    "not_confirmed_text": "Znajdź wiadomość od Navyk i kliknij link. Nie dotarła? Wyślemy ponownie.",
+    "gate_title": "Zapisz postęp i odblokuj cały kurs",
+    "gate_perk_course": "Wszystkie lekcje, nie tylko próbne",
+    "gate_perk_sync": "Seria, XP i powtórki na telefonie i komputerze",
+    "gate_perk_keep": "To, co już ukończone, zostanie z Tobą",
+    "gate_register": "Załóż konto",
+    "gate_login": "Mam już konto",
+    "gate_note": "Za darmo. Wystarczy e-mail.",
+    "account_title": "Konto",
+    "account_label": "Konto: {email}",
+    "signed_in_as": "Zalogowano jako",
+    "synced_note": "Postęp zapisuje się na koncie i jest dostępny na wszystkich urządzeniach.",
+    "logout": "Wyloguj",
+    "error": {
+      "email_required": "Podaj adres e-mail.",
+      "invalid_email": "Wygląda na to, że w adresie jest błąd. Przykład: name@mail.com",
+      "password_required": "Podaj hasło.",
+      "weak_password": "Hasło jest za proste: potrzeba co najmniej 8 znaków, a najlepiej kilku słów.",
+      "password_mismatch": "Hasła się nie zgadzają.",
+      "invalid_credentials": "E-mail lub hasło nie pasują. Sprawdź układ klawiatury i spróbuj ponownie.",
+      "locked": {
+        "one": "Za dużo prób. Spróbuj za {count} minutę.",
+        "few": "Za dużo prób. Spróbuj za {count} minuty.",
+        "many": "Za dużo prób. Spróbuj za {count} minut.",
+        "other": "Za dużo prób. Spróbuj za {count} minuty."
+      },
+      "network": "Brak połączenia z serwerem. Sprawdź internet i spróbuj ponownie.",
+      "generic": "Coś poszło nie tak. Spróbuj ponownie za chwilę."
+    }
+  }
+}

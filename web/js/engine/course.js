@@ -1,13 +1,13 @@
 // Course structure helpers and lesson content preparation. Pure.
 
-export const LANGS = ["ru", "uk", "en"];
+export const LANGS = ["ru", "uk", "en", "pl"];
 
-/** Pick the UI language from a navigator.language-like string: uk -> uk, ru -> ru, else en. */
+/** Pick the UI language from a navigator.language-like string: uk/ru/pl as is, else en. */
 export function pickLang(saved, navigatorLanguages = []) {
   if (LANGS.includes(saved)) return saved;
   for (const tag of navigatorLanguages) {
     const base = String(tag || "").toLowerCase().split(/[-_]/)[0];
-    if (base === "uk" || base === "ru") return base;
+    if (base === "uk" || base === "ru" || base === "pl") return base;
   }
   return "en";
 }

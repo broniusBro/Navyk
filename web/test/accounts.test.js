@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { validateCredentials, interpretAuth, normalizeUser, canOpenLesson, parseTokenRoute, retryMinutes, isEmail } from "../js/engine/auth.js";
 import { mergeProgress, sameProgress, lessonsXp, retryDelay } from "../js/engine/sync.js";
 import { emptyProgress, normalizeProgress } from "../js/engine/progress.js";
-import { roadPath, splitRoad, travelledIndex } from "../js/engine/road.js";
+import { roadPath, splitRoad, travelledIndex, waveOffset } from "../js/engine/road.js";
 
 test("validateCredentials", () => {
   assert.deepEqual(validateCredentials({ email: "a@b.co", password: "12345678" }), {});
@@ -90,7 +90,14 @@ test("road geometry", () => {
   const pts = [{ x: 50, y: 10 }, { x: 150, y: 90 }, { x: 60, y: 170 }];
   assert.equal(roadPath(pts.slice(0, 1)), "");
   const d = roadPath(pts);
-  assert.match(d, /^M50 10C50 54 150 46 150 90C150 134 60 126 60 170$/);
+  assert.equal(d, "M50 10C66.7 38 148.3 62 150 90C151.7 118 75 142 60 170");
+  // split halves lie on the same curve
+  assert.equal(roadPath(pts, 0, 1) + roadPath(pts, 1, 2).replace(/^M[\d.]+ [\d.]+/, ""), d);
+  assert.equal(waveOffset(0, 0), 0);
+  assert.equal(waveOffset(1, 0), 0.707);
+  assert.equal(waveOffset(2, 0), 1);
+  assert.equal(waveOffset(1, 1), -0.707);
+  assert.equal(waveOffset(4, 0), 0);
   assert.equal(travelledIndex(["sign", "done", "done", "current", "open"]), 3);
   assert.equal(travelledIndex(["sign", "done", "soon"]), 1);
   assert.equal(travelledIndex(["sign", "open"]), -1);

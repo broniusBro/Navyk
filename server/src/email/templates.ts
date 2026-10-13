@@ -1,6 +1,6 @@
-// Письма Navyk на ru/uk/en: подтверждение адреса, сброс пароля, «аккаунт уже есть».
+// Письма Navyk на ru/uk/en/pl: подтверждение адреса, сброс пароля, «аккаунт уже есть».
 // Стиль D: бумага #FFFDF8, чернила #22223B, оранжевая кнопка #FFB020 с тёмным текстом. Только инлайн-стили.
-export type EmailLang = "ru" | "uk" | "en";
+export type EmailLang = "ru" | "uk" | "en" | "pl";
 export type EmailKind = "confirm" | "reset" | "already_registered";
 
 export interface RenderedEmail {
@@ -95,6 +95,32 @@ const COPY: Record<EmailLang, Record<EmailKind, Copy> & { footer: string; fallba
     footer: "Navyk is an independent course, not affiliated with Anthropic.",
     fallback: "If the button doesn't work, open this link:",
     ignore: "If you didn't ask for this email, just delete it.",
+  },
+  pl: {
+    confirm: {
+      subject: "Potwierdź adres e-mail w Navyk",
+      title: "Cześć! Został jeszcze jeden krok",
+      body: "Kliknij przycisk, żeby potwierdzić adres e-mail i zapisywać postępy na swoim koncie.",
+      button: "Potwierdź e-mail",
+      note: "Link jest ważny przez 24 godziny.",
+    },
+    reset: {
+      subject: "Nowe hasło do Navyk",
+      title: "Ustawmy nowe hasło",
+      body: "Ktoś (mamy nadzieję, że ty) poprosił o zmianę hasła. Kliknij przycisk i wybierz nowe.",
+      button: "Ustaw nowe hasło",
+      note: "Link jest ważny przez 1 godzinę. Po zmianie hasła wylogujemy cię na innych urządzeniach.",
+    },
+    already_registered: {
+      subject: "Masz już konto w Navyk",
+      title: "Konto już istnieje",
+      body: "Ktoś próbował zarejestrować się z tym adresem, ale konto już istnieje. Nie pamiętasz hasła? Ustaw nowe.",
+      button: "Ustaw nowe hasło",
+      note: "Link jest ważny przez 1 godzinę. Jeśli to nie ty, nic nie rób — z kontem wszystko w porządku.",
+    },
+    footer: "Navyk to niezależny kurs, niezwiązany z Anthropic.",
+    fallback: "Jeśli przycisk nie działa, otwórz ten link:",
+    ignore: "Jeśli nie prosiłeś(-aś) o tę wiadomość, po prostu ją usuń.",
   },
 };
 

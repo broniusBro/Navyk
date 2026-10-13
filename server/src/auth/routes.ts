@@ -19,7 +19,7 @@ import {
   type UserRow,
 } from "./sessions.ts";
 
-const LANGS = new Set(["ru", "uk", "en"]);
+const LANGS = new Set(["ru", "uk", "en", "pl"]);
 const DEFAULT_LANG: EmailLang = "ru"; // исходный язык курса
 const EMAIL_RE = /^[^\s@<>()",;:\\[\]]{1,64}@[^\s@<>()",;:\\[\]]+\.[^\s@<>()",;:\\[\]]{2,}$/;
 

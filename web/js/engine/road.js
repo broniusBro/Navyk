@@ -1,13 +1,32 @@
 // Geometry of the "road" on the path screen. Pure: waypoints in, SVG path data out.
-// The road leaves every waypoint vertically and bends between rows (S-curves), so it never runs
-// sideways through the labels next to the lesson circles.
+// Lessons sit on a gentle wave (waveOffset); the road is one smooth curve through all of them
+// (Catmull-Rom turned into cubic Béziers), so it flows like a path instead of zig-zagging.
 
 const r1 = (n) => Math.round(n * 10) / 10;
 
-/** Cubic segment from a to b with vertical tangents at both ends. */
-function segment(a, b) {
-  const k = (b.y - a.y) * 0.55;
-  return `C${r1(a.x)} ${r1(a.y + k)} ${r1(b.x)} ${r1(b.y - k)} ${r1(b.x)} ${r1(b.y)}`;
+/**
+ * Horizontal position of a lesson on the wave, in [-1, 1] (0 = centre line).
+ * Every module starts in the centre right under its signpost; neighbouring modules swing to opposite sides.
+ */
+export function waveOffset(indexInModule, moduleIndex = 0) {
+  const v = Math.sin((indexInModule * Math.PI) / 4) * (moduleIndex % 2 ? -1 : 1);
+  return Math.round(v * 1000) / 1000 || 0;
+}
+
+/**
+ * Cubic segment from points[i] to points[i + 1]. Tangents come from the neighbours (Catmull-Rom),
+ * so splitting the road at any point keeps both halves on the same curve. The vertical pull keeps
+ * the curve heading down through each stop rather than cutting sideways.
+ */
+function segment(points, i) {
+  const p0 = points[Math.max(0, i - 1)];
+  const p1 = points[i];
+  const p2 = points[i + 1];
+  const p3 = points[Math.min(points.length - 1, i + 2)];
+  const dy = (p2.y - p1.y) * 0.35;
+  const c1 = { x: p1.x + (p2.x - p0.x) / 6, y: p1.y + Math.max(dy, (p2.y - p0.y) / 6) };
+  const c2 = { x: p2.x - (p3.x - p1.x) / 6, y: p2.y - Math.max(dy, (p3.y - p1.y) / 6) };
+  return `C${r1(c1.x)} ${r1(c1.y)} ${r1(c2.x)} ${r1(c2.y)} ${r1(p2.x)} ${r1(p2.y)}`;
 }
 
 /**
@@ -19,7 +38,7 @@ export function roadPath(points, from = 0, to = points.length - 1) {
   const hi = Math.min(points.length - 1, to);
   if (hi - lo < 1) return "";
   let d = `M${r1(points[lo].x)} ${r1(points[lo].y)}`;
-  for (let i = lo; i < hi; i++) d += segment(points[i], points[i + 1]);
+  for (let i = lo; i < hi; i++) d += segment(points, i);
   return d;
 }
 

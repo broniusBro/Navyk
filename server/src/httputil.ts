@@ -5,6 +5,8 @@ export const SECURITY_HEADERS = {
   "x-content-type-options": "nosniff",
   "referrer-policy": "strict-origin-when-cross-origin",
   "x-frame-options": "DENY",
+  // HTTPS only from now on (Caddy already redirects http → https); ignored by browsers on plain http.
+  "strict-transport-security": "max-age=31536000",
   "content-security-policy":
     "default-src 'self'; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'",
 };

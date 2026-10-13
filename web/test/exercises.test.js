@@ -169,8 +169,8 @@ test("practice helpers", () => {
 
 test("every exercise in built content is renderable and checkable", () => {
   const known = new Set(["single_choice", "multi_choice", "compare_answers", "find_error", "match_pairs", "order_steps", "build_prompt", "fill_gap", "write_prompt", "improve_prompt"]);
-  for (const lang of ["ru", "uk", "en"]) {
-    for (const id of ["b1.1", "b2.1"]) {
+  for (const lang of ["ru", "uk", "en", "pl"]) {
+    for (const id of ["b1.1", "b2.1", "b2.8", "b4.3", "b6.2", "b7.6"]) {
       for (const e of lesson(lang, id).blocks.filter((b) => b.kind === "exercise")) {
         assert.ok(known.has(e.type), `${lang}/${e.id}: ${e.type}`);
         assert.ok(e.hint, `${e.id} has hint`);
