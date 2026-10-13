@@ -1,7 +1,7 @@
 // Navyk service worker: cache-first for the app shell, network-first for /api (lessons work offline
 // once opened), stale-while-revalidate for Google Fonts. /api/review is never cached.
 
-const VERSION = "navyk-v2";
+const VERSION = "navyk-v3";
 const SHELL = `${VERSION}-shell`;
 const DATA = `${VERSION}-data`;
 const FONTS = `${VERSION}-fonts`;

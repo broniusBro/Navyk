@@ -172,5 +172,6 @@ export function createApp() {
 
 if (import.meta.url === `file://${process.argv[1]}`) {
   const port = Number(process.env.PORT ?? 8080);
-  createApp().listen(port, () => log({ event: "listening", port, reviewer: Boolean(process.env.ANTHROPIC_API_KEY) }));
+  const host = process.env.HOST ?? "0.0.0.0"; // в продакшене 127.0.0.1: снаружи доступ только через Caddy
+  createApp().listen(port, host, () => log({ event: "listening", host, port, reviewer: Boolean(process.env.ANTHROPIC_API_KEY) }));
 }

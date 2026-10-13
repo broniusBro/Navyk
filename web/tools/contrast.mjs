@@ -1,5 +1,5 @@
 // WCAG 2.x contrast check for the colour pairs the web client actually uses.
-// Reads design/tokens.json (single source of truth) and checks both themes.
+// Reads design/tokens.json (single source of truth) (light theme only).
 //   node web/tools/contrast.mjs        -> table; exit code 1 if any pair fails
 // Text pairs need 4.5:1 (AA, normal text). Non-text pairs (borders, focus ring, icons) need 3:1.
 
@@ -31,11 +31,9 @@ const mix = (a, b, p) => {
 };
 const derive = (c, theme) => ({
   ...c,
-  // light focus token #4D9DFF is only ~2.7:1 on paper, so the ring is darkened toward ink in light theme
-  // (the ring has outline-offset: 3px, so it always sits on paper/surface, never directly on the orange button)
-  focus_ring: theme === "light" ? mix(c.focus, c.ink, 0.7) : c.focus,
-  // dark border_soft is ~2.9:1 on surface, so locked nodes use ink_soft in dark theme
-  locked_border: theme === "light" ? c.border_soft : c.ink_soft,
+  // the ring has outline-offset: 3px, so it always sits on paper/surface, never directly on the orange button
+  focus_ring: c.focus,
+  locked_border: c.border_soft,
 });
 
 // [foreground, background, kind, where]
@@ -74,7 +72,7 @@ const PAIRS = [
 ];
 
 let failed = 0;
-for (const theme of ["light", "dark"]) {
+for (const theme of ["light"]) {
   const c = derive(tokens.color[theme], theme);
   console.log(`\n${theme}`);
   for (const [fg, bg, need, where] of PAIRS) {

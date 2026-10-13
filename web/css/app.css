@@ -1,5 +1,5 @@
 /* Navyk web client · style D «Тетрадь-конфетти».
-   Tokens mirror design/tokens.json (source of truth). Mobile-first; light + dark via prefers-color-scheme.
+   Tokens mirror design/tokens.json (source of truth). Mobile-first; light theme only (owner decision 2026-10-13).
    Colour never carries meaning alone: right/wrong also differ by icon, text and weight. */
 
 :root {
@@ -25,10 +25,10 @@
   --info: #cfe5ff;
   --repeat: #e6dbff;
   --wrong: #ffd6e7;
-  --focus: #4d9dff;
+  --focus: #4078c4;
 
-  /* derived (checked in tools/contrast.mjs): the light focus token is ~2.7:1 on paper, darken it for the ring */
-  --focus-ring: color-mix(in srgb, var(--focus) 70%, var(--ink));
+  /* derived (checked in tools/contrast.mjs) */
+  --focus-ring: var(--focus);
   --locked-border: var(--border-soft);
   --confetti-4: #9b7bff;
   --progress-end: color-mix(in srgb, var(--action) 55%, var(--highlight));
@@ -68,41 +68,6 @@
   --paper-glass: color-mix(in srgb, var(--paper) 92%, transparent);
   --col: 560px;
   color-scheme: light;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    /* colour: design/tokens.json color.dark */
-    --ink: #f4f1ea;
-    --ink-muted: #c9c5d9;
-    --ink-soft: #a9a5bc;
-    --paper: #1c1b2b;
-    --paper-dot: #2e2c42;
-    --surface: #26253a;
-    --frame: #14131f;
-    --border: #cfcbe0;
-    --border-soft: #6c6987;
-    --action: #ffb020;
-    --on-action: #22223b;
-    --action-shadow: #000000;
-    --success: #1f4d3e;
-    --success-strong: #5cc79a;
-    --highlight: #5a4e1c;
-    --streak: #55253d;
-    --improve: #55253d;
-    --brand-dot: #ff7ab6;
-    --info: #1f3a5c;
-    --repeat: #3a2d66;
-    --wrong: #55253d;
-    --focus: #7db8ff;
-
-    --focus-ring: var(--focus);
-    /* dark border_soft is ~2.9:1 on surface; locked nodes need 3:1 */
-    --locked-border: var(--ink-soft);
-    --confetti-4: #b49cff;
-    --progress-end: var(--action);
-    color-scheme: dark;
-  }
 }
 
 /* ---------- base ---------- */

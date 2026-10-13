@@ -1,0 +1,101 @@
+name: Deploy
+
+# Выкладка на сервер Hetzner при каждом коммите в main (и вручную: Actions → Deploy → Run workflow).
+# Нужны секреты репозитория (Settings → Secrets and variables → Actions):
+#   DEPLOY_HOST        — IPv4 сервера Hetzner
+#   DEPLOY_SSH_KEY     — приватный SSH-ключ (пара к публичному, указанному при создании сервера)
+#   ANTHROPIC_API_KEY  — ключ Claude API (sk-ant-api03-…)
+# Необязательная переменная репозитория (вкладка Variables):
+#   NAVYK_DOMAIN       — свой домен (например navyk.app). Без неё сайт живёт на <ip-с-дефисами>.sslip.io
+# Пока DEPLOY_HOST не задан, workflow проходит тесты и пропускает выкладку.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install pyyaml
+      - name: Build and validate lessons
+        run: python3 scripts/build_content.py
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Tests
+        run: |
+          (cd server && npm test)
+          (cd web && npm test && npm run check)
+
+      - name: Check deploy settings
+        id: cfg
+        env:
+          HOST: ${{ secrets.DEPLOY_HOST }}
+          DOMAIN_VAR: ${{ vars.NAVYK_DOMAIN }}
+        run: |
+          if [ -z "$HOST" ]; then
+            echo "DEPLOY_HOST is not set yet — skipping deploy."
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          DOMAIN="${DOMAIN_VAR:-$(echo "$HOST" | tr . -).sslip.io}"
+          echo "skip=false" >> "$GITHUB_OUTPUT"
+          echo "domain=$DOMAIN" >> "$GITHUB_OUTPUT"
+
+      - name: Set up SSH
+        if: steps.cfg.outputs.skip == 'false'
+        env:
+          HOST: ${{ secrets.DEPLOY_HOST }}
+          KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+        run: |
+          mkdir -p ~/.ssh && chmod 700 ~/.ssh
+          printf '%s\n' "$KEY" > ~/.ssh/id_deploy && chmod 600 ~/.ssh/id_deploy
+          ssh-keyscan -T 15 -t ed25519 "$HOST" >> ~/.ssh/known_hosts
+          printf 'Host navyk\n  HostName %s\n  User deploy\n  IdentityFile ~/.ssh/id_deploy\n  IdentitiesOnly yes\n' "$HOST" > ~/.ssh/config
+
+      - name: Upload code
+        if: steps.cfg.outputs.skip == 'false'
+        run: |
+          rsync -az --delete \
+            --exclude '.git' --exclude '.github' --exclude 'node_modules' \
+            --exclude 'server/eval/results' --exclude 'research' \
+            ./ navyk:/srv/navyk/
+
+      - name: Apply secrets, domain and restart
+        if: steps.cfg.outputs.skip == 'false'
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          DOMAIN: ${{ steps.cfg.outputs.domain }}
+        run: |
+          printf 'ANTHROPIC_API_KEY=%s\n' "$ANTHROPIC_API_KEY" | ssh navyk 'umask 077; cat > ~/incoming/secrets.env'
+          printf '%s\n' "$DOMAIN" | ssh navyk 'cat > ~/incoming/domain'
+          ssh navyk 'sudo /usr/local/bin/navyk-apply'
+
+      - name: Health check
+        if: steps.cfg.outputs.skip == 'false'
+        env:
+          DOMAIN: ${{ steps.cfg.outputs.domain }}
+        run: |
+          for i in $(seq 1 20); do
+            if body=$(curl -fsS "https://$DOMAIN/api/health"); then
+              echo "$body"
+              echo "Live: https://$DOMAIN" >> "$GITHUB_STEP_SUMMARY"
+              exit 0
+            fi
+            sleep 6
+          done
+          echo "Health check failed for https://$DOMAIN" >&2
+          exit 1
