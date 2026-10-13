@@ -1,0 +1,30 @@
+{
+  "version": "0.1.0",
+  "scale": { "0": "нет", "1": "частично", "2": "хорошо" },
+  "verdicts": [
+    { "id": "draft", "min": 0, "ru": "Черновик", "uk": "Чернетка", "en": "Draft" },
+    { "id": "working", "min": 50, "ru": "Рабочий", "uk": "Робочий", "en": "Working" },
+    { "id": "strong", "min": 80, "ru": "Сильный", "uk": "Сильний", "en": "Strong" }
+  ],
+  "criteria": [
+    { "id": "R1", "name": "goal", "question": "Is the desired result and its purpose clear? Would a colleague without context understand it?", "weights": { "beginner": 3, "advanced": 3, "pro": 2 } },
+    { "id": "R2", "name": "context", "question": "Does it include the facts needed: audience, situation, input data, why constraints matter?", "weights": { "beginner": 3, "advanced": 2, "pro": 2 } },
+    { "id": "R3", "name": "format", "question": "Are length, structure, tone and language specified, phrased as what to do?", "weights": { "beginner": 2, "advanced": 2, "pro": 1 } },
+    { "id": "R4", "name": "success_criteria", "question": "Is it clear what a good answer is and what to avoid?", "weights": { "beginner": 2, "advanced": 2, "pro": 2 } },
+    { "id": "R5", "name": "steps", "question": "For multi-step tasks, are steps or order given?", "weights": { "beginner": 0, "advanced": 1, "pro": 1 }, "only_if_relevant": true },
+    { "id": "R6", "name": "examples", "question": "If format or style matters, are there 1-3 varied examples?", "weights": { "beginner": 0, "advanced": 1, "pro": 2 }, "only_if_relevant": true },
+    { "id": "R7", "name": "structure", "question": "Are instructions separated from data (tags, headings), long data above the question?", "weights": { "beginner": 0, "advanced": 1, "pro": 2 } },
+    { "id": "R8", "name": "grounding", "question": "For factual or document tasks: is 'I don't know' allowed, are quotes or sources requested?", "weights": { "beginner": 0, "advanced": 1, "pro": 1 }, "only_if_relevant": true },
+    { "id": "R9", "name": "scope_safety", "question": "For agentic tasks: scope, verification method and 'ask before irreversible actions'?", "weights": { "beginner": 0, "advanced": 0, "pro": 2 }, "only_if_relevant": true }
+  ],
+  "blocking": {
+    "id": "R10",
+    "name": "privacy",
+    "question": "Does the prompt contain passwords, API keys, card or document numbers, or other people's personal data?"
+  },
+  "notes": [
+    "Weight 0 at a level means the criterion is a bonus there: mention it only as a tip, never as a gap.",
+    "Lessons may override which criteria apply via lesson.review.criteria.",
+    "The total score is computed by the backend from scores and weights, not by the model: total = sum(score*weight) / sum(2*weight) * 100 over applicable criteria."
+  ]
+}

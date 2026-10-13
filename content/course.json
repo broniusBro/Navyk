@@ -1,0 +1,419 @@
+{
+  "version": "0.1.0",
+  "verified_at": "2026-10-13",
+  "exercise_types": {
+    "single_choice": { "ai": false, "ru": "Выбор одного ответа" },
+    "multi_choice": { "ai": false, "ru": "Отметь все верные" },
+    "find_error": { "ai": false, "ru": "Найди слабое место в промпте" },
+    "build_prompt": { "ai": false, "ru": "Собери промпт из блоков" },
+    "order_steps": { "ai": false, "ru": "Расставь по порядку" },
+    "match_pairs": { "ai": false, "ru": "Сопоставь пары" },
+    "fill_gap": { "ai": false, "ru": "Заполни пропуск" },
+    "compare_answers": { "ai": false, "ru": "Какой промпт дал этот ответ / какой лучше" },
+    "write_prompt": { "ai": true, "ru": "Напиши промпт под задачу (разбор Claude)" },
+    "improve_prompt": { "ai": true, "ru": "Улучши слабый промпт (разбор Claude)" }
+  },
+  "principles": {
+    "P1": "Ясно и прямо, «тест коллеги»",
+    "P2": "Контекст и мотивация «зачем»",
+    "P3": "Формат: что делать, а не чего не делать",
+    "P4": "Шаги по порядку",
+    "P5": "Примеры",
+    "P7": "Роль",
+    "P8": "Длинный контекст: данные сверху, вопрос снизу",
+    "P9": "Право сказать «не знаю», опора на источник",
+    "P13": "Управление контекстом: новая задача — новый чат"
+  },
+  "levels": [
+    {
+      "id": "beginner",
+      "title": { "ru": "Новичок", "uk": "Новачок", "en": "Beginner" },
+      "goal": "Уверенно пользоваться чатом Claude, формулировать понятные запросы, работать с файлами, проектами и памятью, понимать ограничения и риски.",
+      "modules": [
+        {
+          "id": "b1",
+          "title": { "ru": "Первый разговор", "uk": "Перша розмова", "en": "First conversation" },
+          "lessons": [
+            {
+              "id": "b1.1",
+              "title": { "ru": "Что такое Claude и твой первый запрос", "uk": "Що таке Claude і твій перший запит", "en": "What Claude is and your first prompt" },
+              "goal": "объяснить, что Claude — ИИ-ассистент, назвать 3 задачи для него и написать первый запрос",
+              "principles": ["P1"],
+              "exercises": ["single_choice", "multi_choice", "write_prompt"],
+              "ai_practice": "Попроси Claude помочь с реальной задачей из твоей недели (письмо, план, объяснение). Разбор покажет, что уже хорошо.",
+              "free_preview": true,
+              "volatile": false,
+              "sources": ["https://support.claude.com/en/articles/8114491-get-started-with-claude"]
+            },
+            {
+              "id": "b1.2",
+              "title": { "ru": "Что Claude знает, а чего нет", "uk": "Що Claude знає, а чого ні", "en": "What Claude knows and doesn't" },
+              "goal": "объяснить дату отсечения знаний и понять, когда нужен веб-поиск",
+              "principles": ["P9"],
+              "exercises": ["single_choice", "match_pairs", "compare_answers"],
+              "volatile": false,
+              "sources": ["https://support.claude.com/en/articles/8114494-how-up-to-date-is-claude-s-training-data"]
+            },
+            {
+              "id": "b1.3",
+              "title": { "ru": "Где живёт Claude и кто может им пользоваться", "uk": "Де живе Claude і хто може ним користуватися", "en": "Where Claude lives and who can use it" },
+              "goal": "выбрать способ доступа (веб, десктоп, телефон) и проверить, поддерживается ли его страна",
+              "principles": [],
+              "exercises": ["match_pairs", "single_choice"],
+              "volatile": true,
+              "data_refs": ["regions", "apps"],
+              "sources": ["https://support.claude.com/en/articles/8461763-where-can-i-access-claude", "https://www.anthropic.com/supported-countries"]
+            },
+            {
+              "id": "b1.4",
+              "title": { "ru": "Модели и «усилие»", "uk": "Моделі та «зусилля»", "en": "Models and effort" },
+              "goal": "выбрать модель и уровень effort под задачу: быстро и дёшево или глубоко",
+              "principles": [],
+              "exercises": ["match_pairs", "single_choice"],
+              "volatile": true,
+              "data_refs": ["models"],
+              "sources": ["https://support.claude.com/en/articles/8664678-change-the-model-effort-and-thinking-settings"]
+            },
+            {
+              "id": "b1.5",
+              "title": { "ru": "Тарифы и лимиты", "uk": "Тарифи та ліміти", "en": "Plans and limits" },
+              "goal": "назвать отличия Free и Pro, найти Settings > Usage и объяснить сессионный и недельный лимит",
+              "principles": [],
+              "exercises": ["single_choice", "fill_gap"],
+              "volatile": true,
+              "data_refs": ["plans", "limits"],
+              "sources": ["https://claude.com/pricing", "https://support.claude.com/en/articles/11647753-how-do-usage-and-length-limits-work"]
+            }
+          ]
+        },
+        {
+          "id": "b2",
+          "title": { "ru": "Как формулировать запросы", "uk": "Як формулювати запити", "en": "How to write prompts" },
+          "lessons": [
+            {
+              "id": "b2.1",
+              "title": { "ru": "Умный новый сотрудник", "uk": "Розумний новий співробітник", "en": "The smart new colleague" },
+              "goal": "переписать расплывчатый запрос в конкретный, пройдя «тест коллеги»",
+              "principles": ["P1"],
+              "exercises": ["compare_answers", "find_error", "improve_prompt"],
+              "ai_practice": "Улучши запрос «напиши пост про наш магазин» так, чтобы его понял человек без контекста.",
+              "free_preview": true,
+              "volatile": false,
+              "sources": ["https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices"]
+            },
+            {
+              "id": "b2.2",
+              "title": { "ru": "Объясни «зачем»", "uk": "Поясни «навіщо»", "en": "Explain the why" },
+              "goal": "добавить к запросу контекст и цель так, чтобы ответ стал точнее",
+              "principles": ["P2"],
+              "exercises": ["compare_answers", "build_prompt", "write_prompt"],
+              "ai_practice": "Попроси совет по выбору ноутбука, рассказав, для чего он и почему важен бюджет.",
+              "volatile": false,
+              "sources": ["https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices"]
+            },
+            {
+              "id": "b2.3",
+              "title": { "ru": "Скажи, каким должен быть ответ", "uk": "Скажи, якою має бути відповідь", "en": "Describe the answer you want" },
+              "goal": "задать длину, структуру, тон и язык ответа в позитивной форме",
+              "principles": ["P3"],
+              "exercises": ["find_error", "fill_gap", "improve_prompt"],
+              "ai_practice": "Перепиши «объясни налоги, без воды и без списков» так, чтобы описать желаемый ответ, а не запреты.",
+              "volatile": false,
+              "sources": ["https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices"]
+            },
+            {
+              "id": "b2.4",
+              "title": { "ru": "Шаги по порядку", "uk": "Кроки по черзі", "en": "Steps in order" },
+              "goal": "разбить сложный запрос на нумерованные шаги",
+              "principles": ["P4"],
+              "exercises": ["order_steps", "build_prompt", "write_prompt"],
+              "ai_practice": "Попроси Claude подготовить план переезда в другой город по шагам: бюджет, жильё, документы.",
+              "volatile": false,
+              "sources": ["https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices"]
+            },
+            {
+              "id": "b2.5",
+              "title": { "ru": "Роль для Claude", "uk": "Роль для Claude", "en": "Give Claude a role" },
+              "goal": "задать роль одной фразой и увидеть, как меняется ответ",
+              "principles": ["P7"],
+              "exercises": ["compare_answers", "match_pairs", "write_prompt"],
+              "ai_practice": "Задай Claude роль и попроси проверить твоё резюме.",
+              "volatile": false,
+              "sources": ["https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices"]
+            },
+            {
+              "id": "b2.6",
+              "title": { "ru": "Покажи пример", "uk": "Покажи приклад", "en": "Show an example" },
+              "goal": "добавить к запросу 1–2 примера желаемого результата",
+              "principles": ["P5"],
+              "exercises": ["compare_answers", "fill_gap", "write_prompt"],
+              "ai_practice": "Попроси придумать 5 названий для кофейни, показав 2 примера стиля, который нравится.",
+              "volatile": false,
+              "sources": ["https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices"]
+            },
+            {
+              "id": "b2.7",
+              "title": { "ru": "Диалог, а не один выстрел", "uk": "Діалог, а не один постріл", "en": "A conversation, not one shot" },
+              "goal": "уточнять и править ответ следующими сообщениями и правкой фрагмента на месте",
+              "principles": ["P1", "P13"],
+              "exercises": ["order_steps", "single_choice"],
+              "volatile": true,
+              "data_refs": ["ui_paths"],
+              "sources": ["https://support.claude.com/en/articles/9797557-usage-limit-best-practices"]
+            },
+            {
+              "id": "b2.8",
+              "title": { "ru": "Контрольная: полный промпт", "uk": "Контрольна: повний промпт", "en": "Checkpoint: a complete prompt" },
+              "goal": "самостоятельно написать запрос с целью, контекстом, форматом, шагами и ролью",
+              "principles": ["P1", "P2", "P3", "P4", "P7"],
+              "exercises": ["build_prompt", "write_prompt"],
+              "ai_practice": "Попроси Claude помочь подготовиться к собеседованию на конкретную должность.",
+              "checkpoint": true,
+              "volatile": false,
+              "sources": ["https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices"]
+            }
+          ]
+        },
+        {
+          "id": "b3",
+          "title": { "ru": "Файлы и изображения", "uk": "Файли та зображення", "en": "Files and images" },
+          "lessons": [
+            {
+              "id": "b3.1",
+              "title": { "ru": "Загружаем файл", "uk": "Завантажуємо файл", "en": "Uploading a file" },
+              "goal": "загрузить PDF, DOCX или фото и задать по нему вопрос",
+              "principles": [],
+              "exercises": ["order_steps", "single_choice"],
+              "volatile": true,
+              "data_refs": ["ui_paths"],
+              "sources": ["https://support.claude.com/en/articles/8241126-upload-files-to-claude"]
+            },
+            {
+              "id": "b3.2",
+              "title": { "ru": "Сколько и каких файлов можно", "uk": "Скільки і яких файлів можна", "en": "File types and limits" },
+              "goal": "знать лимиты на файлы и понимать, что делать с большим документом",
+              "principles": [],
+              "exercises": ["single_choice", "fill_gap"],
+              "volatile": true,
+              "data_refs": ["limits"],
+              "sources": ["https://support.claude.com/en/articles/8241126-upload-files-to-claude"]
+            },
+            {
+              "id": "b3.3",
+              "title": { "ru": "Вопросы к документу", "uk": "Запитання до документа", "en": "Asking about a document" },
+              "goal": "задать вопрос так, чтобы ответ опирался на текст документа и цитаты",
+              "principles": ["P8", "P9"],
+              "exercises": ["compare_answers", "find_error", "write_prompt"],
+              "ai_practice": "Напиши запрос к договору аренды: найти условия расторжения и подтвердить их цитатами.",
+              "volatile": false,
+              "sources": ["https://platform.claude.com/docs/en/test-and-evaluate/strengthen-guardrails/reduce-hallucinations"]
+            },
+            {
+              "id": "b3.4",
+              "title": { "ru": "Картинки и скриншоты", "uk": "Зображення та скриншоти", "en": "Images and screenshots" },
+              "goal": "получить полезный разбор скриншота, фото или графика",
+              "principles": ["P1", "P2"],
+              "exercises": ["multi_choice", "write_prompt"],
+              "ai_practice": "Опиши, что попросишь Claude сделать со скриншотом ошибки на сайте, чтобы получить решение.",
+              "volatile": false,
+              "sources": ["https://support.claude.com/en/articles/8241126-upload-files-to-claude"]
+            }
+          ]
+        },
+        {
+          "id": "b4",
+          "title": { "ru": "Проекты", "uk": "Проєкти", "en": "Projects" },
+          "lessons": [
+            {
+              "id": "b4.1",
+              "title": { "ru": "Зачем нужен проект", "uk": "Навіщо потрібен проєкт", "en": "Why use a project" },
+              "goal": "объяснить, чем проект отличается от чата, и создать первый проект",
+              "principles": [],
+              "exercises": ["match_pairs", "single_choice"],
+              "volatile": true,
+              "data_refs": ["plans", "ui_paths"],
+              "sources": ["https://support.claude.com/en/articles/9517075-what-are-projects"]
+            },
+            {
+              "id": "b4.2",
+              "title": { "ru": "Знания проекта", "uk": "Знання проєкту", "en": "Project knowledge" },
+              "goal": "добавить в проект файлы, нужные в каждом чате, и убрать лишние",
+              "principles": ["P2"],
+              "exercises": ["multi_choice", "single_choice"],
+              "volatile": true,
+              "data_refs": ["limits"],
+              "sources": ["https://support.claude.com/en/articles/9517075-what-are-projects", "https://support.claude.com/en/articles/11473015-retrieval-augmented-generation-rag-for-projects"]
+            },
+            {
+              "id": "b4.3",
+              "title": { "ru": "Инструкции проекта", "uk": "Інструкції проєкту", "en": "Project instructions" },
+              "goal": "написать инструкцию проекта с ролью, тоном и правилами",
+              "principles": ["P2", "P3", "P7"],
+              "exercises": ["build_prompt", "write_prompt"],
+              "ai_practice": "Напиши инструкцию для проекта «Ответы клиентам интернет-магазина».",
+              "volatile": false,
+              "sources": ["https://support.claude.com/en/articles/10185728-understanding-claude-s-personalization-features"]
+            },
+            {
+              "id": "b4.4",
+              "title": { "ru": "Проект на практике", "uk": "Проєкт на практиці", "en": "A project in practice" },
+              "goal": "спланировать проект под свою задачу: название, файлы, инструкция",
+              "principles": ["P1", "P2"],
+              "exercises": ["order_steps", "write_prompt"],
+              "ai_practice": "Опиши проект для своей задачи (учёба, работа, хобби) и напиши к нему инструкцию.",
+              "checkpoint": true,
+              "volatile": false,
+              "sources": ["https://support.claude.com/en/articles/9517075-what-are-projects"]
+            }
+          ]
+        },
+        {
+          "id": "b5",
+          "title": { "ru": "Память и настройки", "uk": "Пам'ять і налаштування", "en": "Memory and settings" },
+          "lessons": [
+            {
+              "id": "b5.1",
+              "title": { "ru": "Инструкции для всех чатов", "uk": "Інструкції для всіх чатів", "en": "Instructions for every chat" },
+              "goal": "задать общие предпочтения в профиле и отличать их от инструкций проекта",
+              "principles": ["P2", "P3"],
+              "exercises": ["match_pairs", "write_prompt"],
+              "ai_practice": "Напиши инструкцию о себе: на каком языке отвечать, как подробно, что о тебе важно знать.",
+              "volatile": true,
+              "data_refs": ["ui_paths"],
+              "sources": ["https://support.claude.com/en/articles/10185728-understanding-claude-s-personalization-features"]
+            },
+            {
+              "id": "b5.2",
+              "title": { "ru": "Как работает память", "uk": "Як працює пам'ять", "en": "How memory works" },
+              "goal": "найти память в настройках, прочитать, исправить и удалить записи",
+              "principles": [],
+              "exercises": ["order_steps", "single_choice"],
+              "volatile": true,
+              "data_refs": ["ui_paths", "plans"],
+              "sources": ["https://support.claude.com/en/articles/11817273-use-claude-s-chat-search-and-memory-to-build-on-previous-context"]
+            },
+            {
+              "id": "b5.3",
+              "title": { "ru": "Запомни, забудь, найди прошлый чат", "uk": "Запам'ятай, забудь, знайди минулий чат", "en": "Remember, forget, find a past chat" },
+              "goal": "попросить Claude запомнить или забыть факт и сослаться на прошлый разговор",
+              "principles": ["P1"],
+              "exercises": ["fill_gap", "match_pairs"],
+              "volatile": true,
+              "data_refs": ["plans"],
+              "sources": ["https://support.claude.com/en/articles/11817273-use-claude-s-chat-search-and-memory-to-build-on-previous-context"]
+            },
+            {
+              "id": "b5.4",
+              "title": { "ru": "Инкогнито", "uk": "Інкогніто", "en": "Incognito chats" },
+              "goal": "выбрать инкогнито-чат, когда разговор не должен попасть в историю и память",
+              "principles": [],
+              "exercises": ["single_choice", "multi_choice"],
+              "volatile": true,
+              "sources": ["https://support.claude.com/en/articles/12260368-use-incognito-chats"]
+            }
+          ]
+        },
+        {
+          "id": "b6",
+          "title": { "ru": "Приватность и безопасность", "uk": "Приватність і безпека", "en": "Privacy and safety" },
+          "lessons": [
+            {
+              "id": "b6.1",
+              "title": { "ru": "Учится ли Claude на моих чатах", "uk": "Чи вчиться Claude на моїх чатах", "en": "Is my data used for training" },
+              "goal": "найти настройку улучшения модели и принять осознанное решение",
+              "principles": [],
+              "exercises": ["single_choice", "order_steps"],
+              "volatile": true,
+              "data_refs": ["ui_paths"],
+              "sources": ["https://privacy.claude.com/en/articles/10023580-is-my-data-used-for-model-training"]
+            },
+            {
+              "id": "b6.2",
+              "title": { "ru": "Что нельзя отправлять", "uk": "Що не можна надсилати", "en": "What not to share" },
+              "goal": "перечислить, что не стоит вставлять в чат, и обезличить текст перед отправкой",
+              "principles": [],
+              "exercises": ["multi_choice", "find_error", "improve_prompt"],
+              "ai_practice": "Обезличь запрос с именами, телефоном и номером карты так, чтобы Claude всё равно смог помочь.",
+              "volatile": false,
+              "sources": ["https://privacy.claude.com/en/articles/10023580-is-my-data-used-for-model-training"]
+            },
+            {
+              "id": "b6.3",
+              "title": { "ru": "Оценки и публичные ссылки", "uk": "Оцінки та публічні посилання", "en": "Feedback and shared links" },
+              "goal": "понимать, что сохраняется при оценке ответа и как работает ссылка на чат",
+              "principles": [],
+              "exercises": ["single_choice", "multi_choice"],
+              "volatile": true,
+              "sources": ["https://support.claude.com/en/articles/10593882-share-and-unshare-chats"]
+            }
+          ]
+        },
+        {
+          "id": "b7",
+          "title": { "ru": "Ошибки и проверка ответов", "uk": "Помилки та перевірка відповідей", "en": "Mistakes and checking answers" },
+          "lessons": [
+            {
+              "id": "b7.1",
+              "title": { "ru": "Галлюцинации", "uk": "Галюцинації", "en": "Hallucinations" },
+              "goal": "распознать признаки выдуманного ответа и попросить источник",
+              "principles": ["P9"],
+              "exercises": ["find_error", "multi_choice"],
+              "volatile": false,
+              "sources": ["https://platform.claude.com/docs/en/test-and-evaluate/strengthen-guardrails/reduce-hallucinations"]
+            },
+            {
+              "id": "b7.2",
+              "title": { "ru": "Разреши сказать «не знаю»", "uk": "Дозволь сказати «не знаю»", "en": "Let Claude say “I don't know”" },
+              "goal": "добавить в промпт разрешение признавать неуверенность",
+              "principles": ["P9"],
+              "exercises": ["fill_gap", "improve_prompt"],
+              "ai_practice": "Улучши запрос о симптомах простуды у ребёнка так, чтобы Claude честно указывал неуверенность и советовал врача.",
+              "volatile": false,
+              "sources": ["https://platform.claude.com/docs/en/test-and-evaluate/strengthen-guardrails/reduce-hallucinations"]
+            },
+            {
+              "id": "b7.3",
+              "title": { "ru": "Три главные ошибки", "uk": "Три головні помилки", "en": "The three big mistakes" },
+              "goal": "найти и исправить отсутствие цели, контекста и формата",
+              "principles": ["P1", "P2", "P3"],
+              "exercises": ["find_error", "improve_prompt"],
+              "ai_practice": "Исправь три слабых запроса подряд.",
+              "volatile": false,
+              "sources": ["https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices"]
+            },
+            {
+              "id": "b7.4",
+              "title": { "ru": "Бесконечный длинный чат", "uk": "Нескінченний довгий чат", "en": "The endless chat" },
+              "goal": "понимать, когда начать новый чат и почему это улучшает ответы и экономит лимиты",
+              "principles": ["P13"],
+              "exercises": ["single_choice", "order_steps"],
+              "volatile": false,
+              "sources": ["https://support.claude.com/en/articles/11647753-how-do-usage-and-length-limits-work"]
+            },
+            {
+              "id": "b7.5",
+              "title": { "ru": "Экономим лимиты", "uk": "Економимо ліміти", "en": "Saving your limits" },
+              "goal": "применить 5 приёмов экономии лимитов",
+              "principles": ["P13"],
+              "exercises": ["multi_choice", "match_pairs"],
+              "volatile": true,
+              "data_refs": ["limits"],
+              "sources": ["https://support.claude.com/en/articles/9797557-usage-limit-best-practices"]
+            },
+            {
+              "id": "b7.6",
+              "title": { "ru": "Финал уровня", "uk": "Фінал рівня", "en": "Level final" },
+              "goal": "решить реальную задачу: выбрать инструмент (чат, файл, проект) и написать сильный промпт",
+              "principles": ["P1", "P2", "P3", "P4", "P5", "P7", "P9"],
+              "exercises": ["single_choice", "write_prompt", "write_prompt"],
+              "ai_practice": "Две задачи на выбор: разобрать выписку расходов за месяц или подготовить план изучения нового навыка.",
+              "checkpoint": true,
+              "volatile": false,
+              "sources": ["https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices"]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
