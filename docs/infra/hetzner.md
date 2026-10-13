@@ -1,69 +1,43 @@
-# Запуск Navyk на Hetzner
+# Navyk на общем сервере приложений (Hetzner, 65.108.234.212)
 
-Один раз руками (≈15 минут), дальше всё автоматически: каждый коммит в `main` проходит тесты
-и выкладывается на сервер (`.github/workflows/deploy.yml`).
+Navyk живёт на том же сервере, что и bronus.app, по правилам из `bronus-core/host/README.md`:
+общая только «здание» (обновления, файрвол, Docker, Caddy), у Navyk своя «квартира».
 
-## 1. SSH-ключ для выкладки (на вашем компьютере, macOS/Linux)
-
-```
-ssh-keygen -t ed25519 -f ~/.ssh/navyk_deploy -N "" -C navyk-deploy
-cat ~/.ssh/navyk_deploy.pub      # публичный — для Hetzner
-pbcopy < ~/.ssh/navyk_deploy     # приватный — в буфер, для GitHub (на Linux: cat ~/.ssh/navyk_deploy)
-```
-
-Приватный ключ никому не отправляйте и не вставляйте в чат.
-
-## 2. Сервер в Hetzner Cloud
-
-console.hetzner.com → проект → **Add Server**:
-
-| Поле | Значение |
+| | Navyk |
 |---|---|
-| Location | Falkenstein, Nuremberg или Helsinki (ЕС) |
-| Image | Ubuntu 24.04 |
-| Type | самый маленький Shared vCPU (x86 или Arm) — для старта хватит |
-| Networking | Public IPv4 + IPv6 |
-| SSH keys | Add SSH key → вставить содержимое `navyk_deploy.pub` |
-| Backups | включить (рекомендуется) |
-| Cloud config | вставить файл `deploy/cloud-init.yaml` целиком |
-| Name | navyk-prod |
+| Код | `/srv/navyk` (клон публичного репозитория, ключ GitHub не нужен) |
+| Приложение | Docker Compose проект `navyk`, контейнер только для чтения, без привилегий |
+| Порт | `127.0.0.1:8100` (зарезервирован в `/etc/host/projects`) |
+| Секреты | `/etc/navyk/navyk.env` (chmod 600): `ANTHROPIC_API_KEY`, лимиты разборов |
+| Сайт в Caddy | `/etc/caddy/sites/<домен>.caddy` → `reverse_proxy 127.0.0.1:8100` |
+| База данных | пока не нужна (прогресс хранится на устройстве ученика) |
+| Обновления | таймер `navyk-autoupdate` каждые 5 минут: если в `main` новый коммит — сборка, проверка здоровья, при сбое откат |
 
-Create & Buy. Запишите IPv4. Через 3–5 минут сервер сам закончит настройку.
-
-## 3. Секреты в GitHub
-
-Репозиторий → Settings → Secrets and variables → Actions → **New repository secret**:
-
-| Name | Значение |
-|---|---|
-| `DEPLOY_HOST` | IPv4 сервера |
-| `DEPLOY_SSH_KEY` | приватный ключ из шага 1 (весь текст, включая строки BEGIN/END) |
-| `ANTHROPIC_API_KEY` | ключ Claude API `sk-ant-api03-…` (если ещё не добавлен) |
-
-## 4. Первая выкладка
-
-Actions → **Deploy** → Run workflow. В конце в сводке будет адрес:
-`https://<ip-с-дефисами>.sslip.io` (например `https://203-0-113-7.sslip.io`). HTTPS настоящий.
-
-## 5. Свой домен (когда появится)
-
-1. У регистратора: A-запись `@` → IPv4 сервера (и AAAA → IPv6, по желанию).
-2. GitHub → Settings → Secrets and variables → Actions → вкладка **Variables** → `NAVYK_DOMAIN` = `navyk.app`.
-3. Actions → Deploy → Run workflow. Caddy сам получит сертификат.
-
-## Что настроено на сервере
-
-- Node.js 22, приложение как сервис `navyk` (отдельный пользователь без прав, код только для чтения, слушает 127.0.0.1:8080).
-- Caddy: HTTPS (Let's Encrypt), сжатие, проксирование на приложение.
-- Файрвол: открыты только 22, 80, 443. Вход по SSH только по ключу.
-- Автоматические обновления безопасности Ubuntu.
-- Ключ Claude API: `/etc/navyk/secrets.env` (только root), приходит из секретов GitHub при каждой выкладке.
-
-## Диагностика (если нужно зайти на сервер)
+## Первый запуск (с Mac, из папки репозитория navyk)
 
 ```
-ssh -i ~/.ssh/navyk_deploy root@<IP>
-systemctl status navyk caddy
-journalctl -u navyk -n 100     # логи приложения, в т.ч. стоимость каждого разбора
-cloud-init status --long       # завершилась ли первичная настройка
+bash deploy/deploy-from-mac.sh
 ```
+
+Скрипт проверит доступ к серверу, склонирует код в `/srv/navyk`, спросит ключ Claude API
+(ввод скрыт; можно пропустить — тогда вместо ИИ-разбора будет чек-лист самопроверки),
+соберёт и запустит контейнер, добавит сайт в Caddy, включит автообновление и проверит адрес снаружи.
+
+Адрес по умолчанию: **https://65-108-234-212.sslip.io** (временный, работает без DNS, HTTPS настоящий).
+
+## Свой домен
+
+1. У регистратора: одна A-запись домена → `65.108.234.212` (без AAAA).
+2. `SITE=navyk.example.com bash deploy/deploy-from-mac.sh` — Caddy получит сертификат, старый сайт sslip будет удалён.
+
+## Обслуживание
+
+```
+ssh -t root@65.108.234.212 /srv/navyk/deploy/set-api-key.sh        # сменить ключ Claude API (ввод скрыт)
+ssh root@65.108.234.212 'cd /srv/navyk && docker compose logs --tail 100 app'   # логи, стоимость разборов
+ssh root@65.108.234.212 'systemctl list-timers navyk-autoupdate.timer; journalctl -u navyk-autoupdate -n 30'
+ssh root@65.108.234.212 'cd /srv/navyk && ./deploy/update.sh'   # обновить немедленно
+```
+
+Правила общего сервера: после правки Caddy — `caddy validate` и `systemctl restart caddy`
+(скрипты делают это сами, с откатом); секреты в чат не передавать.

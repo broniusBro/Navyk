@@ -1,0 +1,18 @@
+# Navyk on the shared application server (see bronus-core/host/README.md).
+# Secrets: /etc/navyk/navyk.env (ANTHROPIC_API_KEY=...). Port 8100 is reserved for navyk in /etc/host/projects.
+name: navyk
+
+services:
+  app:
+    build: .
+    image: navyk:latest
+    restart: unless-stopped
+    env_file: /etc/navyk/navyk.env
+    # only reachable from the server itself; Caddy terminates HTTPS
+    ports:
+      - "127.0.0.1:${APP_PORT:-8100}:8080"
+    read_only: true
+    tmpfs: [/tmp]
+    security_opt: ["no-new-privileges:true"]
+    cap_drop: [ALL]
+    mem_limit: 512m
