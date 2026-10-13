@@ -35,7 +35,14 @@ Navyk — неофициальное обучающее приложение о 
 
 ## Актуальность
 Функции Claude меняются часто. Любые факты о продуктах Anthropic проверять по
-https://docs.claude.com и https://support.claude.com, а не по памяти. В каждом уроке хранить дату проверки.
+https://platform.claude.com/docs (API, промптинг; бывший docs.claude.com), https://code.claude.com/docs
+(Claude Code, Agent SDK) и https://support.claude.com, а не по памяти. В каждом уроке хранить дату проверки.
+Названия моделей, тарифы, лимиты и пути в интерфейсе хранить как данные, а не в тексте уроков.
+
+## Регионы
+Claude не доступен в России и Беларуси; в Украине доступен, кроме оккупированных территорий
+(список: https://www.anthropic.com/supported-countries). Интерфейс Claude не переведён на ru/uk —
+в уроках показываем английские названия элементов с объяснением.
 
 ## Команда агентов (`.claude/agents/`)
 researcher, methodologist, claude-expert, copywriter, translator, product-designer,
