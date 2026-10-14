@@ -970,6 +970,16 @@
               "free_preview": true,
               "sources": [
                 "https://support.claude.com/en/articles/17153992-what-are-artifacts-and-how-do-i-use-them"
+              ],
+              "exercises": [
+                "single_choice",
+                "multi_choice",
+                "match_pairs",
+                "order_steps"
+              ],
+              "principles": [
+                "P1",
+                "P2"
               ]
             },
             {
@@ -985,6 +995,18 @@
               "free_preview": false,
               "sources": [
                 "https://support.claude.com/en/articles/16923645-get-started-with-claude-docs"
+              ],
+              "exercises": [
+                "single_choice",
+                "find_error",
+                "match_pairs",
+                "multi_choice",
+                "write_prompt"
+              ],
+              "principles": [
+                "P1",
+                "P2",
+                "P3"
               ]
             },
             {
@@ -1000,6 +1022,18 @@
               "free_preview": false,
               "sources": [
                 "https://support.claude.com/en/articles/17153992-what-are-artifacts-and-how-do-i-use-them"
+              ],
+              "exercises": [
+                "single_choice",
+                "find_error",
+                "build_prompt",
+                "multi_choice",
+                "improve_prompt"
+              ],
+              "principles": [
+                "P1",
+                "P2",
+                "P3"
               ]
             },
             {
@@ -1015,6 +1049,19 @@
               "free_preview": false,
               "sources": [
                 "https://support.claude.com/en/articles/14604416-get-started-with-claude-design"
+              ],
+              "exercises": [
+                "find_error",
+                "multi_choice",
+                "match_pairs",
+                "single_choice",
+                "write_prompt"
+              ],
+              "principles": [
+                "P1",
+                "P2",
+                "P3",
+                "P5"
               ]
             },
             {
@@ -1030,6 +1077,18 @@
               "free_preview": false,
               "sources": [
                 "https://support.claude.com/en/articles/17153992-what-are-artifacts-and-how-do-i-use-them"
+              ],
+              "exercises": [
+                "single_choice",
+                "multi_choice",
+                "match_pairs",
+                "order_steps",
+                "write_prompt"
+              ],
+              "principles": [
+                "P1",
+                "P3",
+                "P4"
               ]
             },
             {
@@ -1045,6 +1104,15 @@
               "free_preview": false,
               "sources": [
                 "https://support.claude.com/en/articles/9547008-share-artifacts"
+              ],
+              "exercises": [
+                "single_choice",
+                "match_pairs",
+                "multi_choice",
+                "order_steps"
+              ],
+              "principles": [
+                "P9"
               ]
             },
             {
@@ -1060,6 +1128,17 @@
               "free_preview": false,
               "sources": [
                 "https://support.claude.com/en/articles/17454700-get-started-with-claude-dashboards"
+              ],
+              "exercises": [
+                "single_choice",
+                "find_error",
+                "multi_choice",
+                "improve_prompt"
+              ],
+              "principles": [
+                "P1",
+                "P2",
+                "P9"
               ]
             }
           ]
@@ -1086,6 +1165,17 @@
               "free_preview": false,
               "sources": [
                 "https://support.claude.com/en/articles/12111783-create-and-edit-files-with-claude"
+              ],
+              "exercises": [
+                "single_choice",
+                "order_steps",
+                "match_pairs",
+                "multi_choice",
+                "improve_prompt"
+              ],
+              "principles": [
+                "P1",
+                "P3"
               ]
             },
             {
@@ -1099,7 +1189,20 @@
               "goal": "получить XLSX с работающими формулами по описанию задачи",
               "volatile": false,
               "free_preview": false,
-              "sources": []
+              "sources": [],
+              "exercises": [
+                "compare_answers",
+                "find_error",
+                "build_prompt",
+                "fill_gap",
+                "write_prompt"
+              ],
+              "principles": [
+                "P1",
+                "P2",
+                "P3",
+                "P4"
+              ]
             },
             {
               "id": "a2.3",
@@ -1112,7 +1215,20 @@
               "goal": "загрузить данные и получить анализ и PNG-график",
               "volatile": false,
               "free_preview": false,
-              "sources": []
+              "sources": [],
+              "exercises": [
+                "single_choice",
+                "match_pairs",
+                "find_error",
+                "multi_choice",
+                "write_prompt"
+              ],
+              "principles": [
+                "P1",
+                "P2",
+                "P3",
+                "P9"
+              ]
             },
             {
               "id": "a2.4",
@@ -1125,7 +1241,19 @@
               "goal": "сформулировать требования к документу (аудитория, структура, объём)",
               "volatile": false,
               "free_preview": false,
-              "sources": []
+              "sources": [],
+              "exercises": [
+                "match_pairs",
+                "find_error",
+                "build_prompt",
+                "single_choice",
+                "improve_prompt"
+              ],
+              "principles": [
+                "P1",
+                "P2",
+                "P3"
+              ]
             },
             {
               "id": "a2.5",
@@ -1138,7 +1266,17 @@
               "goal": "объяснить, что такое промпт-инъекция в файлах и почему за работой нужно следить",
               "volatile": false,
               "free_preview": false,
-              "sources": []
+              "sources": [],
+              "exercises": [
+                "single_choice",
+                "find_error",
+                "multi_choice",
+                "order_steps",
+                "write_prompt"
+              ],
+              "principles": [
+                "P9"
+              ]
             },
             {
               "id": "a2.6",
@@ -1153,6 +1291,18 @@
               "free_preview": false,
               "sources": [
                 "https://support.claude.com/en/articles/16951679-use-claude-in-google-docs-sheets-and-slides"
+              ],
+              "exercises": [
+                "single_choice",
+                "order_steps",
+                "match_pairs",
+                "multi_choice",
+                "improve_prompt"
+              ],
+              "principles": [
+                "P1",
+                "P2",
+                "P9"
               ]
             }
           ]
@@ -1179,6 +1329,16 @@
               "free_preview": false,
               "sources": [
                 "https://support.claude.com/en/articles/10684626-enable-and-use-web-search"
+              ],
+              "exercises": [
+                "single_choice",
+                "multi_choice",
+                "find_error",
+                "match_pairs",
+                "improve_prompt"
+              ],
+              "principles": [
+                "P9"
               ]
             },
             {
@@ -1194,7 +1354,14 @@
               "free_preview": false,
               "sources": [
                 "https://support.claude.com/en/articles/11095361-when-should-i-use-web-search-extended-thinking-and-research"
-              ]
+              ],
+              "exercises": [
+                "match_pairs",
+                "single_choice",
+                "multi_choice",
+                "fill_gap"
+              ],
+              "principles": []
             },
             {
               "id": "a3.3",
@@ -1209,6 +1376,16 @@
               "free_preview": false,
               "sources": [
                 "https://support.claude.com/en/articles/11088861-use-research-on-claude"
+              ],
+              "exercises": [
+                "single_choice",
+                "find_error",
+                "multi_choice",
+                "write_prompt"
+              ],
+              "principles": [
+                "P1",
+                "P9"
               ]
             },
             {
@@ -1224,6 +1401,19 @@
               "free_preview": false,
               "sources": [
                 "https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices"
+              ],
+              "exercises": [
+                "match_pairs",
+                "build_prompt",
+                "single_choice",
+                "compare_answers",
+                "improve_prompt"
+              ],
+              "principles": [
+                "P1",
+                "P2",
+                "P3",
+                "P9"
               ]
             }
           ]
@@ -1250,6 +1440,17 @@
               "free_preview": false,
               "sources": [
                 "https://support.claude.com/en/articles/11176164-use-connectors-to-extend-claude-s-capabilities"
+              ],
+              "exercises": [
+                "single_choice",
+                "match_pairs",
+                "multi_choice",
+                "fill_gap",
+                "write_prompt"
+              ],
+              "principles": [
+                "P1",
+                "P2"
               ]
             },
             {
@@ -1263,7 +1464,14 @@
               "goal": "подключить сервис через Customize > Connectors и включить его для конкретного чата",
               "volatile": true,
               "free_preview": false,
-              "sources": []
+              "sources": [],
+              "exercises": [
+                "order_steps",
+                "single_choice",
+                "multi_choice",
+                "match_pairs"
+              ],
+              "principles": []
             },
             {
               "id": "a4.3",
@@ -1276,7 +1484,14 @@
               "goal": "добавить кастомный коннектор по URL (на Free — только один)",
               "volatile": false,
               "free_preview": false,
-              "sources": []
+              "sources": [],
+              "exercises": [
+                "single_choice",
+                "order_steps",
+                "fill_gap",
+                "multi_choice"
+              ],
+              "principles": []
             },
             {
               "id": "a4.4",
@@ -1291,6 +1506,16 @@
               "free_preview": false,
               "sources": [
                 "https://support.claude.com/en/articles/13730515-manage-claude-s-tool-access"
+              ],
+              "exercises": [
+                "match_pairs",
+                "single_choice",
+                "multi_choice",
+                "improve_prompt"
+              ],
+              "principles": [
+                "P1",
+                "P13"
               ]
             },
             {
@@ -1306,6 +1531,17 @@
               "free_preview": false,
               "sources": [
                 "https://support.claude.com/en/articles/11176164-use-connectors-to-extend-claude-s-capabilities"
+              ],
+              "exercises": [
+                "match_pairs",
+                "single_choice",
+                "find_error",
+                "multi_choice",
+                "write_prompt"
+              ],
+              "principles": [
+                "P1",
+                "P3"
               ]
             }
           ]
@@ -1332,6 +1568,17 @@
               "free_preview": false,
               "sources": [
                 "https://support.claude.com/en/articles/12512176-what-are-skills"
+              ],
+              "exercises": [
+                "single_choice",
+                "order_steps",
+                "match_pairs",
+                "multi_choice",
+                "write_prompt"
+              ],
+              "principles": [
+                "P1",
+                "P13"
               ]
             },
             {
@@ -1347,6 +1594,17 @@
               "free_preview": false,
               "sources": [
                 "https://support.claude.com/en/articles/12512180-use-skills-in-claude"
+              ],
+              "exercises": [
+                "match_pairs",
+                "single_choice",
+                "multi_choice",
+                "find_error",
+                "improve_prompt"
+              ],
+              "principles": [
+                "P1",
+                "P3"
               ]
             },
             {
@@ -1362,6 +1620,18 @@
               "free_preview": false,
               "sources": [
                 "https://support.claude.com/en/articles/12512198-how-to-create-custom-skills"
+              ],
+              "exercises": [
+                "single_choice",
+                "find_error",
+                "build_prompt",
+                "order_steps",
+                "write_prompt"
+              ],
+              "principles": [
+                "P1",
+                "P2",
+                "P5"
               ]
             },
             {
@@ -1377,6 +1647,16 @@
               "free_preview": false,
               "sources": [
                 "https://support.claude.com/en/articles/10185728-understanding-claude-s-personalization-features"
+              ],
+              "exercises": [
+                "match_pairs",
+                "single_choice",
+                "find_error",
+                "multi_choice"
+              ],
+              "principles": [
+                "P2",
+                "P13"
               ]
             },
             {
@@ -1393,6 +1673,15 @@
               "sources": [
                 "https://support.claude.com/en/articles/13837440-use-plugins-in-claude",
                 "https://support.claude.com/en/articles/14328846-browse-skills-connectors-and-plugins-in-one-directory"
+              ],
+              "exercises": [
+                "single_choice",
+                "order_steps",
+                "match_pairs",
+                "multi_choice"
+              ],
+              "principles": [
+                "P13"
               ]
             }
           ]
@@ -1419,6 +1708,16 @@
               "free_preview": false,
               "sources": [
                 "https://support.claude.com/en/articles/16761823-claude-cowork-and-chat-are-one-claude"
+              ],
+              "exercises": [
+                "single_choice",
+                "multi_choice",
+                "match_pairs",
+                "fill_gap"
+              ],
+              "principles": [
+                "P1",
+                "P13"
               ]
             },
             {
@@ -1434,6 +1733,20 @@
               "free_preview": false,
               "sources": [
                 "https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices"
+              ],
+              "exercises": [
+                "build_prompt",
+                "find_error",
+                "multi_choice",
+                "single_choice",
+                "write_prompt"
+              ],
+              "principles": [
+                "P1",
+                "P2",
+                "P4",
+                "P11",
+                "P12"
               ]
             },
             {
@@ -1449,6 +1762,17 @@
               "free_preview": false,
               "sources": [
                 "https://support.claude.com/en/articles/13364135-use-claude-cowork-safely"
+              ],
+              "exercises": [
+                "single_choice",
+                "match_pairs",
+                "multi_choice",
+                "find_error",
+                "improve_prompt"
+              ],
+              "principles": [
+                "P1",
+                "P12"
               ]
             },
             {
@@ -1465,6 +1789,16 @@
               "sources": [
                 "https://support.claude.com/en/articles/16607400-use-the-built-in-browser-in-claude-cowork",
                 "https://support.claude.com/en/articles/14128542-let-claude-use-your-computer-in-cowork"
+              ],
+              "exercises": [
+                "order_steps",
+                "match_pairs",
+                "single_choice",
+                "multi_choice",
+                "fill_gap"
+              ],
+              "principles": [
+                "P12"
               ]
             },
             {
@@ -1480,6 +1814,19 @@
               "free_preview": false,
               "sources": [
                 "https://support.claude.com/en/articles/13854387-schedule-recurring-tasks-in-claude-cowork"
+              ],
+              "exercises": [
+                "order_steps",
+                "single_choice",
+                "find_error",
+                "multi_choice",
+                "write_prompt"
+              ],
+              "principles": [
+                "P1",
+                "P3",
+                "P4",
+                "P12"
               ]
             },
             {
@@ -1495,6 +1842,17 @@
               "free_preview": false,
               "sources": [
                 "https://support.claude.com/en/articles/15520349-use-claude-cowork-on-web-desktop-and-mobile"
+              ],
+              "exercises": [
+                "order_steps",
+                "single_choice",
+                "multi_choice",
+                "match_pairs",
+                "find_error"
+              ],
+              "principles": [
+                "P1",
+                "P12"
               ]
             }
           ]
@@ -1521,6 +1879,16 @@
               "free_preview": false,
               "sources": [
                 "https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices"
+              ],
+              "exercises": [
+                "single_choice",
+                "match_pairs",
+                "find_error",
+                "multi_choice",
+                "improve_prompt"
+              ],
+              "principles": [
+                "P6"
               ]
             },
             {
@@ -1534,7 +1902,18 @@
               "goal": "подобрать 3 разнообразных примера в тегах `<example>`",
               "volatile": false,
               "free_preview": false,
-              "sources": []
+              "sources": [],
+              "exercises": [
+                "single_choice",
+                "find_error",
+                "match_pairs",
+                "multi_choice",
+                "write_prompt"
+              ],
+              "principles": [
+                "P5",
+                "P6"
+              ]
             },
             {
               "id": "a7.3",
@@ -1547,7 +1926,18 @@
               "goal": "разместить документы сверху, вопрос снизу и снабдить документы метаданными",
               "volatile": false,
               "free_preview": false,
-              "sources": []
+              "sources": [],
+              "exercises": [
+                "order_steps",
+                "match_pairs",
+                "single_choice",
+                "find_error",
+                "write_prompt"
+              ],
+              "principles": [
+                "P8",
+                "P6"
+              ]
             },
             {
               "id": "a7.4",
@@ -1562,6 +1952,16 @@
               "free_preview": false,
               "sources": [
                 "https://platform.claude.com/docs/en/test-and-evaluate/strengthen-guardrails/reduce-hallucinations"
+              ],
+              "exercises": [
+                "order_steps",
+                "single_choice",
+                "find_error",
+                "multi_choice",
+                "improve_prompt"
+              ],
+              "principles": [
+                "P9"
               ]
             },
             {
@@ -1577,6 +1977,17 @@
               "free_preview": false,
               "sources": [
                 "https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices"
+              ],
+              "exercises": [
+                "order_steps",
+                "single_choice",
+                "find_error",
+                "match_pairs",
+                "write_prompt"
+              ],
+              "principles": [
+                "P10",
+                "P11"
               ]
             },
             {
@@ -1592,6 +2003,17 @@
               "free_preview": false,
               "sources": [
                 "https://code.claude.com/docs/en/best-practices.md"
+              ],
+              "exercises": [
+                "single_choice",
+                "order_steps",
+                "find_error",
+                "multi_choice",
+                "write_prompt"
+              ],
+              "principles": [
+                "P1",
+                "P13"
               ]
             }
           ]
@@ -1618,6 +2040,17 @@
               "free_preview": false,
               "sources": [
                 "https://support.claude.com/en/articles/11647753-how-do-usage-and-length-limits-work"
+              ],
+              "exercises": [
+                "multi_choice",
+                "single_choice",
+                "match_pairs",
+                "fill_gap",
+                "improve_prompt"
+              ],
+              "principles": [
+                "P13",
+                "P8"
               ]
             },
             {
@@ -1629,9 +2062,19 @@
                 "pl": "Automatyczna kompresja kontekstu"
               },
               "goal": "понимать, что значит «organizing its thoughts», и что важное лучше вынести в проект",
-              "volatile": false,
+              "volatile": true,
               "free_preview": false,
-              "sources": []
+              "sources": [],
+              "exercises": [
+                "single_choice",
+                "multi_choice",
+                "match_pairs",
+                "order_steps",
+                "write_prompt"
+              ],
+              "principles": [
+                "P13"
+              ]
             },
             {
               "id": "a8.3",
@@ -1642,9 +2085,26 @@
                 "pl": "Co zużywa limit"
               },
               "goal": "расставить по «дороговизне» effort, Research, инструменты и длинные чаты",
-              "volatile": false,
+              "volatile": true,
               "free_preview": false,
-              "sources": []
+              "sources": [],
+              "exercises": [
+                "order_steps",
+                "match_pairs",
+                "single_choice",
+                "multi_choice",
+                "write_prompt"
+              ],
+              "principles": [
+                "P13",
+                "P1",
+                "P2",
+                "P3",
+                "P4",
+                "P6",
+                "P8",
+                "P9"
+              ]
             }
           ]
         }
@@ -1682,6 +2142,16 @@
               "free_preview": true,
               "sources": [
                 "https://code.claude.com/docs/en/overview"
+              ],
+              "exercises": [
+                "multi_choice",
+                "match_pairs",
+                "single_choice",
+                "write_prompt"
+              ],
+              "principles": [
+                "P1",
+                "P2"
               ]
             },
             {
@@ -1697,7 +2167,15 @@
               "free_preview": false,
               "sources": [
                 "https://code.claude.com/docs/en/quickstart"
-              ]
+              ],
+              "exercises": [
+                "match_pairs",
+                "single_choice",
+                "multi_choice",
+                "order_steps",
+                "fill_gap"
+              ],
+              "principles": []
             },
             {
               "id": "p1.3",
@@ -1712,6 +2190,17 @@
               "free_preview": false,
               "sources": [
                 "https://code.claude.com/docs/en/how-claude-code-works"
+              ],
+              "exercises": [
+                "order_steps",
+                "match_pairs",
+                "single_choice",
+                "multi_choice",
+                "improve_prompt"
+              ],
+              "principles": [
+                "P1",
+                "P2"
               ]
             },
             {
@@ -1728,6 +2217,18 @@
               "sources": [
                 "https://code.claude.com/docs/en/memory.md",
                 "https://code.claude.com/docs/en/best-practices.md"
+              ],
+              "exercises": [
+                "match_pairs",
+                "multi_choice",
+                "find_error",
+                "single_choice",
+                "write_prompt"
+              ],
+              "principles": [
+                "P1",
+                "P2",
+                "P3"
               ]
             },
             {
@@ -1743,7 +2244,14 @@
               "free_preview": false,
               "sources": [
                 "https://code.claude.com/docs/en/permission-modes.md"
-              ]
+              ],
+              "exercises": [
+                "match_pairs",
+                "order_steps",
+                "single_choice",
+                "multi_choice"
+              ],
+              "principles": []
             },
             {
               "id": "p1.6",
@@ -1758,6 +2266,17 @@
               "free_preview": false,
               "sources": [
                 "https://code.claude.com/docs/en/best-practices.md"
+              ],
+              "exercises": [
+                "order_steps",
+                "single_choice",
+                "multi_choice",
+                "fill_gap",
+                "write_prompt"
+              ],
+              "principles": [
+                "P1",
+                "P4"
               ]
             },
             {
@@ -1771,7 +2290,18 @@
               "goal": "сформулировать задачу с тестом, сборкой или скриншотом для самопроверки",
               "volatile": false,
               "free_preview": false,
-              "sources": []
+              "sources": [],
+              "exercises": [
+                "compare_answers",
+                "match_pairs",
+                "find_error",
+                "single_choice",
+                "improve_prompt"
+              ],
+              "principles": [
+                "P1",
+                "P9"
+              ]
             },
             {
               "id": "p1.8",
@@ -1786,6 +2316,16 @@
               "free_preview": false,
               "sources": [
                 "https://code.claude.com/docs/en/checkpointing.md"
+              ],
+              "exercises": [
+                "match_pairs",
+                "single_choice",
+                "multi_choice",
+                "fill_gap",
+                "write_prompt"
+              ],
+              "principles": [
+                "P13"
               ]
             }
           ]
@@ -1812,6 +2352,16 @@
               "free_preview": false,
               "sources": [
                 "https://code.claude.com/docs/en/features-overview.md"
+              ],
+              "exercises": [
+                "match_pairs",
+                "single_choice",
+                "multi_choice",
+                "fill_gap"
+              ],
+              "principles": [
+                "P1",
+                "P13"
               ]
             },
             {
@@ -1827,6 +2377,18 @@
               "free_preview": false,
               "sources": [
                 "https://code.claude.com/docs/en/skills.md"
+              ],
+              "exercises": [
+                "single_choice",
+                "match_pairs",
+                "find_error",
+                "fill_gap",
+                "write_prompt"
+              ],
+              "principles": [
+                "P1",
+                "P2",
+                "P4"
               ]
             },
             {
@@ -1842,6 +2404,19 @@
               "free_preview": false,
               "sources": [
                 "https://code.claude.com/docs/en/sub-agents.md"
+              ],
+              "exercises": [
+                "single_choice",
+                "multi_choice",
+                "find_error",
+                "order_steps",
+                "write_prompt"
+              ],
+              "principles": [
+                "P1",
+                "P2",
+                "P7",
+                "P13"
               ]
             },
             {
@@ -1857,6 +2432,15 @@
               "free_preview": false,
               "sources": [
                 "https://code.claude.com/docs/en/hooks-guide.md"
+              ],
+              "exercises": [
+                "single_choice",
+                "fill_gap",
+                "match_pairs",
+                "multi_choice"
+              ],
+              "principles": [
+                "P1"
               ]
             },
             {
@@ -1872,6 +2456,16 @@
               "free_preview": false,
               "sources": [
                 "https://code.claude.com/docs/en/mcp.md"
+              ],
+              "exercises": [
+                "fill_gap",
+                "match_pairs",
+                "find_error",
+                "single_choice",
+                "multi_choice"
+              ],
+              "principles": [
+                "P1"
               ]
             },
             {
@@ -1883,11 +2477,22 @@
                 "pl": "Wtyczki"
               },
               "goal": "установить плагин через `/plugin` и оценить, можно ли ему доверять",
-              "volatile": false,
+              "volatile": true,
               "free_preview": false,
               "sources": [
                 "https://code.claude.com/docs/en/plugins/overview.md",
                 "https://code.claude.com/docs/en/plugins/security.md"
+              ],
+              "exercises": [
+                "single_choice",
+                "match_pairs",
+                "multi_choice",
+                "order_steps",
+                "improve_prompt"
+              ],
+              "principles": [
+                "P1",
+                "P9"
               ]
             }
           ]
@@ -1914,6 +2519,15 @@
               "free_preview": false,
               "sources": [
                 "https://code.claude.com/docs/en/headless.md"
+              ],
+              "exercises": [
+                "single_choice",
+                "match_pairs",
+                "find_error",
+                "fill_gap"
+              ],
+              "principles": [
+                "P1"
               ]
             },
             {
@@ -1929,6 +2543,18 @@
               "free_preview": false,
               "sources": [
                 "https://code.claude.com/docs/en/routines.md"
+              ],
+              "exercises": [
+                "match_pairs",
+                "single_choice",
+                "multi_choice",
+                "find_error",
+                "write_prompt"
+              ],
+              "principles": [
+                "P1",
+                "P2",
+                "P4"
               ]
             },
             {
@@ -1945,6 +2571,15 @@
               "sources": [
                 "https://code.claude.com/docs/en/scheduled-tasks.md",
                 "https://code.claude.com/docs/en/overview"
+              ],
+              "exercises": [
+                "match_pairs",
+                "single_choice",
+                "fill_gap",
+                "multi_choice"
+              ],
+              "principles": [
+                "P2"
               ]
             },
             {
@@ -1960,6 +2595,18 @@
               "free_preview": false,
               "sources": [
                 "https://code.claude.com/docs/en/github-actions"
+              ],
+              "exercises": [
+                "single_choice",
+                "order_steps",
+                "find_error",
+                "multi_choice",
+                "improve_prompt"
+              ],
+              "principles": [
+                "P1",
+                "P2",
+                "P3"
               ]
             },
             {
@@ -1975,6 +2622,15 @@
               "free_preview": false,
               "sources": [
                 "https://code.claude.com/docs/en/routines.md"
+              ],
+              "exercises": [
+                "single_choice",
+                "match_pairs",
+                "multi_choice",
+                "find_error"
+              ],
+              "principles": [
+                "P1"
               ]
             },
             {
@@ -1991,6 +2647,17 @@
               "sources": [
                 "https://code.claude.com/docs/en/best-practices.md",
                 "https://code.claude.com/docs/en/agents.md"
+              ],
+              "exercises": [
+                "single_choice",
+                "fill_gap",
+                "multi_choice",
+                "order_steps",
+                "write_prompt"
+              ],
+              "principles": [
+                "P1",
+                "P13"
               ]
             }
           ]
@@ -2017,7 +2684,14 @@
               "free_preview": false,
               "sources": [
                 "https://platform.claude.com/docs/en/get-started"
-              ]
+              ],
+              "exercises": [
+                "single_choice",
+                "match_pairs",
+                "find_error",
+                "order_steps"
+              ],
+              "principles": []
             },
             {
               "id": "p4.2",
@@ -2033,7 +2707,14 @@
               "sources": [
                 "https://platform.claude.com/docs/en/models/overview.md",
                 "https://platform.claude.com/docs/en/about-claude/pricing.md"
-              ]
+              ],
+              "exercises": [
+                "match_pairs",
+                "single_choice",
+                "fill_gap",
+                "multi_choice"
+              ],
+              "principles": []
             },
             {
               "id": "p4.3",
@@ -2048,6 +2729,17 @@
               "free_preview": false,
               "sources": [
                 "https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices"
+              ],
+              "exercises": [
+                "single_choice",
+                "build_prompt",
+                "find_error",
+                "write_prompt"
+              ],
+              "principles": [
+                "P2",
+                "P3",
+                "P7"
               ]
             },
             {
@@ -2063,7 +2755,14 @@
               "free_preview": false,
               "sources": [
                 "https://platform.claude.com/docs/en/build-with-claude/effort"
-              ]
+              ],
+              "exercises": [
+                "match_pairs",
+                "find_error",
+                "multi_choice",
+                "single_choice"
+              ],
+              "principles": []
             },
             {
               "id": "p4.5",
@@ -2078,6 +2777,15 @@
               "free_preview": false,
               "sources": [
                 "https://platform.claude.com/docs/en/build-with-claude/structured-outputs"
+              ],
+              "exercises": [
+                "single_choice",
+                "find_error",
+                "multi_choice",
+                "improve_prompt"
+              ],
+              "principles": [
+                "P3"
               ]
             },
             {
@@ -2093,6 +2801,17 @@
               "free_preview": false,
               "sources": [
                 "https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview.md"
+              ],
+              "exercises": [
+                "order_steps",
+                "single_choice",
+                "find_error",
+                "match_pairs",
+                "improve_prompt"
+              ],
+              "principles": [
+                "P1",
+                "P2"
               ]
             },
             {
@@ -2108,7 +2827,13 @@
               "free_preview": false,
               "sources": [
                 "https://platform.claude.com/docs/en/build-with-claude/prompt-caching.md"
-              ]
+              ],
+              "exercises": [
+                "single_choice",
+                "find_error",
+                "match_pairs"
+              ],
+              "principles": []
             },
             {
               "id": "p4.8",
@@ -2123,7 +2848,13 @@
               "free_preview": false,
               "sources": [
                 "https://platform.claude.com/docs/en/build-with-claude/batch-processing.md"
-              ]
+              ],
+              "exercises": [
+                "single_choice",
+                "match_pairs",
+                "find_error"
+              ],
+              "principles": []
             }
           ]
         },
@@ -2149,7 +2880,15 @@
               "free_preview": false,
               "sources": [
                 "https://modelcontextprotocol.io/docs/getting-started/intro"
-              ]
+              ],
+              "exercises": [
+                "fill_gap",
+                "match_pairs",
+                "single_choice",
+                "multi_choice",
+                "order_steps"
+              ],
+              "principles": []
             },
             {
               "id": "p5.2",
@@ -2160,11 +2899,16 @@
                 "pl": "Prymitywy"
               },
               "goal": "различать tools, resources и prompts, а на стороне клиента — elicitation",
-              "volatile": false,
+              "volatile": true,
               "free_preview": false,
               "sources": [
                 "https://modelcontextprotocol.io/docs/learn/architecture"
-              ]
+              ],
+              "exercises": [
+                "match_pairs",
+                "single_choice"
+              ],
+              "principles": []
             },
             {
               "id": "p5.3",
@@ -2175,9 +2919,17 @@
                 "pl": "Transporty"
               },
               "goal": "выбрать stdio (локально) или Streamable HTTP (удалённо, OAuth)",
-              "volatile": false,
+              "volatile": true,
               "free_preview": false,
-              "sources": []
+              "sources": [],
+              "exercises": [
+                "match_pairs",
+                "single_choice",
+                "find_error",
+                "multi_choice",
+                "fill_gap"
+              ],
+              "principles": []
             },
             {
               "id": "p5.4",
@@ -2188,10 +2940,21 @@
                 "pl": "Własny serwer MCP"
               },
               "goal": "собрать простой сервер с одним инструментом по официальному гайду",
-              "volatile": false,
+              "volatile": true,
               "free_preview": false,
               "sources": [
                 "https://modelcontextprotocol.io/docs/develop/build-server"
+              ],
+              "exercises": [
+                "order_steps",
+                "find_error",
+                "single_choice",
+                "multi_choice",
+                "write_prompt"
+              ],
+              "principles": [
+                "P1",
+                "P2"
               ]
             },
             {
@@ -2203,12 +2966,19 @@
                 "pl": "Podłączanie do Claude"
               },
               "goal": "подключить сервер к Claude Code, Desktop или claude.ai как custom connector, а через API — как MCP connector",
-              "volatile": false,
+              "volatile": true,
               "free_preview": false,
               "sources": [
                 "https://platform.claude.com/docs/en/agents-and-tools/mcp-connector.md",
                 "https://code.claude.com/docs/en/mcp.md"
-              ]
+              ],
+              "exercises": [
+                "match_pairs",
+                "single_choice",
+                "fill_gap",
+                "multi_choice"
+              ],
+              "principles": []
             },
             {
               "id": "p5.6",
@@ -2223,6 +2993,18 @@
               "free_preview": false,
               "sources": [
                 "https://www.anthropic.com/engineering/writing-tools-for-agents"
+              ],
+              "exercises": [
+                "single_choice",
+                "find_error",
+                "match_pairs",
+                "multi_choice",
+                "improve_prompt"
+              ],
+              "principles": [
+                "P1",
+                "P2",
+                "P3"
               ]
             }
           ]
@@ -2249,6 +3031,15 @@
               "free_preview": false,
               "sources": [
                 "https://www.anthropic.com/engineering/building-effective-agents"
+              ],
+              "exercises": [
+                "single_choice",
+                "match_pairs",
+                "multi_choice",
+                "order_steps"
+              ],
+              "principles": [
+                "P12"
               ]
             },
             {
@@ -2262,7 +3053,18 @@
               "goal": "узнавать паттерны chaining, routing, parallelization, orchestrator-workers и evaluator-optimizer",
               "volatile": false,
               "free_preview": false,
-              "sources": []
+              "sources": [],
+              "exercises": [
+                "match_pairs",
+                "single_choice",
+                "multi_choice",
+                "find_error",
+                "order_steps"
+              ],
+              "principles": [
+                "P10",
+                "P11"
+              ]
             },
             {
               "id": "p6.3",
@@ -2277,6 +3079,16 @@
               "free_preview": false,
               "sources": [
                 "https://code.claude.com/docs/en/agent-sdk/overview.md"
+              ],
+              "exercises": [
+                "single_choice",
+                "fill_gap",
+                "match_pairs",
+                "multi_choice",
+                "write_prompt"
+              ],
+              "principles": [
+                "P12"
               ]
             },
             {
@@ -2292,7 +3104,13 @@
               "free_preview": false,
               "sources": [
                 "https://platform.claude.com/docs/en/managed-agents/overview"
-              ]
+              ],
+              "exercises": [
+                "match_pairs",
+                "single_choice",
+                "multi_choice"
+              ],
+              "principles": []
             },
             {
               "id": "p6.5",
@@ -2307,6 +3125,15 @@
               "free_preview": false,
               "sources": [
                 "https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents"
+              ],
+              "exercises": [
+                "single_choice",
+                "match_pairs",
+                "multi_choice",
+                "write_prompt"
+              ],
+              "principles": [
+                "P13"
               ]
             },
             {
@@ -2322,6 +3149,16 @@
               "free_preview": false,
               "sources": [
                 "https://code.claude.com/docs/en/agent-sdk/secure-deployment.md"
+              ],
+              "exercises": [
+                "single_choice",
+                "match_pairs",
+                "multi_choice",
+                "find_error",
+                "improve_prompt"
+              ],
+              "principles": [
+                "P12"
               ]
             }
           ]
@@ -2348,6 +3185,17 @@
               "free_preview": false,
               "sources": [
                 "https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/overview"
+              ],
+              "exercises": [
+                "single_choice",
+                "match_pairs",
+                "multi_choice",
+                "find_error",
+                "improve_prompt"
+              ],
+              "principles": [
+                "P1",
+                "P2"
               ]
             },
             {
@@ -2364,6 +3212,17 @@
               "sources": [
                 "https://platform.claude.com/docs/en/test-and-evaluate/develop-tests",
                 "https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents"
+              ],
+              "exercises": [
+                "match_pairs",
+                "multi_choice",
+                "order_steps",
+                "single_choice",
+                "write_prompt"
+              ],
+              "principles": [
+                "P1",
+                "P5"
               ]
             },
             {
@@ -2379,6 +3238,17 @@
               "free_preview": false,
               "sources": [
                 "https://platform.claude.com/docs/en/test-and-evaluate/strengthen-guardrails/reduce-hallucinations"
+              ],
+              "exercises": [
+                "match_pairs",
+                "single_choice",
+                "find_error",
+                "multi_choice",
+                "improve_prompt"
+              ],
+              "principles": [
+                "P5",
+                "P9"
               ]
             },
             {
@@ -2394,6 +3264,16 @@
               "free_preview": false,
               "sources": [
                 "https://platform.claude.com/docs/en/about-claude/models/migration-guide"
+              ],
+              "exercises": [
+                "match_pairs",
+                "order_steps",
+                "single_choice",
+                "fill_gap",
+                "write_prompt"
+              ],
+              "principles": [
+                "P4"
               ]
             },
             {
@@ -2409,6 +3289,19 @@
               "free_preview": false,
               "sources": [
                 "https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices"
+              ],
+              "exercises": [
+                "match_pairs",
+                "multi_choice",
+                "find_error",
+                "single_choice",
+                "write_prompt"
+              ],
+              "principles": [
+                "P1",
+                "P2",
+                "P4",
+                "P9"
               ]
             }
           ]
