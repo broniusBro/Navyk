@@ -32,6 +32,15 @@ for (const c of cases) {
 }
 
 console.log(`\n${passed}/${cases.length} passed, cost $${totalCost.toFixed(5)}`);
+// In GitHub Actions: failures as annotations, visible on the run page (and via the API) without the log.
+if (process.env.GITHUB_ACTIONS) {
+  const esc = (s: string) => s.replace(/%/g, "%25").replace(/\r/g, "%0D").replace(/\n/g, "%0A");
+  for (const r of results.filter((x) => !x.ok)) {
+    const detail = r.error ? `error: ${r.error}` : `${r.problems.join("; ")} (score ${r.score}). Gaps: ${(r.review?.gaps ?? []).map((g: any) => g.text ?? g).join(" | ")}`;
+    console.log(`::error title=eval ${r.id}::${esc(detail.slice(0, 900))}`);
+  }
+  console.log(`::notice title=Reviewer eval::${passed}/${cases.length} passed, cost $${totalCost.toFixed(5)}`);
+}
 mkdirSync(new URL("results/", base), { recursive: true });
 writeFileSync(new URL(`results/${new Date().toISOString().slice(0, 10)}.json`, base), JSON.stringify(results, null, 2));
 process.exit(passed === cases.length ? 0 : 1);
