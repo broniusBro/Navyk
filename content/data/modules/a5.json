@@ -1,0 +1,132 @@
+{
+  "_about": "Изменчивые значения модуля a5 «Навыки и плагины»: названия элементов интерфейса Claude (на английском, как в приложении), планы и лимиты. Подставляются в {{data.<раздел>.<ключ>}} при сборке. Источники и даты — content/data/volatile/a5.md. Проверено 2026-10-14. Переводы uk/en/pl добавят переводчики.",
+  "ui_paths": {
+    "a5_customize": {
+      "label": "Customize",
+      "hint": {
+        "ru": "меню настройки Claude в левой боковой панели",
+        "uk": "меню налаштування Claude на лівій бічній панелі",
+        "en": "Claude's customisation menu",
+        "pl": "menu dostosowywania Claude na lewym pasku bocznym"
+      }
+    },
+    "a5_customize_skills": {
+      "label": "Customize → Skills",
+      "hint": {
+        "ru": "боковая панель → настройка → вкладка навыков",
+        "uk": "бічна панель → налаштування → вкладка навичок",
+        "en": "in the left sidebar",
+        "pl": "pasek boczny → dostosowywanie → karta skilli"
+      }
+    },
+    "a5_upload_skill": {
+      "label": "Upload skill",
+      "hint": {
+        "ru": "загрузить навык из ZIP-архива",
+        "uk": "завантажити навичку з ZIP-архіву",
+        "en": "from a ZIP file",
+        "pl": "wgraj skill z archiwum ZIP"
+      }
+    },
+    "a5_add": {
+      "label": "Add",
+      "hint": {
+        "ru": "добавить, кнопка на карточке навыка или плагина",
+        "uk": "додати, кнопка на картці навички чи плагіна",
+        "en": "button on the skill or plugin card",
+        "pl": "dodaj, przycisk na karcie skilla lub wtyczki"
+      }
+    },
+    "a5_code_execution": {
+      "label": "Settings → Capabilities → Code execution and file creation",
+      "hint": {
+        "ru": "настройки → возможности → выполнение кода и создание файлов",
+        "uk": "налаштування → можливості → виконання коду та створення файлів",
+        "en": "",
+        "pl": "ustawienia → możliwości → wykonywanie kodu i tworzenie plików"
+      }
+    },
+    "a5_edit_with_claude": {
+      "label": "Edit with Claude",
+      "hint": {
+        "ru": "выдели текст в файле навыка и попроси Claude его поправить",
+        "uk": "виділи текст у файлі навички й попроси Claude його виправити",
+        "en": "select text in the skill file and ask Claude to change it",
+        "pl": "zaznacz tekst w pliku skilla i poproś Claude o poprawki"
+      }
+    },
+    "a5_customize_plugins_discover": {
+      "label": "Customize → Plugins → Discover",
+      "hint": {
+        "ru": "боковая панель → настройка → плагины → каталог",
+        "uk": "бічна панель → налаштування → плагіни → каталог",
+        "en": "in the left sidebar",
+        "pl": "pasek boczny → dostosowywanie → wtyczki → katalog"
+      }
+    },
+    "a5_slash_menu": {
+      "label": "/",
+      "hint": {
+        "ru": "косая черта в поле сообщения или кнопка «+»: список навыков и команд",
+        "uk": "скісна риска в полі повідомлення або кнопка «+»: список навичок і команд",
+        "en": "a slash in the message box, or the “+” button: list of skills and commands",
+        "pl": "ukośnik w polu wiadomości lub przycisk „+”: lista skilli i poleceń"
+      }
+    },
+    "a5_directory_tabs": {
+      "label": "Skills · Connectors · Plugins",
+      "hint": {
+        "ru": "вкладки навыков, коннекторов и плагинов",
+        "uk": "вкладки навичок, конекторів і плагінів",
+        "en": "",
+        "pl": "karty skilli, konektorów i wtyczek"
+      }
+    },
+    "a5_discover": {
+      "label": "Discover",
+      "hint": {
+        "ru": "каталог на вкладке",
+        "uk": "каталог на вкладці",
+        "en": "",
+        "pl": "katalog na karcie"
+      }
+    },
+    "a5_plugins_tab": {
+      "label": "Plugins",
+      "hint": {
+        "ru": "вкладка плагинов в Customize",
+        "uk": "вкладка плагінів у Customize",
+        "en": "",
+        "pl": "karta wtyczek w Customize"
+      }
+    }
+  },
+  "plans": {
+    "a5_plugins_plans": {
+      "ru": "только на платных планах: Pro, Max, Team и Enterprise",
+      "uk": "лише на платних планах: Pro, Max, Team і Enterprise",
+      "en": "only on paid plans: Pro, Max, Team and Enterprise",
+      "pl": "tylko w płatnych planach: Pro, Max, Team i Enterprise"
+    },
+    "a5_org_skills_plans": {
+      "ru": "Team и Enterprise",
+      "uk": "Team і Enterprise",
+      "en": "Team and Enterprise",
+      "pl": "Team i Enterprise"
+    }
+  },
+  "limits": {
+    "a5_skill_name_max": {
+      "ru": "64 символов",
+      "uk": "64 символів",
+      "en": "64 characters",
+      "pl": "64 znaków"
+    },
+    "a5_skill_description_max": {
+      "ru": "200 символов",
+      "uk": "200 символів",
+      "en": "200 characters",
+      "pl": "200 znaków"
+    }
+  }
+}

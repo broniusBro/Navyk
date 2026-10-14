@@ -1,0 +1,43 @@
+{
+  "_about": "Изменчивые значения модуля p7 «Промпт-инжиниринг для продакшена». Подставляются в {{data.<раздел>.<ключ>}}. Префикс ключей pseven_ (а не p7_): регулярное выражение плейсхолдеров в scripts/build_content.py допускает только [a-z_]. Источники и даты — content/data/volatile/p7.md. Проверено 2026-10-14.",
+  "models": {
+    "pseven_new_name": {
+      "ru": "Claude Sonnet 5.5",
+      "uk": "Claude Sonnet 5.5",
+      "en": "Claude Sonnet 5.5",
+      "pl": "Claude Sonnet 5.5"
+    },
+    "pseven_new_id": {
+      "ru": "claude-sonnet-5-5",
+      "uk": "claude-sonnet-5-5",
+      "en": "claude-sonnet-5-5",
+      "pl": "claude-sonnet-5-5"
+    },
+    "pseven_old_name": {
+      "ru": "Claude Sonnet 4.5",
+      "uk": "Claude Sonnet 4.5",
+      "en": "Claude Sonnet 4.5",
+      "pl": "Claude Sonnet 4.5"
+    },
+    "pseven_prefill_unsupported": {
+      "ru": "Claude 4.6 и более новых моделях, а также в Claude Mythos Preview",
+      "uk": "Claude 4.6 і новіших моделях, а також на Claude Mythos Preview",
+      "en": "Claude 4.6 and newer models, as well as Claude Mythos Preview",
+      "pl": "modelach Claude 4.6 i nowszych oraz w Claude Mythos Preview"
+    }
+  },
+  "limits": {
+    "pseven_long_doc_tokens": {
+      "ru": "20 000 токенов",
+      "uk": "20 000 токенів",
+      "en": "20,000 tokens",
+      "pl": "20 000 tokenów"
+    },
+    "pseven_token_growth": {
+      "ru": "примерно на 30% больше токенов, в зависимости от содержимого",
+      "uk": "приблизно на 30% більше токенів залежно від вмісту",
+      "en": "roughly 30% more tokens, depending on the content",
+      "pl": "mniej więcej o 30% więcej tokenów, zależnie od treści"
+    }
+  }
+}

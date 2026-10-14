@@ -67,6 +67,40 @@
     "save_progress": "Your progress lives only on this device. Create an account so you don't lose it.",
     "save_progress_cta": "Save it"
   },
+  "levels": {
+    "heading": "Choose your level",
+    "lead": "Three levels, from your first prompt to agents. You can start with any of them.",
+    "kicker": "Level {n}",
+    "desc": {
+      "beginner": "Chat, clear prompts, files, projects and memory",
+      "advanced": "Artifacts, documents, research, connectors and skills",
+      "pro": "Claude Code, API, MCP, agents and automation"
+    },
+    "modules": {
+      "one": "{count} module",
+      "other": "{count} modules"
+    },
+    "lessons": {
+      "one": "{count} lesson",
+      "other": "{count} lessons"
+    },
+    "progress": "{done} of {total}",
+    "progress_label": {
+      "one": "{done} of {total} lesson completed",
+      "other": "{done} of {total} lessons completed"
+    },
+    "continue": "Continue: {title}",
+    "start": "Start",
+    "soon": "Coming soon",
+    "completed": "Level complete",
+    "recommended": "Recommended",
+    "back": "Levels",
+    "back_label": "Back to levels",
+    "page_kicker": "Level {n} · {done} of {total}",
+    "soon_note": "The lessons of this level are being written right now. The road is ready, so check back a little later.",
+    "doc_title": "{title}",
+    "stats": "{modules} · {lessons}"
+  },
   "lesson": {
     "loading": "Opening the lesson…",
     "not_found": "This lesson isn't available in your language yet. Go back to the path and pick another one.",

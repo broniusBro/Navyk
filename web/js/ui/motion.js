@@ -106,3 +106,16 @@ export function enter(el, dir = 1) {
   if (!canAnimate(el)) return;
   el.animate([{ transform: `translateX(${dir * 28}px)`, opacity: 0 }, { transform: "none", opacity: 1 }], { duration: 260, easing: "cubic-bezier(0.2, 0.8, 0.2, 1)" });
 }
+
+/** Soft staggered rise for cards (levels screen): a short lift and fade, nothing bouncy. */
+export function rise(elements, { stagger = 70, duration = 420, distance = 14 } = {}) {
+  elements.forEach((el, i) => {
+    if (!canAnimate(el)) return;
+    el.animate([{ transform: `translateY(${distance}px)`, opacity: 0 }, { transform: "none", opacity: 1 }], {
+      duration,
+      delay: i * stagger,
+      easing: "cubic-bezier(0.2, 0.8, 0.2, 1)",
+      fill: "backwards",
+    });
+  });
+}

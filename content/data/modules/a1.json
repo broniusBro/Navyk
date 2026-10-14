@@ -1,0 +1,297 @@
+{
+  "_about": "Изменчивые значения модуля a1 «Артефакты»: названия элементов интерфейса Claude (на английском, как в приложении), планы и лимиты. Подставляются в {{data.<раздел>.<ключ>}} при сборке. Источники и даты — content/data/volatile/a1.md. Проверено 2026-10-14. Переводы uk/en/pl добавят переводчики.",
+  "ui_paths": {
+    "a1_artifacts_tab": {
+      "label": "Artifacts",
+      "hint": {
+        "ru": "вкладка «Артефакты» в боковой панели, адрес claude.ai/artifacts",
+        "uk": "вкладка «Артефакти» на бічній панелі, адреса claude.ai/artifacts",
+        "en": "the tab in the sidebar, claude.ai/artifacts",
+        "pl": "zakładka „Artefakty” na pasku bocznym, adres claude.ai/artifacts"
+      }
+    },
+    "a1_output_menu": {
+      "label": "Output",
+      "hint": {
+        "ru": "меню выбора результата в поле сообщения",
+        "uk": "меню вибору результату в полі повідомлення",
+        "en": "the menu in the message box",
+        "pl": "menu wyboru wyniku w polu wiadomości"
+      }
+    },
+    "a1_output_docs": {
+      "label": "Output → Docs",
+      "hint": {
+        "ru": "в поле сообщения: результат → документ",
+        "uk": "у полі повідомлення: результат → документ",
+        "en": "in the message box",
+        "pl": "w polu wiadomości: wynik → dokument"
+      }
+    },
+    "a1_output_slides": {
+      "label": "Output → Slides",
+      "hint": {
+        "ru": "в поле сообщения: результат → презентация",
+        "uk": "у полі повідомлення: результат → презентація",
+        "en": "in the message box",
+        "pl": "w polu wiadomości: wynik → prezentacja"
+      }
+    },
+    "a1_output_design": {
+      "label": "Output → Design",
+      "hint": {
+        "ru": "в поле сообщения: результат → дизайн",
+        "uk": "у полі повідомлення: результат → дизайн",
+        "en": "in the message box",
+        "pl": "w polu wiadomości: wynik → projekt graficzny"
+      }
+    },
+    "a1_output_dashboards": {
+      "label": "Output → Dashboards",
+      "hint": {
+        "ru": "в поле сообщения: результат → дашборд",
+        "uk": "у полі повідомлення: результат → дашборд",
+        "en": "in the message box",
+        "pl": "w polu wiadomości: wynik → dashboard"
+      }
+    },
+    "a1_settings_capabilities": {
+      "label": "Settings → Capabilities",
+      "hint": {
+        "ru": "настройки → возможности; в Team и Enterprise это Organization settings → Capabilities",
+        "uk": "налаштування → можливості; у Team і Enterprise це Organization settings → Capabilities",
+        "en": "on Team and Enterprise it's Organization settings → Capabilities",
+        "pl": "ustawienia → możliwości; w Team i Enterprise to Organization settings → Capabilities"
+      }
+    },
+    "a1_code_execution_toggle": {
+      "label": "Code execution and file creation",
+      "hint": {
+        "ru": "переключатель «выполнение кода и создание файлов»; в части справки он называется Cloud code execution and file creation",
+        "uk": "перемикач «виконання коду і створення файлів»; у частині довідки він називається Cloud code execution and file creation",
+        "en": "a toggle; some help articles call it Cloud code execution and file creation",
+        "pl": "przełącznik „wykonywanie kodu i tworzenie plików”; w części pomocy nazywa się Cloud code execution and file creation"
+      }
+    },
+    "a1_edit_with_claude": {
+      "label": "Edit with Claude",
+      "hint": {
+        "ru": "появляется, когда выделяешь текст в документе",
+        "uk": "з'являється, коли виділяєш текст у документі",
+        "en": "appears when you select text in a document",
+        "pl": "pojawia się, gdy zaznaczysz tekst w dokumencie"
+      }
+    },
+    "a1_try_fixing": {
+      "label": "Try fixing with Claude",
+      "hint": {
+        "ru": "кнопка рядом с сообщением об ошибке в артефакте",
+        "uk": "кнопка поруч із повідомленням про помилку в артефакті",
+        "en": "next to the error message in an artifact",
+        "pl": "przycisk obok komunikatu o błędzie w artefakcie"
+      }
+    },
+    "a1_export": {
+      "label": "Export",
+      "hint": {
+        "ru": "экспорт, вверху артефакта",
+        "uk": "експорт, угорі артефакту",
+        "en": "at the top of the artifact",
+        "pl": "eksport, u góry artefaktu"
+      }
+    },
+    "a1_share": {
+      "label": "Share",
+      "hint": {
+        "ru": "поделиться, вверху открытого артефакта",
+        "uk": "поділитися, угорі відкритого артефакту",
+        "en": "at the top of an open artifact",
+        "pl": "udostępnij, u góry otwartego artefaktu"
+      }
+    },
+    "a1_visibility_only_you": {
+      "label": "Only you",
+      "hint": {
+        "ru": "только ты",
+        "uk": "тільки ти",
+        "en": "",
+        "pl": "tylko ty"
+      }
+    },
+    "a1_visibility_link": {
+      "label": "Anyone with the link",
+      "hint": {
+        "ru": "все, у кого есть ссылка",
+        "uk": "усі, хто має посилання",
+        "en": "",
+        "pl": "każdy, kto ma link"
+      }
+    },
+    "a1_visibility_org": {
+      "label": "Everyone in your organization",
+      "hint": {
+        "ru": "все в твоей организации",
+        "uk": "усі у твоїй організації",
+        "en": "",
+        "pl": "wszyscy w twojej organizacji"
+      }
+    },
+    "a1_publish": {
+      "label": "Publish",
+      "hint": {
+        "ru": "опубликовать: для старых артефактов из чата",
+        "uk": "опублікувати: для старих артефактів із чату",
+        "en": "for older artifacts created in chat",
+        "pl": "opublikuj: dla starszych artefaktów z czatu"
+      }
+    },
+    "a1_unpublish": {
+      "label": "Unpublish",
+      "hint": {
+        "ru": "снять с публикации",
+        "uk": "зняти з публікації",
+        "en": "",
+        "pl": "cofnij publikację"
+      }
+    },
+    "a1_copy_artifact": {
+      "label": "Copy",
+      "hint": {
+        "ru": "скопировать код опубликованного артефакта",
+        "uk": "скопіювати код опублікованого артефакту",
+        "en": "copies the code of a published artifact",
+        "pl": "skopiuj kod opublikowanego artefaktu"
+      }
+    },
+    "a1_docs_command": {
+      "label": "/docs",
+      "hint": {
+        "ru": "команда для создания документа",
+        "uk": "команда для створення документа",
+        "en": "the command for creating a document",
+        "pl": "polecenie do tworzenia dokumentu"
+      }
+    },
+    "a1_mention_claude": {
+      "label": "@Claude",
+      "hint": {
+        "ru": "упоминание Claude в комментарии",
+        "uk": "згадка Claude в коментарі",
+        "en": "a mention of Claude in a comment",
+        "pl": "wzmianka o Claude w komentarzu"
+      }
+    },
+    "a1_docs_viewers": {
+      "label": "Viewers",
+      "hint": {
+        "ru": "только чтение",
+        "uk": "лише перегляд",
+        "en": "read-only",
+        "pl": "tylko odczyt"
+      }
+    },
+    "a1_docs_editors": {
+      "label": "Editors",
+      "hint": {
+        "ru": "чтение, правка, комментарии и экспорт",
+        "uk": "перегляд, редагування, коментарі й експорт",
+        "en": "can view, edit, comment and export",
+        "pl": "odczyt, edycja, komentarze i eksport"
+      }
+    }
+  },
+  "plans": {
+    "a1_templates_plans": {
+      "ru": "на всех планах, включая Free",
+      "uk": "на всіх планах, зокрема на Free",
+      "en": "on all plans, including Free",
+      "pl": "we wszystkich planach, także w Free"
+    },
+    "a1_dashboards_plans": {
+      "ru": "Pro, Max, Team и Enterprise",
+      "uk": "Pro, Max, Team і Enterprise",
+      "en": "Pro, Max, Team and Enterprise",
+      "pl": "Pro, Max, Team i Enterprise"
+    },
+    "a1_motion_plans": {
+      "ru": "Team и Enterprise",
+      "uk": "Team і Enterprise",
+      "en": "Team and Enterprise",
+      "pl": "Team i Enterprise"
+    },
+    "a1_apps_storage_plans": {
+      "ru": "Pro, Max, Team и Enterprise",
+      "uk": "Pro, Max, Team і Enterprise",
+      "en": "Pro, Max, Team and Enterprise",
+      "pl": "Pro, Max, Team i Enterprise"
+    },
+    "a1_link_sharing_personal": {
+      "ru": "на Free, Pro и Max",
+      "uk": "на Free, Pro і Max",
+      "en": "on Free, Pro and Max",
+      "pl": "w planach Free, Pro i Max"
+    },
+    "a1_legacy_cutoff": {
+      "ru": "16 сентября 2026 года",
+      "uk": "16 вересня 2026 року",
+      "en": "16 September 2026",
+      "pl": "16 września 2026 r."
+    },
+    "a1_design_standalone_close": {
+      "ru": "14 декабря 2026 года",
+      "uk": "14 грудня 2026 року",
+      "en": "14 December 2026",
+      "pl": "14 grudnia 2026 r."
+    },
+    "a1_visibility_personal_plans": {
+      "ru": "Pro и Max",
+      "uk": "Pro і Max",
+      "en": "Pro and Max",
+      "pl": "Pro i Max"
+    },
+    "a1_org_plans": {
+      "ru": "Team и Enterprise",
+      "uk": "Team і Enterprise",
+      "en": "Team and Enterprise",
+      "pl": "Team i Enterprise"
+    }
+  },
+  "limits": {
+    "a1_artifact_size_hint": {
+      "ru": "обычно больше 15 строк",
+      "uk": "зазвичай понад 15 рядків",
+      "en": "usually more than 15 lines",
+      "pl": "zwykle ponad 15 linijek"
+    },
+    "a1_storage_max": {
+      "ru": "20 МБ на артефакт, только текст",
+      "uk": "20 МБ на артефакт, лише текст",
+      "en": "20 MB per artifact, text only",
+      "pl": "20 MB na artefakt, tylko tekst"
+    },
+    "a1_docs_export_formats": {
+      "ru": "Word (.docx), PDF, Markdown (.md) и Google Docs",
+      "uk": "Word (.docx), PDF, Markdown (.md) і Google Docs",
+      "en": "Word (.docx), PDF, Markdown (.md) and Google Docs",
+      "pl": "Word (.docx), PDF, Markdown (.md) i Google Docs"
+    },
+    "a1_slides_export_formats": {
+      "ru": "PowerPoint или PDF, а ещё можно открыть как редактируемый файл в Google Slides",
+      "uk": "PowerPoint або PDF, а ще можна відкрити як редагований файл у Google Slides",
+      "en": "PowerPoint or PDF, or open it as an editable file in Google Slides",
+      "pl": "PowerPoint lub PDF, a do tego można ją otworzyć jako edytowalny plik w Google Slides"
+    },
+    "a1_design_export_formats": {
+      "ru": "архив .zip, PDF, PowerPoint, Google Slides, отдельный HTML-файл или передача в Claude Code",
+      "uk": "архів .zip, PDF, PowerPoint, Google Slides, окремий HTML-файл або передавання в Claude Code",
+      "en": "a .zip archive, PDF, PowerPoint, Google Slides, a standalone HTML file or a handoff to Claude Code",
+      "pl": "archiwum .zip, PDF, PowerPoint, Google Slides, osobny plik HTML lub przekazanie do Claude Code"
+    },
+    "a1_dashboards_sources": {
+      "ru": "хранилища данных (Amazon Redshift, BigQuery, ClickHouse, Databricks, Snowflake) и подключённые к Claude приложения, например Salesforce",
+      "uk": "сховища даних (Amazon Redshift, BigQuery, ClickHouse, Databricks, Snowflake) і підключені до Claude застосунки, наприклад Salesforce",
+      "en": "data warehouses (Amazon Redshift, BigQuery, ClickHouse, Databricks, Snowflake) and apps connected to Claude, such as Salesforce",
+      "pl": "hurtownie danych (Amazon Redshift, BigQuery, ClickHouse, Databricks, Snowflake) i aplikacje połączone z Claude, np. Salesforce"
+    }
+  }
+}

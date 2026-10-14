@@ -89,6 +89,11 @@ const ICONS = {
   key: "M14.5 9.5a4 4 0 1 0-1.2 2.9L20 19M17 16l2-2M15 14l1.5-1.5",
   cloud: "M7 18h10a4 4 0 0 0 .6-8 6 6 0 0 0-11.5 1.5A3.3 3.3 0 0 0 7 18z",
   logout: "M14 4h5v16h-5M10 8l-4 4 4 4M6 12h10",
+  arrow: "M5 12h14M13 6l6 6-6 6",
+  // level badges on the levels screen
+  chat: "M4.5 5.5h15v10h-9l-4.5 3.5v-3.5h-1.5zM8.5 9.5h7M8.5 12.5h4",
+  docs: "M7 3.5h7.5l4 4v13H7zM14 3.5V8h4.5M10 12h5.5M10 15.5h5.5M4.5 7v14.5H15",
+  terminal: "M3.5 5h17v14h-17zM7.5 10l3 2.5-3 2.5M12.5 15.5h4",
 };
 
 export function icon(name, cls = "icon") {

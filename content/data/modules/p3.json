@@ -1,0 +1,243 @@
+{
+  "_about": "Изменчивые значения модуля p3 «Автоматизация и запланированные задачи»: названия элементов интерфейса Claude Code (на английском, как в приложении), планы и лимиты. Подставляются в {{data.<раздел>.<ключ>}} при сборке. Префикс ключей pthree_ вместо p3_: регулярное выражение DATA_RE в scripts/build_content.py не допускает цифр в ключе. Источники и даты — content/data/volatile/p3.md. Проверено 2026-10-14. Переводы uk/en/pl добавлены 2026-10-14.",
+  "ui_paths": {
+    "pthree_routines_page": {
+      "label": "claude.ai/code/routines",
+      "hint": {
+        "ru": "страница routines в веб-версии Claude Code",
+        "uk": "сторінка routines у вебверсії Claude Code",
+        "en": "the routines page in Claude Code on the web",
+        "pl": "strona routines w wersji webowej Claude Code"
+      }
+    },
+    "pthree_new_routine": {
+      "label": "New routine",
+      "hint": {
+        "ru": "кнопка создания новой routine",
+        "uk": "кнопка створення нової routine",
+        "en": "",
+        "pl": "przycisk tworzenia nowej routine"
+      }
+    },
+    "pthree_select_trigger": {
+      "label": "Select a trigger",
+      "hint": {
+        "ru": "раздел выбора триггеров в форме routine",
+        "uk": "розділ вибору тригерів у формі routine",
+        "en": "the trigger section of the routine form",
+        "pl": "sekcja wyboru wyzwalaczy w formularzu routine"
+      }
+    },
+    "pthree_trigger_schedule": {
+      "label": "Schedule",
+      "hint": {
+        "ru": "триггер по расписанию",
+        "uk": "тригер за розкладом",
+        "en": "",
+        "pl": "wyzwalacz według harmonogramu"
+      }
+    },
+    "pthree_trigger_github": {
+      "label": "GitHub event",
+      "hint": {
+        "ru": "триггер на событие в репозитории GitHub",
+        "uk": "тригер на подію в репозиторії GitHub",
+        "en": "",
+        "pl": "wyzwalacz na zdarzenie w repozytorium GitHub"
+      }
+    },
+    "pthree_trigger_api": {
+      "label": "API",
+      "hint": {
+        "ru": "триггер по HTTP-запросу",
+        "uk": "тригер за HTTP-запитом",
+        "en": "a trigger fired by an HTTP request",
+        "pl": "wyzwalacz uruchamiany żądaniem HTTP"
+      }
+    },
+    "pthree_generate_token": {
+      "label": "Generate token",
+      "hint": {
+        "ru": "создать токен для API-триггера; он показывается один раз",
+        "uk": "створити токен для API-тригера; його показують лише один раз",
+        "en": "creates a token for the API trigger; it's shown only once",
+        "pl": "utwórz token dla wyzwalacza API; jest pokazywany tylko raz"
+      }
+    },
+    "pthree_regenerate_token": {
+      "label": "Regenerate",
+      "hint": {
+        "ru": "выпустить новый токен вместо старого",
+        "uk": "випустити новий токен замість старого",
+        "en": "issues a new token to replace the old one",
+        "pl": "wygeneruj nowy token w miejsce starego"
+      }
+    },
+    "pthree_connectors": {
+      "label": "Connectors",
+      "hint": {
+        "ru": "список коннекторов внизу формы routine",
+        "uk": "список конекторів унизу форми routine",
+        "en": "the connector list at the bottom of the routine form",
+        "pl": "lista konektorów na dole formularza routine"
+      }
+    },
+    "pthree_run_now": {
+      "label": "Run now",
+      "hint": {
+        "ru": "запустить прямо сейчас",
+        "uk": "запустити просто зараз",
+        "en": "",
+        "pl": "uruchom od razu"
+      }
+    },
+    "pthree_network_access": {
+      "label": "Network access",
+      "hint": {
+        "ru": "уровень доступа в интернет в настройках окружения",
+        "uk": "рівень доступу до інтернету в налаштуваннях середовища",
+        "en": "the internet access level in the environment settings",
+        "pl": "poziom dostępu do internetu w ustawieniach środowiska"
+      }
+    },
+    "pthree_network_trusted": {
+      "label": "Trusted",
+      "hint": {
+        "ru": "только список доверенных доменов по умолчанию",
+        "uk": "лише список довірених доменів за замовчуванням",
+        "en": "only the default list of trusted domains",
+        "pl": "tylko domyślna lista zaufanych domen"
+      }
+    },
+    "pthree_network_custom": {
+      "label": "Custom",
+      "hint": {
+        "ru": "свой список разрешённых доменов в поле Allowed domains",
+        "uk": "власний список дозволених доменів у полі Allowed domains",
+        "en": "your own list of permitted domains in the Allowed domains field",
+        "pl": "własna lista dozwolonych domen w polu Allowed domains"
+      }
+    },
+    "pthree_network_full": {
+      "label": "Full",
+      "hint": {
+        "ru": "доступ без ограничений",
+        "uk": "доступ без обмежень",
+        "en": "unrestricted access",
+        "pl": "dostęp bez ograniczeń"
+      }
+    },
+    "pthree_desktop_new_routine": {
+      "label": "Code → Routines → New routine",
+      "hint": {
+        "ru": "в приложении Claude Desktop: вкладка Code, раздел Routines, новая задача",
+        "uk": "у застосунку Claude Desktop: вкладка Code, розділ Routines, нове завдання",
+        "en": "in the Claude Desktop app: the Code tab, then Routines, then a new task",
+        "pl": "w aplikacji Claude Desktop: karta Code, sekcja Routines, nowe zadanie"
+      }
+    },
+    "pthree_desktop_local": {
+      "label": "Local",
+      "hint": {
+        "ru": "локальная задача на твоём компьютере",
+        "uk": "локальне завдання на твоєму комп'ютері",
+        "en": "a local task on your computer",
+        "pl": "lokalne zadanie na twoim komputerze"
+      }
+    },
+    "pthree_desktop_cloud": {
+      "label": "Cloud",
+      "hint": {
+        "ru": "routine в облаке",
+        "uk": "routine у хмарі",
+        "en": "a routine in the cloud",
+        "pl": "routine w chmurze"
+      }
+    },
+    "pthree_keep_awake": {
+      "label": "Settings > This computer > System > Keep computer awake",
+      "hint": {
+        "ru": "не давать компьютеру засыпать в простое",
+        "uk": "не давати комп'ютеру засинати під час простою",
+        "en": "stops the computer sleeping when idle",
+        "pl": "nie pozwala komputerowi usypiać przy bezczynności"
+      }
+    }
+  },
+  "plans": {
+    "pthree_routines_plans": {
+      "ru": "Pro, Max, Team и Enterprise",
+      "uk": "Pro, Max, Team і Enterprise",
+      "en": "Pro, Max, Team and Enterprise",
+      "pl": "Pro, Max, Team i Enterprise"
+    },
+    "pthree_routines_status": {
+      "ru": "исследовательская версия (research preview): поведение, лимиты и API могут меняться",
+      "uk": "дослідницька версія (research preview): поведінка, ліміти й API можуть змінюватися",
+      "en": "research preview: behaviour, limits and the API may change",
+      "pl": "wersja badawcza (research preview): działanie, limity i API mogą się zmieniać"
+    },
+    "pthree_agent_view_status": {
+      "ru": "исследовательская версия (research preview): интерфейс и горячие клавиши могут меняться",
+      "uk": "дослідницька версія (research preview): інтерфейс і гарячі клавіші можуть змінюватися",
+      "en": "research preview: the interface and keyboard shortcuts may change",
+      "pl": "wersja badawcza (research preview): interfejs i skróty klawiszowe mogą się zmieniać"
+    }
+  },
+  "limits": {
+    "pthree_cloud_min_interval": {
+      "ru": "1 час",
+      "uk": "1 година",
+      "en": "1 hour",
+      "pl": "1 godzina"
+    },
+    "pthree_local_min_interval": {
+      "ru": "1 минута",
+      "uk": "1 хвилина",
+      "en": "1 minute",
+      "pl": "1 minuta"
+    },
+    "pthree_loop_expiry": {
+      "ru": "7 дней",
+      "uk": "7 днів",
+      "en": "7 days",
+      "pl": "7 dni"
+    },
+    "pthree_loop_max_tasks": {
+      "ru": "50",
+      "uk": "50",
+      "en": "50",
+      "pl": "50"
+    },
+    "pthree_desktop_catchup_window": {
+      "ru": "7 дней",
+      "uk": "7 днів",
+      "en": "7 days",
+      "pl": "7 dni"
+    },
+    "pthree_scheduled_runs_hourly": {
+      "ru": "100 в час на аккаунт",
+      "uk": "100 на годину на акаунт",
+      "en": "100 per hour per account",
+      "pl": "100 na godzinę na konto"
+    },
+    "pthree_fire_hourly_per_routine": {
+      "ru": "30 в час на одну routine (Run now и API вместе)",
+      "uk": "30 на годину на одну routine (Run now і API разом)",
+      "en": "30 per hour per routine (Run now and API combined)",
+      "pl": "30 na godzinę na jedną routine (Run now i API łącznie)"
+    },
+    "pthree_github_reconnect_window": {
+      "ru": "72 часа",
+      "uk": "72 години",
+      "en": "72 hours",
+      "pl": "72 godziny"
+    },
+    "pthree_stdin_max": {
+      "ru": "10 МБ",
+      "uk": "10 МБ",
+      "en": "10 MB",
+      "pl": "10 MB"
+    }
+  }
+}

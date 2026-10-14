@@ -1,12 +1,14 @@
-// Home: levels -> modules -> lessons as a winding path joined by one continuous "road".
-// Module headers stand on the road like signposts. The road is an SVG overlay computed from the
-// real positions of the circles (engine/road.js), recomputed on resize and font load.
+// Home: the levels screen (#/) with one card per level, and the road of one level (#/level/<id>):
+// modules -> lessons as a winding path joined by one continuous "road". Module headers stand on the
+// road like signposts. The road is an SVG overlay computed from the real positions of the circles
+// (engine/road.js), recomputed on resize and font load.
 
 import { h, icon } from "./dom.js";
-import { t, getLang } from "./i18n.js";
+import { t, getLang, formatNumber } from "./i18n.js";
 import { langPicker, statChips, footer, wordmark, accountButton } from "./chrome.js";
 import { popIn, drawStroke, reduced } from "./motion.js";
-import { localized, pathStatus } from "../engine/course.js";
+import { levelCards, levelLook } from "./levels.js";
+import { localized, pathStatus, levelSummary } from "../engine/course.js";
 import { canOpenLesson } from "../engine/auth.js";
 import { splitRoad, travelledIndex, waveOffset } from "../engine/road.js";
 
@@ -14,64 +16,97 @@ const SVG = "http://www.w3.org/2000/svg";
 
 /**
  * renderPath({ course, available: Set|null, progress, streak, activeToday, due, user, animate,
- *              onOpen(lesson), onReview(), onAccount() })
- * available === null means "still checking". animate: play the entrance (nodes pop in, road draws).
+ *              levelId, onOpen(lesson), onReview(), onAccount() })
+ * levelId: show the road of that level; without it, the levels screen.
+ * available === null means "still checking". animate: play the entrance (cards rise / nodes pop in, road draws).
  */
 export function renderPath(p) {
   const lang = getLang();
   const completed = new Set(Object.keys(p.progress.lessons));
-  const status = p.course ? pathStatus(p.course, p.available ?? new Set(), completed) : {};
   const signedIn = Boolean(p.user);
+  const levels = p.course?.levels ?? [];
+  const levelIndex = p.levelId ? levels.findIndex((l) => l.id === p.levelId) : -1;
+  const level = levelIndex >= 0 ? levels[levelIndex] : null;
 
   const top = h("header.topbar", wordmark(), statChips({ xp: p.progress.xp, streak: p.streak, activeToday: p.activeToday }), langPicker(), accountButton(p.user, p.onAccount));
+  const main = h(`main.path${level ? ".path--level" : ""}`, { id: "main" });
 
-  const main = h("main.path", { id: "main" });
-  main.append(h("h1.path__title.sr-only", { tabindex: "-1" }, t("path.title")));
-  main.append(dayCards(p));
-  if (!signedIn && completed.size > 0) main.append(saveBanner(p));
+  if (level) {
+    main.append(levelHead(level, levelIndex, p.available, completed, lang));
+  } else {
+    main.append(h("h1.path__title.sr-only", { tabindex: "-1" }, t("path.title")));
+    main.append(dayCards(p));
+    if (!signedIn && completed.size > 0) main.append(saveBanner(p));
+  }
 
   if (!p.course) {
     main.append(h("p.alert.alert--info", { role: "status" }, t(p.loading ? "path.loading" : "path.offline")));
-  } else {
+  } else if (!level) {
     if (p.available === null) main.append(h("p.path__checking", { role: "status" }, t("path.checking")));
-    const road = h("div.road");
-    for (const level of p.course.levels ?? []) {
-      const levelTitle = localized(level.title, lang);
-      const levelEl = h("section.level", h("h2.level__title.sr-only", levelTitle));
-      const mods = level.modules ?? [];
-      mods.forEach((mod, mi) => {
-        const items = mod.lessons.map((lesson, li) => {
-          const st = status[lesson.id] ?? "soon";
-          const gated = st !== "soon" && st !== "done" && !canOpenLesson(lesson, signedIn);
-          return lessonNode(lesson, st, waveOffset(li, mi), lang, gated, p.onOpen);
-        });
-        const doneCount = mod.lessons.filter((l) => completed.has(l.id)).length;
-        const count = t("path.module_count", { done: doneCount, total: mod.lessons.length });
-        const allDone = doneCount === mod.lessons.length && doneCount > 0;
-        levelEl.append(
-          h(
-            "section.module",
-            h(
-              `header.module__head${allDone ? ".is-done" : ""}`,
-              { data: { road: "sign" } },
-              h("p.module__kicker", t("path.module_kicker", { level: levelTitle, n: mi + 1, total: mods.length })),
-              h("h3.module__title", localized(mod.title, lang)),
-              h(
-                "p.segments",
-                { role: "img", aria: { label: count } },
-                mod.lessons.map((l) => h(`span.segments__item${completed.has(l.id) ? ".is-done" : ""}`)),
-              ),
-            ),
-            h("ol.nodes", items),
-          ),
-        );
-      });
-      road.append(levelEl);
-    }
+    main.append(levelCards({ course: p.course, available: p.available, completed, lang, animate: p.animate }));
+  } else {
+    const status = pathStatus(p.course, p.available ?? new Set(), completed);
+    if (p.available === null) main.append(h("p.path__checking", { role: "status" }, t("path.checking")));
+    else if (!levelSummary(level, p.available, completed).available) main.append(h("p.alert.alert--info.level-soon", { role: "status" }, t("levels.soon_note")));
+    const road = h("div.road", levelRoad(level, status, completed, signedIn, lang, p.onOpen));
     mountRoad(road, { animate: p.animate });
     main.append(road);
   }
-  return h("div.screen.screen--path", top, main, footer());
+  return h(`div.screen.screen--path${level ? ".screen--level" : ""}`, top, main, footer());
+}
+
+/** Top of a level's road: back to the levels, level kicker with progress, the level title. */
+function levelHead(level, index, available, completed, lang) {
+  const s = levelSummary(level, available ?? new Set(), completed);
+  const look = levelLook(index);
+  return h(
+    `header.level-head.level-head--${look.tone}`,
+    h("a.btn.btn--small.btn--ghost.level-head__back", { href: "#/", aria: { label: t("levels.back_label") } }, icon("back"), h("span", t("levels.back"))),
+    h(
+      "div.level-head__main",
+      h("span.level-head__badge", { aria: { hidden: "true" } }, icon(look.glyph, "icon level-head__glyph")),
+      h(
+        "div.level-head__text",
+        h("p.level-head__kicker", t("levels.page_kicker", { n: index + 1, done: formatNumber(s.done), total: formatNumber(s.total) })),
+        h("h1.level-head__title", { tabindex: "-1" }, h("span.hl", localized(level.title, lang))),
+      ),
+    ),
+  );
+}
+
+/** One level's modules and lessons, in road order. */
+function levelRoad(level, status, completed, signedIn, lang, onOpen) {
+  const levelTitle = localized(level.title, lang);
+  const levelEl = h("section.level");
+  const mods = level.modules ?? [];
+  mods.forEach((mod, mi) => {
+    const items = mod.lessons.map((lesson, li) => {
+      const st = status[lesson.id] ?? "soon";
+      const gated = st !== "soon" && st !== "done" && !canOpenLesson(lesson, signedIn);
+      return lessonNode(lesson, st, waveOffset(li, mi), lang, gated, onOpen);
+    });
+    const doneCount = mod.lessons.filter((l) => completed.has(l.id)).length;
+    const count = t("path.module_count", { done: doneCount, total: mod.lessons.length });
+    const allDone = doneCount === mod.lessons.length && doneCount > 0;
+    levelEl.append(
+      h(
+        "section.module",
+        h(
+          `header.module__head${allDone ? ".is-done" : ""}`,
+          { data: { road: "sign" } },
+          h("p.module__kicker", t("path.module_kicker", { level: levelTitle, n: mi + 1, total: mods.length })),
+          h("h2.module__title", localized(mod.title, lang)),
+          h(
+            "p.segments",
+            { role: "img", aria: { label: count } },
+            mod.lessons.map((l) => h(`span.segments__item${completed.has(l.id) ? ".is-done" : ""}`)),
+          ),
+        ),
+        h("ol.nodes", items),
+      ),
+    );
+  });
+  return levelEl;
 }
 
 function dayCards(p) {

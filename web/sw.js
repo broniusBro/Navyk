@@ -44,6 +44,7 @@ const SHELL_FILES = [
   "./js/ui/complete.js",
   "./js/ui/dom.js",
   "./js/ui/i18n.js",
+  "./js/ui/levels.js",
   "./js/ui/lesson.js",
   "./js/ui/motion.js",
   "./js/ui/path.js",

@@ -8,7 +8,7 @@
 - Названия элементов интерфейса Claude остаются на английском во всех языках (их подставляет `{{data.ui_paths.*}}` с пояснением на языке урока).
 - Названия сервисов (Viber, WhatsApp, OLX, Instagram, Facebook Marketplace, Google) не переводятся. В en-версиях бытовые сервисы адаптируются под аудиторию (Viber → WhatsApp/text, OLX → Facebook Marketplace).
 - Валюта и места: ru и uk — гривна, украинские города; en — EUR и нейтральный европейский город (Dublin, Ghent и т. п.).
-- Гендерные формы в uk: «зробив(-ла)», «сам(-а)», «готовий(-а)»; в en используется нейтральное they / you.
+- Обращение к ученику — на «ты» в мужском роде во всех языках (решение владельца, 2026-10-14): ru «сделал», uk «зробив», pl «zrobiłeś», en — you. Женский род — только у персонажей-женщин в примерах.
 
 ## Термины
 
@@ -176,3 +176,210 @@
 | собеседование | співбесіда | (job) interview | |
 | резюме | резюме | CV | en: британское CV, не résumé. Заглушка [резюме] → [CV]. |
 | сопроводительное письмо | супровідний лист | cover letter | |
+| агентный инструмент / агентный цикл | агентний інструмент / агентний цикл | agentic tool / agentic loop | Модуль p1. pl: narzędzie agentowe / pętla agenta. |
+| агентная обвязка | агентна обв'язка | agentic harness | pl: obudowa agenta (ang. agentic harness). |
+| поверхность (где работает Claude Code) | поверхня | surface | pl: powierzchnia (ang. surface). |
+| приложение для компьютера | застосунок для комп'ютера | desktop app | pl: aplikacja na komputer. |
+| облачная сессия | хмарна сесія | cloud session | pl: sesja w chmurze. |
+| нативный установщик | нативний інсталятор | native installer | pl: natywny instalator. |
+| сборка (проекта) | збирання | build | uk: «збирання», не «збірка»; pl: budowanie. |
+| папка проекта | тека проєкту | project folder | pl: folder projektu. |
+| ветка (git) | гілка | branch | pl: gałąź. |
+| коммит / закоммитить | коміт / закомітити | commit | pl: commit / zacommitować. |
+| запрос на слияние | запит на злиття | pull request | pl: pull request. |
+| режим разрешений | режим дозволів | permission mode | pl: tryb uprawnień. Названия режимов — через `{{data.ui_paths.p1_mode_*}}`; в en без пояснения (hint ""). |
+| список разрешённых команд | список дозволених команд | allowlist | pl: lista dozwolonych poleceń. allow / ask / deny не переводятся. |
+| режим планирования | режим планування | plan mode | pl: tryb planowania. |
+| контрольная точка | контрольна точка | checkpoint | pl: punkt kontrolny. Снимок → знімок → snapshot → migawka. |
+| откат / откатить | відкат / відкотити | rewind / roll back | pl: cofanie / cofnąć. |
+| сжать разговор | стиснути розмову | compact / condense | pl: skompresować rozmowę. |
+| автопамять | автопам'ять | auto memory | pl: automatyczna pamięć (auto memory). |
+| «сессия-кухонная мойка» | «сесія-кухонна мийка» | “the kitchen sink session” | pl: „sesja-zlew kuchenny”. |
+| делегируй, а не диктуй | делегуй, а не диктуй | delegate, don't dictate | pl: deleguj, a nie dyktuj. |
+| способ проверки / доказательства | спосіб перевірки / докази | way to verify / evidence | pl: sposób na sprawdzenie / dowody. «Не можешь проверить — не выпускай» → «Не можеш перевірити — не випускай» → “If you can't verify it, don't ship it” → „Nie możesz sprawdzić — nie wypuszczaj”. |
+| артефакт | артефакт | artifact | Модуль a1. en: американское написание, как в интерфейсе Claude (не artefact). pl: artefakt. |
+| вкладка Artifacts | вкладка Artifacts | Artifacts | en: без слова «tab» после `{{data.ui_paths.a1_artifacts_tab}}` — подсказка уже содержит «the tab». |
+| шаблон (артефакта) | шаблон | template | Docs, Slides, Design, Dashboards, Motion не переводятся. |
+| живой документ | живий документ | living document | pl: żywy dokument. |
+| макет / лендинг | макет / лендинг | mockup / landing page | pl: makieta / strona docelowa. |
+| одностраничник | односторінковий сайт | one-pager | pl: one-pager / strona typu one-pager. |
+| мини-приложение (с ИИ внутри) | мінізастосунок (зі ШІ всередині) | mini app (with AI inside) | uk: слитно (правопис 2019). pl: miniaplikacja z AI w środku. |
+| холст (в Design) | полотно | canvas | pl: płótno. |
+| образцы стиля | зразки стилю | style references | pl: wzory stylu. |
+| экспорт / выгрузить | експорт / вивантажити | export | |
+| история версий | історія версій | version history | |
+| хранилище (личное / общее) | сховище (особисте / спільне) | storage (personal / shared) | pl: magazyn (osobisty / wspólny). |
+| снять с публикации | зняти з публікації | unpublish | Кнопка Unpublish. pl: cofnąć publikację. |
+| уровень доступа (просмотр / комментарии / правка) | рівень доступу (перегляд / коментування / редагування) | access level (view / comment / edit) | pl: podgląd / komentowanie / edycja. |
+| чужой артефакт — как файл от незнакомца | чужий артефакт — як файл від незнайомця | treat someone else's artifact like a file from a stranger | Правило из справки (a1.6). |
+| дашборд | дашборд | dashboard | Название функции — Dashboards (beta), не переводится. |
+| запрос к данным | запит до даних | data query | Не путать с «запрос» = prompt. |
+| время обновления (графика) | час оновлення | refresh time / last refreshed | |
+| сделка (в CRM) | угода | deal | pl: transakcja. Статусы Closed Won / Closed Lost не переводятся. |
+| отпускные | відпускні | holiday pay | pl: wynagrodzenie urlopowe. |
+
+## MCP (модуль p5)
+
+Термины протокола (host, client, server, tools, resources, prompts, elicitation, sampling, roots, logging, stdio, Streamable HTTP, deprecated) остаются по-английски с пояснением при первом упоминании. Docstring и описания инструментов в коде и эталонах — на английском во всех языках (как в ru); ученик может писать на своём языке. В колонке «Примечание» — pl.
+
+| ru | uk | en | Примечание |
+|---|---|---|---|
+| хост / клиент / сервер | хост / клієнт / сервер | host / client / server | pl: host / klient / serwer. |
+| ИИ-приложение | ШІ-застосунок | AI application | pl: aplikacja AI. |
+| инструмент (tool) | інструмент | tool | pl: narzędzie. |
+| ресурс (resource) | ресурс | resource | pl: zasób. |
+| шаблон (prompt) | шаблон | prompt (template) | pl: szablon. |
+| примитив | примітив | primitive | pl: prymityw. |
+| запрос данных у пользователя (elicitation) | запит даних у користувача | requesting data from the user | pl: prośba o dane od użytkownika. Режимы form / URL не переводятся. |
+| устаревший (deprecated) | застарілий | deprecated | pl: przestarzały. |
+| окно устаревания | вікно застарівання | deprecation window | pl: okres wycofywania. |
+| протокол без состояния | протокол без стану | stateless protocol | pl: protokół bezstanowy. |
+| рукопожатие (initialize) | рукостискання | handshake | pl: uzgadnianie. |
+| эндпоинт | ендпоінт | endpoint | pl: endpoint. |
+| развернуть (сервер) | розгорнути | deploy | pl: wdrożyć. |
+| отладка | налагодження | debugging | pl: debugowanie. |
+| аутентификация / авторизация | автентифікація / авторизація | authentication / authorisation | en: британское написание. pl: uwierzytelnianie / autoryzacja. |
+| учётные данные | облікові дані | credentials | pl: dane uwierzytelniające. |
+| коннектор | конектор | connector | uk: одна «н». custom connector / MCP connector — по-английски. pl: konektor. |
+| туториал | туторіал | tutorial | pl: tutorial. |
+| официальный гайд | офіційний посібник | official guide | pl: oficjalny przewodnik. |
+| подсказки типов | підказки типів | type hints | pl: podpowiedzi typów. |
+| абсолютный путь | абсолютний шлях | absolute path | pl: ścieżka bezwzględna. |
+| пагинация | пагінація | pagination | pl: paginacja. |
+| ответственный (в CRM) | відповідальний(-а) | owner | pl: opiekun. |
+| routine | routine | routine | Модуль p3. Не переводится ни в одном языке; ru/uk/pl — женский род («новая routine», «нова routine», «nowa routine»), мн. ч. routines. |
+| триггер | тригер | trigger | pl: «wyzwalacz» (при первом упоминании «wyzwalacz (trigger)»). Названия триггеров (Schedule, API, GitHub event) — из `{{data.ui_paths.*}}`. |
+| неинтерактивный режим | неінтерактивний режим | non-interactive mode | pl: «tryb nieinteraktywny». Флаг `-p`. |
+| флаг (CLI) | прапорець | flag | pl: «flaga». uk: не «флаг». |
+| самодостаточный промпт | самодостатній промпт | self-contained prompt | pl: «samowystarczalny prompt». |
+| недоверенные данные | недовірені дані | untrusted data | pl: «niezaufane dane». Текст из API-триггера. |
+| ревью / код-ревью | рев'ю / код-рев'ю | review / code review | pl: «review» / «code review» (ср. р., не склоняется). |
+| ревьюер | рев'юер | reviewer | pl: «recenzent». Паттерн «автор/ревьюер» → «автор/рев'юер» → writer/reviewer → «autor/recenzent». |
+| принцип минимальных прав | принцип мінімальних прав | principle of least privilege | pl: «zasada minimalnych uprawnień». |
+| коннектор | конектор | connector | pl: «konektor». uk: одна «н». |
+| окружение (среды выполнения) | середовище | environment | pl: «środowisko». |
+| хранилище секретов | сховище секретів | secrets store | pl: «menedżer sekretów». |
+| фоновая сессия | фонова сесія | background session | pl: «sesja w tle». |
+| догоняющий запуск | надолужувальний запуск | catch-up run | pl: «uruchomienie nadrabiające». |
+| деньги в копейках | гроші в копійках | money in cents | pl: «w groszach». Реалия адаптируется под валюту. |
+| рабочая среда (Claude) | робоче середовище | working environment | Модуль a2. Метафора «песочница» → «пісочниця» → “sandbox”; pl: środowisko robocze, „piaskownica”. |
+| создание файлов | створення файлів | file creation | Переключатель — `{{data.ui_paths.a2_code_execution_toggle}}`; pl: tworzenie plików. |
+| таблица (файл Excel) | таблиця | spreadsheet | en: «spreadsheet», не «table» (table — таблица в тексте ответа); pl: arkusz. |
+| лист (Excel) / вкладка (Google Sheets) | аркуш / вкладка | sheet / tab | uk: «аркуш», не «лист»; pl: arkusz / karta. |
+| ячейка | клітинка | cell | uk: не «комірка» в тексте для новичков; pl: komórka. |
+| готовое число («зашитое» значение) | готове число («зашите» значення) | fixed number / hardcoded value | Противопоставление формуле (a2.2); pl: gotowa liczba / wartość wpisana na sztywno. |
+| итог | підсумок | total | В названии ячейки «Итого» → «Разом» → “Total”; pl: suma / „Razem”. |
+| ячейки для ввода | клітинки для введення | input cells | pl: komórki do wpisywania. |
+| вопрос к данным | запитання до даних | question for the data | a2.3; pl: pytanie do danych. |
+| грязные данные | брудні дані | messy data | pl: „brudne” dane. |
+| цифры под графиком | цифри під графіком | the numbers behind the chart | pl: liczby pod wykresem. |
+| мерки документа | мірки документа | a document's measurements | Метафора костюма на заказ (a2.4); pl: wymiary dokumentu. |
+| памятка (документ) | пам'ятка | briefing sheet | pl: ściągawka. |
+| охрана труда | охорона праці | health and safety | pl: BHP. |
+| прораб | виконроб | site manager | pl: kierownik budowy. |
+| выход в сеть | вихід у мережу | network access | Переключатель — `{{data.ui_paths.a2_network_egress_toggle}}`; pl: dostęp do sieci. |
+| следить за работой Claude | стежити за роботою Claude | keep an eye on / monitor Claude's work | Главная защита от инъекций; pl: obserwować pracę Claude. |
+| прайс | прайс | price list | pl: cennik. |
+| режим правок | режим правок | editing mode | a2.6, Google Workspace; pl: tryb edycji. |
+| история версий | історія версій | version history | Элемент Google — `{{data.ui_paths.a2_gws_version_history}}`; pl: historia wersji. |
+| боковая панель (Google) | бічна панель | sidebar | pl: panel boczny. |
+| критерии успеха | критерії успіху | success criteria | Модуль p7. pl: kryteria sukcesu. Свойства: конкретный / измеримый / достижимый / релевантный → конкретний / вимірюваний / досяжний / релевантний → specific / measurable / achievable / relevant (pl: konkretne / mierzalne / osiągalne / istotne). |
+| eval / evals | eval / evals | eval / evals | Не переводится во всех языках (название урока p7.2). |
+| оценщик (grader) | оцінювач | grader | pl: oceniający (grader); «модель-оценщик» → «модель-оцінювач» → “model grader” → „model oceniający”. LLM-as-judge — как есть, с пояснением. |
+| задача (task, в eval) / транскрипт | завдання / транскрипт | task / transcript | pl: zadanie / transkrypt. |
+| точка отсчёта (baseline) | точка відліку (baseline) | baseline | pl: punkt odniesienia (baseline). |
+| крайний случай | крайній випадок | edge case | pl: przypadek brzegowy. |
+| ограничители (guardrails) | запобіжники (guardrails) | guardrails | pl: zabezpieczenia (guardrails). По course.json. |
+| утечка промпта | витік промпту | prompt leak | pl: wyciek promptu. |
+| согласованность | узгодженість | consistency | pl: spójność. |
+| миграция / исходная модель | міграція / вихідна модель | migration / starting model | pl: migracja / model wyjściowy. migration guide, prefill, effort, thinking — не переводятся. |
+| продакшен | продакшн | production | pl: produkcja. |
+| масштаб / проверка / правила автономии / отчёт о прогрессе | масштаб / перевірка / правила автономії / звіт про прогрес | scope / verification / autonomy rules / progress report | Четыре опоры промпта агента (p7.5). pl: zakres / weryfikacja / zasady autonomii / raport z postępów. «опора» → «опора» → pillar → filar. |
+| уровень «Профессионал» | рівень «Професіонал» | Professional level | pl: poziom „Profesjonalista”. Сертификат: Navyk Professional certificate / certyfikat Navyk „Profesjonalista”. |
+| оператор (поддержки) | оператор | agent | pl: konsultant. en: не «operator». |
+| `/имя`, `<имя>` (плейсхолдер навыка) | `/назва`, `<назва>` | `/name`, `<name>` | Модуль p2. pl: `/nazwa`, `<nazwa>`. Навык, субагент, плагин — см. строки модуля a5 ниже. |
+| хук | хук | hook | pl: hook, мн. hooki. |
+| маркетплейс / каталог (плагинов Claude Code) | маркетплейс / каталог | marketplace / catalogue | p2: в Claude Code официальный термин — marketplace; «каталог» как пояснение. Не «directory» (это каталог claude.ai из a4/a5). pl: marketplace / katalog. |
+| область (действия, установки) | область (дії, встановлення) | scope | pl: «zakres». Значения local / project / user не переводятся. |
+| сторонний каталог | сторонній каталог | third-party catalogue | pl: «katalog zewnętrzny». |
+| сводка (субагента) | підсумок | summary | pl: «podsumowanie». |
+| правка файла | редагування файлу / зміна | (file) edit | pl: «edycja pliku». |
+| шапка (YAML, в Claude Code) | шапка | frontmatter | p2: для уровня «Профессионал» en — frontmatter (термин документации Claude Code); в a5 — header. pl: «nagłówek YAML». |
+| исходники | вихідний код | source | pl: «kod źródłowy». |
+| ревьюер | рев'юер | reviewer | pl: «recenzent». |
+| закоммитить | закомітити | commit | pl: «zacommitować». |
+| деплой | деплой | deploy / deployment | pl: «wdrożenie». |
+| тревожный знак | тривожний знак | red flag | pl: «sygnał ostrzegawczy». |
+| XML-тег / открывающий / закрывающий | XML-тег / відкривальний / закривальний | XML tag / opening / closing | Модуль a7. pl: tag XML / otwierający / zamykający. Имена тегов (<context>, <instructions>…) не переводятся ни в одном языке. |
+| коробка (метафора тега) | коробка | box | pl: karton (при переезде). |
+| описательное / единообразное имя тега | описова / однакова назва | descriptive / consistent name | pl: opisowa / spójna nazwa. |
+| пограничный случай | межовий випадок | edge case | a7.2. pl: przypadek brzegowy. |
+| перекос (в примерах) | перекіс | skew | pl: skrzywienie. |
+| метаданные / ярлык (документа) | метадані / наліпка | metadata / label | a7.3. pl: metadane / etykieta. |
+| коммерческое предложение (КП) | комерційна пропозиція (КП) | proposal | en: не «quote», чтобы не путать с цитатами (a7.3–a7.4). pl: oferta. |
+| проверяемый (ответ) | перевірюваний | checkable / auditable | a7.4. pl: sprawdzalny. |
+| самокоррекция / самопроверка | самокорекція / самоперевірка | self-correction / self-check | a7.5. pl: samokorekta / samosprawdzenie. |
+| критика (шаг) / доработка | критика / доопрацювання | critique / revise | pl: krytyka / poprawki (как в course.json). |
+| придирки | прискіпування | nitpicking | pl: czepialstwo. |
+| интервью (приём) | інтерв'ю | interview | a7.6. pl: wywiad. |
+| итоговое задание (spec) | підсумкове завдання | final brief | a7.6. en: «brief», не «spec» в тексте для неразработчиков. pl: końcowe zlecenie. |
+| что не входит в задачу | що не входить у завдання | out of scope | pl: co nie wchodzi w zakres. |
+| workflow / агент | workflow / агент | workflow / agent | Модуль p6. «Workflow» не переводится и не склоняется. pl: workflow / agent. |
+| паттерн | патерн | pattern | p6.2. pl: wzorzec. |
+| цепочка / маршрутизация / параллельные вызовы | ланцюжок / маршрутизація / паралельні виклики | prompt chaining / routing / parallelization | p6.2. В en — названия паттернов Anthropic (американское написание parallelization, evaluator-optimizer). pl: łańcuch / routing / wywołania równoległe. |
+| оркестратор и исполнители / генератор и оценщик | оркестратор і виконавці / генератор і оцінювач | orchestrator-workers / evaluator-optimizer | p6.2. pl: orkiestrator i wykonawcy / generator i oceniający. |
+| цикл агента | цикл агента | agent loop | p6.3–p6.4. pl: pętla agenta. |
+| сжатие (контекста) | стиснення | compaction | p6.5. pl: kompakcja. |
+| очистка результатов инструментов | очищення результатів інструментів | tool result clearing | pl: czyszczenie wyników narzędzi. Заглушка → uk «замінник», pl «zaślepka». |
+| субагент | субагент | subagent | pl: subagent. |
+| минимальные права | мінімальні права | least privilege | p6.6. pl: minimalne uprawnienia. |
+| внедрение инструкций | впровадження інструкцій | prompt injection | p6.6: в тексте урока термин prompt injection даётся по-английски с пояснением; см. также «промпт-инъекция». |
+| возврат денег | повернення коштів | refund | pl: zwrot pieniędzy. |
+| папка (файловая система) | тека | folder | uk: «тека» и в техническом тексте (p6.3: «тека проєкту»). pl: folder. |
+| задача (агентная, Cowork) | завдання | task | Модуль a6. uk: «завдання», не «задача». pl: zadanie. |
+| длинная задача | довге завдання | long task | pl: długie zadanie. |
+| запланированная задача | заплановане завдання | scheduled task | Страница интерфейса — Scheduled. pl: zaplanowane zadanie. |
+| прогон (запланированной задачи) | запуск | run | uk: не «прогін». pl: uruchomienie. |
+| в облаке | у хмарі | in the cloud | pl: w chmurze. |
+| поручение (агенту) | доручення | brief / task | pl: zlecenie. |
+| критерии «готово» | критерії «готово» | “done” criteria | pl: kryteria „gotowe”. |
+| границы (задачи) | межі | boundaries | pl: granice. |
+| обратимое / необратимое действие | оборотна / необоротна дія | reversible / irreversible action | pl: odwracalne / nieodwracalne działanie. |
+| режим подтверждений | режим підтверджень | approval mode | Названия режимов — на английском через `{{data.ui_paths.a6_approve_*}}`. pl: tryb potwierdzeń. |
+| признаки беды | ознаки біди | warning signs | pl: sygnały ostrzegawcze. |
+| промпт-инъекция | промпт-ін'єкція | prompt injection | pl: prompt injection (wstrzyknięcie promptu). |
+| рабочая папка | робоча тека | working folder | pl: folder roboczy. |
+| встроенный браузер | вбудований браузер | built-in browser | Claude in Chrome не переводится. pl: wbudowana przeglądarka. |
+| управление компьютером | керування комп'ютером | computer use | pl: sterowanie komputerem. |
+| снимок экрана | знімок екрана | screenshot | pl: zrzut ekranu. |
+| перенести входы (на сайты) | перенести входи | bring over logins | Кнопка Import cookies. pl: przenieść logowania. |
+| уведомление | сповіщення | notification | uk: не «повідомлення» (это message). pl: powiadomienie. |
+| артефакт | артефакт | artifact | en: американское artifact, как в интерфейсе Claude. pl: artefakt. |
+| самодостаточная инструкция | самодостатня інструкція | self-contained instructions | pl: samowystarczalna instrukcja. |
+| коннектор | конектор | connector | Модуль a4. uk: одна «н». pl: konektor. |
+| каталог коннекторов | каталог конекторів | connectors directory | pl: katalog konektorów. В en «directory», не «catalogue». |
+| подключить / включить в чате | підключити / увімкнути в чаті | connect / turn on in a chat | Разные шаги: подключение в настройках, включение — переключателем в беседе. pl: podłączyć / włączyć w czacie. |
+| отключить (сервис) | відключити | disconnect | Не путать с «выключить в чате» (вимкнути / turn off). pl: odłączyć. |
+| свой (кастомный) коннектор | власний (кастомний) конектор | your own (custom) connector | pl: własny (niestandardowy) konektor. |
+| удалённый MCP-сервер | віддалений MCP-сервер | remote MCP server | pl: zdalny serwer MCP. |
+| права (аккаунта) | права | permissions | pl: uprawnienia. |
+| запрос на одобрение | запит на схвалення | approval request | pl: prośba o zatwierdzenie. |
+| беседа | розмова | conversation | В a4 «место в беседе» → «місце в розмові» → “space in the conversation” → «miejsce w rozmowie». |
+| справка Claude (pl) | — | — | pl: «centrum pomocy Claude» (как в a5). |
+| навык (Claude) | навичка | skill | Модуль a5. uk: «навичка» (ж. р.), как в course.json. pl: «skill» без перевода (skilla, skillem, мн. skille, skilli). |
+| встроенные навыки | вбудовані навички | built-in skills | pl: wbudowane skille. |
+| папка (навыка) | тека | folder | pl: folder; метафора «полка папок» → pl «półka segregatorów». |
+| корешки на полке | корінці на полиці | spines on the shelf | Метафора для name + description. pl: grzbiety. |
+| постепенное раскрытие | поступове розкриття | progressive disclosure | pl: stopniowe odsłanianie. |
+| шапка (SKILL.md) | шапка | header | pl: nagłówek. В sources можно «YAML frontmatter» (en). |
+| загрузить навык | завантажити навичку | upload a skill | pl: wgrać skill. |
+| песочница | «пісочниця» | “sandbox” | pl: „piaskownica”. |
+| выполнение кода | виконання коду | code execution | Переключатель — Code execution and file creation. pl: wykonywanie kodu. |
+| плагин | плагін | plugin | pl: wtyczka (как в course.json). |
+| каталог (навыков, коннекторов, плагинов) | каталог | directory | pl: katalog. |
+| локальный MCP-сервер | локальний MCP-сервер | local MCP server | pl: lokalny serwer MCP. |
+| помощник для подзадач (субагент) | помічник для підзадач | helper for subtasks | pl: pomocnik do podzadań. |
+| владелец организации | власник організації | organisation's owner | pl: właściciel organizacji. |
+| КП (коммерческое предложение) | КП (комерційна пропозиція) | sales proposal | pl: oferta handlowa. |
+| акт сверки | акт звірки | reconciliation statement | pl: potwierdzenie sald. |
+| протокол встречи | протокол зустрічі | meeting minutes | pl: protokół ze spotkania. |

@@ -29,8 +29,8 @@ test("health and course", async () => {
   const course = await (await fetch(`${base}/api/course`)).json();
   assert.equal(course.levels[0].id, "beginner");
   assert.ok(course.available.uk.includes("b2.1"));
-  // every beginner lesson listed in course.json is built in all three languages
-  const ids = course.levels[0].modules.flatMap((m: any) => m.lessons.map((l: any) => l.id));
+  // every lesson of every level listed in course.json is built in all four languages
+  const ids = course.levels.flatMap((lv: any) => lv.modules.flatMap((m: any) => m.lessons.map((l: any) => l.id)));
   for (const lang of ["ru", "uk", "en", "pl"]) assert.deepEqual([...course.available[lang]].sort(), [...ids].sort());
 });
 

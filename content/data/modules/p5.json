@@ -1,0 +1,115 @@
+{
+  "_about": "Изменчивые значения модуля p5 «MCP»: версия спецификации MCP, бета-заголовок MCP connector, названия элементов интерфейса Claude (на английском, как в приложении), планы и лимиты. Подставляются в {{data.<раздел>.<ключ>}} при сборке. Префикс ключей pfive_ (а не p5_): регулярное выражение сборщика принимает в ключах только [a-z_]. Источники и даты — content/data/volatile/p5.md. Проверено 2026-10-14. Переводы uk/en/pl добавят переводчики.",
+  "versions": {
+    "pfive_mcp_spec": {
+      "ru": "2026-07-28",
+      "uk": "2026-07-28",
+      "en": "2026-07-28",
+      "pl": "2026-07-28"
+    },
+    "pfive_python_sdk_min": {
+      "ru": "2.0.0",
+      "uk": "2.0.0",
+      "en": "2.0.0",
+      "pl": "2.0.0"
+    },
+    "pfive_api_beta": {
+      "ru": "mcp-client-2025-11-20",
+      "uk": "mcp-client-2025-11-20",
+      "en": "mcp-client-2025-11-20",
+      "pl": "mcp-client-2025-11-20"
+    }
+  },
+  "models": {
+    "pfive_example_model_id": {
+      "ru": "claude-opus-5-5",
+      "uk": "claude-opus-5-5",
+      "en": "claude-opus-5-5",
+      "pl": "claude-opus-5-5"
+    }
+  },
+  "ui_paths": {
+    "pfive_customize_connectors": {
+      "label": "Customize → Connectors",
+      "hint": {
+        "ru": "раздел claude.ai, где хранятся твои коннекторы",
+        "uk": "розділ claude.ai, де зберігаються твої конектори",
+        "en": "",
+        "pl": "sekcja claude.ai z twoimi konektorami"
+      }
+    },
+    "pfive_add_custom": {
+      "label": "+ → Add custom connector",
+      "hint": {
+        "ru": "добавить свой коннектор по URL",
+        "uk": "додати власний конектор за URL",
+        "en": "add your own connector by URL",
+        "pl": "dodaj własny konektor po URL"
+      }
+    },
+    "pfive_advanced_settings": {
+      "label": "Advanced settings",
+      "hint": {
+        "ru": "дополнительные настройки: OAuth Client ID и Client Secret",
+        "uk": "додаткові налаштування: OAuth Client ID і Client Secret",
+        "en": "OAuth Client ID and Client Secret",
+        "pl": "ustawienia zaawansowane: OAuth Client ID i Client Secret"
+      }
+    },
+    "pfive_chat_connectors": {
+      "label": "+ → Connectors",
+      "hint": {
+        "ru": "меню «+» в поле сообщения, чтобы включить коннектор в чате",
+        "uk": "меню «+» у полі повідомлення, щоб увімкнути конектор у чаті",
+        "en": "the “+” menu in the message box, to turn on a connector in a chat",
+        "pl": "menu „+” w polu wiadomości, żeby włączyć konektor w czacie"
+      }
+    }
+  },
+  "plans": {
+    "pfive_custom_plans": {
+      "ru": "Free, Pro, Max, Team и Enterprise (функция в бете)",
+      "uk": "Free, Pro, Max, Team і Enterprise (функція в беті)",
+      "en": "Free, Pro, Max, Team and Enterprise (beta feature)",
+      "pl": "Free, Pro, Max, Team i Enterprise (funkcja w wersji beta)"
+    },
+    "pfive_free_custom_max": {
+      "ru": "один",
+      "uk": "один",
+      "en": "one",
+      "pl": "jeden"
+    },
+    "pfive_team_custom_who": {
+      "ru": "только владелец организации (Owner)",
+      "uk": "лише власник організації (Owner)",
+      "en": "only the organisation's Owner",
+      "pl": "tylko właściciel organizacji (Owner)"
+    }
+  },
+  "limits": {
+    "pfive_cc_output_warn": {
+      "ru": "10 000 токенов",
+      "uk": "10 000 токенів",
+      "en": "10,000 tokens",
+      "pl": "10 000 tokenów"
+    },
+    "pfive_cc_output_max": {
+      "ru": "25 000 токенов",
+      "uk": "25 000 токенів",
+      "en": "25,000 tokens",
+      "pl": "25 000 tokenów"
+    },
+    "pfive_web_result_max": {
+      "ru": "около 150 000 символов",
+      "uk": "близько 150 000 символів",
+      "en": "about 150,000 characters",
+      "pl": "około 150 000 znaków"
+    },
+    "pfive_web_timeout": {
+      "ru": "240 секунд",
+      "uk": "240 секунд",
+      "en": "240 seconds",
+      "pl": "240 sekund"
+    }
+  }
+}

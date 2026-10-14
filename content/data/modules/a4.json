@@ -1,0 +1,189 @@
+{
+  "_about": "Изменчивые значения модуля a4 «Коннекторы»: названия элементов интерфейса Claude (на английском, как в приложении), планы и лимиты. Подставляются в {{data.<раздел>.<ключ>}} при сборке. Источники и даты — content/data/volatile/a4.md. Проверено 2026-10-14. Переводы uk/en/pl добавлены.",
+  "ui_paths": {
+    "a4_customize_connectors": {
+      "label": "Customize → Connectors",
+      "hint": {
+        "ru": "раздел, где хранятся все твои коннекторы",
+        "uk": "розділ, де зберігаються всі твої конектори",
+        "en": "where all your connectors live",
+        "pl": "sekcja, w której są wszystkie twoje konektory"
+      }
+    },
+    "a4_add_plus": {
+      "label": "+",
+      "hint": {
+        "ru": "кнопка рядом с заголовком Connectors, открывает каталог",
+        "uk": "кнопка поруч із заголовком Connectors, відкриває каталог",
+        "en": "the button next to the Connectors heading; opens the directory",
+        "pl": "przycisk obok nagłówka Connectors, otwiera katalog"
+      }
+    },
+    "a4_browse_connectors": {
+      "label": "Browse connectors",
+      "hint": {
+        "ru": "посмотреть каталог коннекторов",
+        "uk": "переглянути каталог конекторів",
+        "en": "",
+        "pl": "przeglądać katalog konektorów"
+      }
+    },
+    "a4_connect": {
+      "label": "Connect",
+      "hint": {
+        "ru": "подключить; у некоторых коннекторов кнопка называется Install",
+        "uk": "підключити; у деяких конекторів кнопка називається Install",
+        "en": "on some connectors the button is called Install",
+        "pl": "podłącz; przy niektórych konektorach przycisk nazywa się Install"
+      }
+    },
+    "a4_chat_connectors": {
+      "label": "Connectors",
+      "hint": {
+        "ru": "пункт в меню «+» в поле сообщения; меню открывается и по «/»",
+        "uk": "пункт у меню «+» у полі повідомлення; меню відкривається і через «/»",
+        "en": "an item in the “+” menu in the message box; “/” opens the menu too",
+        "pl": "pozycja w menu „+” w polu wiadomości; menu otwiera się też po wpisaniu „/”"
+      }
+    },
+    "a4_manage_connectors": {
+      "label": "Manage connectors",
+      "hint": {
+        "ru": "управление коннекторами, в подменю Connectors",
+        "uk": "керування конекторами, у підменю Connectors",
+        "en": "in the Connectors submenu",
+        "pl": "zarządzanie konektorami, w podmenu Connectors"
+      }
+    },
+    "a4_add_custom": {
+      "label": "+ Add → Add custom connector",
+      "hint": {
+        "ru": "добавить свой коннектор",
+        "uk": "додати власний конектор",
+        "en": "",
+        "pl": "dodaj własny konektor"
+      }
+    },
+    "a4_continue": {
+      "label": "Continue",
+      "hint": {
+        "ru": "продолжить",
+        "uk": "продовжити",
+        "en": "",
+        "pl": "dalej"
+      }
+    },
+    "a4_add_button": {
+      "label": "Add",
+      "hint": {
+        "ru": "добавить, последний шаг настройки",
+        "uk": "додати, останній крок налаштування",
+        "en": "the last step of the setup",
+        "pl": "dodaj, ostatni krok konfiguracji"
+      }
+    },
+    "a4_auth_options": {
+      "label": "Sign in now / Sign in when needed / No sign in",
+      "hint": {
+        "ru": "войти сейчас / войти, когда понадобится / без входа",
+        "uk": "увійти зараз / увійти, коли знадобиться / без входу",
+        "en": "",
+        "pl": "zaloguj teraz / zaloguj, gdy będzie potrzeba / bez logowania"
+      }
+    },
+    "a4_tool_access": {
+      "label": "Tool access",
+      "hint": {
+        "ru": "доступ к инструментам, в подменю Connectors",
+        "uk": "доступ до інструментів, у підменю Connectors",
+        "en": "in the Connectors submenu",
+        "pl": "dostęp do narzędzi, w podmenu Connectors"
+      }
+    },
+    "a4_mode_auto": {
+      "label": "Auto",
+      "hint": {
+        "ru": "автоматически, режим по умолчанию",
+        "uk": "автоматично, режим за замовчуванням",
+        "en": "the default mode",
+        "pl": "automatycznie, tryb domyślny"
+      }
+    },
+    "a4_mode_always": {
+      "label": "Always available",
+      "hint": {
+        "ru": "всегда под рукой",
+        "uk": "завжди під рукою",
+        "en": "",
+        "pl": "zawsze pod ręką"
+      }
+    },
+    "a4_mode_on_demand": {
+      "label": "On demand",
+      "hint": {
+        "ru": "по запросу",
+        "uk": "на запит",
+        "en": "",
+        "pl": "na żądanie"
+      }
+    },
+    "a4_allow_always": {
+      "label": "Allow always",
+      "hint": {
+        "ru": "разрешать всегда, без вопроса",
+        "uk": "дозволяти завжди, без запитання",
+        "en": "Claude won't ask again",
+        "pl": "zezwalaj zawsze, bez pytania"
+      }
+    },
+    "a4_org_connectors": {
+      "label": "Organization settings → Connectors",
+      "hint": {
+        "ru": "настройки организации, доступны владельцу",
+        "uk": "налаштування організації, доступні власникові",
+        "en": "organisation settings, available to the owner",
+        "pl": "ustawienia organizacji, dostępne dla właściciela"
+      }
+    }
+  },
+  "plans": {
+    "a4_connectors_plans": {
+      "ru": "все планы, включая Free",
+      "uk": "всіх планах, включно з Free",
+      "en": "all plans, including Free",
+      "pl": "wszystkich planach, łącznie z Free"
+    },
+    "a4_custom_plans": {
+      "ru": "Free, Pro, Max, Team и Enterprise",
+      "uk": "Free, Pro, Max, Team і Enterprise",
+      "en": "Free, Pro, Max, Team and Enterprise",
+      "pl": "Free, Pro, Max, Team i Enterprise"
+    },
+    "a4_free_custom_max": {
+      "ru": "только один",
+      "uk": "лише один",
+      "en": "only one",
+      "pl": "tylko jeden"
+    },
+    "a4_team_admin": {
+      "ru": "владелец организации (Owner или Primary Owner)",
+      "uk": "власник організації (Owner або Primary Owner)",
+      "en": "the organisation owner (Owner or Primary Owner)",
+      "pl": "właściciel organizacji (Owner lub Primary Owner)"
+    }
+  },
+  "limits": {
+    "a4_on_demand_threshold": {
+      "ru": "10 и больше",
+      "uk": "10 і більше",
+      "en": "10 or more",
+      "pl": "10 lub więcej"
+    },
+    "a4_always_fit": {
+      "ru": "меньше 10",
+      "uk": "менше ніж 10",
+      "en": "fewer than 10",
+      "pl": "mniej niż 10"
+    }
+  }
+}

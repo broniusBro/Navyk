@@ -443,6 +443,79 @@ button.node--current:active .node__dot { transform: translateY(4px); box-shadow:
 button.daycard { cursor: pointer; box-shadow: var(--press-card); margin-bottom: 4px; transition: transform 0.1s ease, box-shadow 0.1s ease; }
 button.daycard:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--border); }
 
+/* ---------- levels screen (ui/levels.js) and level road head ---------- */
+
+/* each level has its own pastel tone */
+.lvl--mint, .level-head--mint { --lvl-bg: var(--success); }
+.lvl--sky, .level-head--sky { --lvl-bg: var(--info); }
+.lvl--lilac, .level-head--lilac { --lvl-bg: var(--repeat); }
+
+.levels { margin-top: var(--s-xs); }
+.levels__heading { font-size: var(--fs-h2); }
+.levels__lead { margin-top: var(--s-xs); color: var(--ink-muted); font-weight: 700; }
+.levels__list { list-style: none; margin: var(--s-xl) 0 0; padding: 0; display: flex; flex-direction: column; gap: 22px; }
+
+.lvl {
+  position: relative; display: flex; flex-direction: column; gap: 10px;
+  padding: 16px 16px 16px; margin-bottom: 4px;
+  background: var(--lvl-bg, var(--surface)); color: var(--ink); text-decoration: none;
+  border: var(--bw) solid var(--border); border-radius: var(--r-hero);
+  box-shadow: var(--press-card);
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+.lvl:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--border); }
+@media (hover: hover) and (pointer: fine) {
+  .lvl:hover:not(:active) { transform: translateY(-2px); box-shadow: 0 6px 0 var(--border); }
+}
+.lvl:focus-visible { outline-offset: 4px; }
+
+.lvl__sticker { position: absolute; top: -13px; right: 16px; background: var(--highlight); }
+.lvl__head { display: flex; align-items: center; gap: var(--s-m); padding-right: 4px; }
+.lvl.is-recommended .lvl__head { padding-right: 96px; }
+.lvl__badge {
+  flex: none; display: grid; place-items: center; width: 50px; height: 50px;
+  border-radius: var(--r-control); background: var(--surface); border: var(--bw) solid var(--border);
+  transform: rotate(-4deg);
+}
+.lvl__glyph { width: 28px; height: 28px; stroke-width: 2; }
+.lvl__heading { display: flex; flex-direction: column; min-width: 0; }
+.lvl__kicker { font-size: var(--fs-caption); font-weight: 900; text-transform: uppercase; letter-spacing: 0.04em; color: var(--ink-muted); }
+.lvl__title { font-size: var(--fs-h2); font-weight: 900; line-height: var(--lh-heading); }
+.lvl__desc { font-weight: 700; line-height: 1.35; }
+.lvl__meta { display: flex; justify-content: space-between; align-items: baseline; gap: var(--s-s); flex-wrap: wrap; margin-top: 2px; font-size: var(--fs-small); font-weight: 800; color: var(--ink-muted); }
+.lvl__count { color: var(--ink); font-variant-numeric: tabular-nums; }
+.lvl__bar { display: block; height: 14px; border-radius: 7px; overflow: hidden; background: var(--surface); border: var(--bw) solid var(--border); }
+.lvl__fill { display: block; height: 100%; background: var(--success-strong); }
+.lvl__foot { display: flex; margin-top: 4px; }
+.lvl__action {
+  display: flex; align-items: center; justify-content: space-between; gap: var(--s-s); width: 100%;
+  min-height: var(--touch); padding: 8px 12px 8px 14px;
+  border: var(--bw) solid var(--border); border-radius: var(--r-control); background: var(--surface);
+  font-weight: 800; line-height: 1.25;
+}
+.lvl__action .icon { width: 20px; height: 20px; stroke-width: 2.6; }
+.lvl__action-text { min-width: 0; overflow: hidden; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; }
+.lvl__action--main { background: var(--action); color: var(--on-action); border-width: var(--bw-strong); box-shadow: 0 3px 0 var(--action-shadow); margin-bottom: 3px; }
+.lvl__action--soon, .lvl__action--done { justify-content: flex-start; width: auto; }
+.lvl__action--soon { background: transparent; border-style: dashed; color: var(--ink-muted); }
+.lvl__action--done .icon { padding: 2px; border-radius: 50%; background: var(--success-strong); border: var(--bw) solid var(--border); stroke-width: 3.2; }
+
+/* top of a level's road */
+.level-head { display: flex; flex-direction: column; align-items: flex-start; gap: var(--s-l); margin: var(--s-xs) 0 var(--s-xxl); }
+.level-head__back { gap: 4px; padding-left: 0.6rem; }
+.level-head__back .icon { width: 18px; height: 18px; stroke-width: 2.8; }
+.level-head__main { display: flex; align-items: center; gap: var(--s-m); }
+.level-head__badge {
+  flex: none; display: grid; place-items: center; width: 54px; height: 54px;
+  border-radius: var(--r-control); background: var(--lvl-bg); border: var(--bw) solid var(--border);
+  box-shadow: var(--press-card); transform: rotate(-4deg);
+}
+.level-head__glyph { width: 30px; height: 30px; stroke-width: 2; }
+.level-head__kicker { font-size: var(--fs-small); font-weight: 800; color: var(--ink-muted); }
+.level-head__title { font-size: var(--fs-h1); }
+.level-head__title .hl { --hl: var(--lvl-bg); }
+.level-soon { margin-bottom: var(--s-xxl); }
+
 /* ---------- lesson player ---------- */
 
 .lesson { display: flex; flex-direction: column; min-height: 100vh; min-height: 100dvh; }

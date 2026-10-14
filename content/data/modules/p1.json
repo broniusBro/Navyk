@@ -1,0 +1,222 @@
+{
+  "_about": "Изменчивые значения модуля p1 «Claude Code: основы»: названия элементов интерфейса Claude Code (на английском, как в приложении), клавиши, планы и лимиты. Подставляются в {{data.<раздел>.<ключ>}} при сборке. Источники и даты — content/data/volatile/p1.md. Проверено 2026-10-14. Переводы uk/en/pl добавят переводчики.",
+  "ui_paths": {
+    "p1_shift_tab": {
+      "label": "Shift+Tab",
+      "hint": {
+        "ru": "переключает режим разрешений по кругу",
+        "uk": "перемикає режим дозволів по колу",
+        "en": "cycles through the permission modes",
+        "pl": "przełącza tryby uprawnień po kolei"
+      }
+    },
+    "p1_esc": {
+      "label": "Esc",
+      "hint": {
+        "ru": "сразу останавливает Claude, контекст сохраняется",
+        "uk": "одразу зупиняє Claude, контекст зберігається",
+        "en": "stops Claude straight away; the context is kept",
+        "pl": "od razu zatrzymuje Claude, kontekst zostaje"
+      }
+    },
+    "p1_esc_twice": {
+      "label": "Esc Esc",
+      "hint": {
+        "ru": "дважды при пустом поле ввода: меню отката",
+        "uk": "двічі за порожнього поля введення: меню відкату",
+        "en": "twice with an empty input field: the rewind menu",
+        "pl": "dwa razy przy pustym polu wiadomości: menu cofania"
+      }
+    },
+    "p1_ctrl_g": {
+      "label": "Ctrl+G",
+      "hint": {
+        "ru": "открыть план в текстовом редакторе",
+        "uk": "відкрити план у текстовому редакторі",
+        "en": "opens the plan in your text editor",
+        "pl": "otwiera plan w edytorze tekstu"
+      }
+    },
+    "p1_desktop_code_tab": {
+      "label": "Code",
+      "hint": {
+        "ru": "раздел для работы с кодом",
+        "uk": "розділ для роботи з кодом",
+        "en": "the tab for working with code",
+        "pl": "karta do pracy z kodem"
+      }
+    },
+    "p1_mode_manual": {
+      "label": "Manual",
+      "hint": {
+        "ru": "ручной режим",
+        "uk": "ручний режим",
+        "en": "",
+        "pl": "tryb ręczny"
+      }
+    },
+    "p1_mode_accept_edits": {
+      "label": "Accept edits",
+      "hint": {
+        "ru": "правки без вопросов",
+        "uk": "правки без запитань",
+        "en": "",
+        "pl": "edycje bez pytania"
+      }
+    },
+    "p1_mode_plan": {
+      "label": "Plan",
+      "hint": {
+        "ru": "планирование",
+        "uk": "планування",
+        "en": "",
+        "pl": "planowanie"
+      }
+    },
+    "p1_mode_auto": {
+      "label": "Auto",
+      "hint": {
+        "ru": "автоматический режим",
+        "uk": "автоматичний режим",
+        "en": "",
+        "pl": "tryb automatyczny"
+      }
+    },
+    "p1_status_plan": {
+      "label": "⏸ plan mode on",
+      "hint": {
+        "ru": "надпись в строке состояния под полем ввода",
+        "uk": "напис у рядку стану під полем введення",
+        "en": "in the status line below the input field",
+        "pl": "napis w pasku stanu pod polem wiadomości"
+      }
+    },
+    "p1_plan_yes_auto": {
+      "label": "Yes, and use auto mode",
+      "hint": {
+        "ru": "одобрить план и работать в автоматическом режиме",
+        "uk": "схвалити план і працювати в автоматичному режимі",
+        "en": "",
+        "pl": "zatwierdzić plan i pracować w trybie automatycznym"
+      }
+    },
+    "p1_plan_yes_manual": {
+      "label": "Yes, manually approve edits",
+      "hint": {
+        "ru": "одобрить план и подтверждать каждую правку",
+        "uk": "схвалити план і підтверджувати кожну правку",
+        "en": "",
+        "pl": "zatwierdzić plan i potwierdzać każdą zmianę"
+      }
+    },
+    "p1_plan_keep": {
+      "label": "No, keep planning",
+      "hint": {
+        "ru": "остаться в планировании и сказать, что изменить",
+        "uk": "залишитися в плануванні й сказати, що змінити",
+        "en": "",
+        "pl": "zostać w planowaniu i powiedzieć, co zmienić"
+      }
+    },
+    "p1_dont_ask_again": {
+      "label": "Yes, and don't ask again",
+      "hint": {
+        "ru": "разрешить и больше не спрашивать про эту команду",
+        "uk": "дозволити й більше не питати про цю команду",
+        "en": "",
+        "pl": "zezwolić i więcej nie pytać o to polecenie"
+      }
+    },
+    "p1_rewind_both": {
+      "label": "Restore code and conversation",
+      "hint": {
+        "ru": "вернуть код и разговор",
+        "uk": "повернути код і розмову",
+        "en": "",
+        "pl": "przywrócić kod i rozmowę"
+      }
+    },
+    "p1_rewind_conversation": {
+      "label": "Restore conversation",
+      "hint": {
+        "ru": "вернуть только разговор",
+        "uk": "повернути лише розмову",
+        "en": "conversation only",
+        "pl": "przywrócić tylko rozmowę"
+      }
+    },
+    "p1_rewind_code": {
+      "label": "Restore code",
+      "hint": {
+        "ru": "вернуть только файлы",
+        "uk": "повернути лише файли",
+        "en": "files only",
+        "pl": "przywrócić tylko pliki"
+      }
+    },
+    "p1_rewind_summarize": {
+      "label": "Summarize from here",
+      "hint": {
+        "ru": "сжать разговор с этого места",
+        "uk": "стиснути розмову з цього місця",
+        "en": "condense the conversation from this point on",
+        "pl": "streścić rozmowę od tego miejsca"
+      }
+    },
+    "p1_esc_key": {
+      "label": "Esc",
+      "hint": {
+        "ru": "клавиша",
+        "uk": "клавіша",
+        "en": "",
+        "pl": "klawisz"
+      }
+    }
+  },
+  "plans": {
+    "p1_cli_accounts": {
+      "ru": "подписка Pro, Max, Team или Enterprise, аккаунт Claude Console с оплатой API или доступ через облачного провайдера (Amazon Bedrock, Google Cloud, Microsoft Foundry)",
+      "uk": "підписка Pro, Max, Team або Enterprise, акаунт Claude Console з оплатою API або доступ через хмарного провайдера (Amazon Bedrock, Google Cloud, Microsoft Foundry)",
+      "en": "a Pro, Max, Team or Enterprise subscription, a Claude Console account with API billing, or access through a cloud provider (Amazon Bedrock, Google Cloud, Microsoft Foundry)",
+      "pl": "subskrypcja Pro, Max, Team lub Enterprise, konto Claude Console z płatnościami za API albo dostęp przez dostawcę chmury (Amazon Bedrock, Google Cloud, Microsoft Foundry)"
+    },
+    "p1_desktop_plan": {
+      "ru": "нужна платная подписка",
+      "uk": "потрібна платна підписка",
+      "en": "requires a paid plan",
+      "pl": "wymaga płatnej subskrypcji"
+    },
+    "p1_cloud_plans": {
+      "ru": "доступны на планах Pro, Max и Team, а также в Enterprise с местами premium или Chat + Claude Code",
+      "uk": "доступні на планах Pro, Max і Team, а також в Enterprise з місцями premium або Chat + Claude Code",
+      "en": "are available on Pro, Max and Team plans, and on Enterprise with premium or Chat + Claude Code seats",
+      "pl": "są dostępne w planach Pro, Max i Team, a także w Enterprise z miejscami premium lub Chat + Claude Code"
+    }
+  },
+  "limits": {
+    "p1_auto_default_version": {
+      "ru": "v2.1.283",
+      "uk": "v2.1.283",
+      "en": "v2.1.283",
+      "pl": "v2.1.283"
+    },
+    "p1_claude_md_lines": {
+      "ru": "200 строк",
+      "uk": "200 рядків",
+      "en": "200 lines",
+      "pl": "200 wierszy"
+    },
+    "p1_checkpoints_kept": {
+      "ru": "100 последних",
+      "uk": "100 останніх",
+      "en": "the last 100",
+      "pl": "100 ostatnich"
+    },
+    "p1_checkpoint_retention": {
+      "ru": "около 30 дней",
+      "uk": "близько 30 днів",
+      "en": "about 30 days",
+      "pl": "około 30 dni"
+    }
+  }
+}

@@ -49,9 +49,13 @@
     "P3": "Формат: что делать, а не чего не делать",
     "P4": "Шаги по порядку",
     "P5": "Примеры",
+    "P6": "Структура через XML-теги",
     "P7": "Роль",
     "P8": "Длинный контекст: данные сверху, вопрос снизу",
     "P9": "Право сказать «не знаю», опора на источник",
+    "P10": "Цепочки и самопроверка",
+    "P11": "Критерии успеха и проверка",
+    "P12": "Масштаб и обратимость (агенты)",
     "P13": "Управление контекстом: новая задача — новый чат"
   },
   "levels": [
@@ -926,6 +930,1483 @@
               "ai_practice": "Две задачи на выбор: разобрать выписку расходов за месяц или подготовить план изучения нового навыка.",
               "checkpoint": true,
               "volatile": false,
+              "sources": [
+                "https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "advanced",
+      "title": {
+        "ru": "Продвинутый",
+        "uk": "Просунутий",
+        "en": "Advanced",
+        "pl": "Zaawansowany"
+      },
+      "goal": "Получать реальные результаты: документы, таблицы, исследования и работу с подключёнными сервисами.",
+      "modules": [
+        {
+          "id": "a1",
+          "title": {
+            "ru": "Артефакты",
+            "uk": "Артефакти",
+            "en": "Artifacts",
+            "pl": "Artefakty"
+          },
+          "lessons": [
+            {
+              "id": "a1.1",
+              "title": {
+                "ru": "Что такое артефакт",
+                "uk": "Що таке артефакт",
+                "en": "What an artifact is",
+                "pl": "Czym jest artefakt"
+              },
+              "goal": "понять, когда Claude создаёт артефакт, и найти его во вкладке Artifacts",
+              "volatile": true,
+              "free_preview": true,
+              "sources": [
+                "https://support.claude.com/en/articles/17153992-what-are-artifacts-and-how-do-i-use-them"
+              ]
+            },
+            {
+              "id": "a1.2",
+              "title": {
+                "ru": "Docs: живой документ",
+                "uk": "Docs: живий документ",
+                "en": "Docs: a living document",
+                "pl": "Docs: żywy dokument"
+              },
+              "goal": "создать документ в Claude Docs и экспортировать его в Word, PDF или Google Docs",
+              "volatile": true,
+              "free_preview": false,
+              "sources": [
+                "https://support.claude.com/en/articles/16923645-get-started-with-claude-docs"
+              ]
+            },
+            {
+              "id": "a1.3",
+              "title": {
+                "ru": "Slides: презентация",
+                "uk": "Slides: презентація",
+                "en": "Slides: presentations",
+                "pl": "Slides: prezentacja"
+              },
+              "goal": "получить редактируемую презентацию и экспортировать её в PowerPoint или Google Slides",
+              "volatile": false,
+              "free_preview": false,
+              "sources": [
+                "https://support.claude.com/en/articles/17153992-what-are-artifacts-and-how-do-i-use-them"
+              ]
+            },
+            {
+              "id": "a1.4",
+              "title": {
+                "ru": "Design: макеты и лендинги",
+                "uk": "Design: макети й лендинги",
+                "en": "Design: mockups and landing pages",
+                "pl": "Design: makiety i strony docelowe"
+              },
+              "goal": "описать макет или лендинг так, чтобы Claude Design учёл стиль",
+              "volatile": true,
+              "free_preview": false,
+              "sources": [
+                "https://support.claude.com/en/articles/14604416-get-started-with-claude-design"
+              ]
+            },
+            {
+              "id": "a1.5",
+              "title": {
+                "ru": "Мини-приложение с ИИ внутри",
+                "uk": "Мінізастосунок зі ШІ всередині",
+                "en": "A mini app with AI inside",
+                "pl": "Miniaplikacja z AI w środku"
+              },
+              "goal": "создать интерактивный артефакт, который сам вызывает Claude, и понять, чей лимит при этом расходуется",
+              "volatile": false,
+              "free_preview": false,
+              "sources": [
+                "https://support.claude.com/en/articles/17153992-what-are-artifacts-and-how-do-i-use-them"
+              ]
+            },
+            {
+              "id": "a1.6",
+              "title": {
+                "ru": "Делиться безопасно",
+                "uk": "Безпечно ділитися",
+                "en": "Sharing safely",
+                "pl": "Bezpieczne udostępnianie"
+              },
+              "goal": "поделиться артефактом и помнить, что чужой код в артефакте — как файл от незнакомца",
+              "volatile": false,
+              "free_preview": false,
+              "sources": [
+                "https://support.claude.com/en/articles/9547008-share-artifacts"
+              ]
+            },
+            {
+              "id": "a1.7",
+              "title": {
+                "ru": "Dashboards (бета)",
+                "uk": "Dashboards (бета)",
+                "en": "Dashboards (beta)",
+                "pl": "Dashboards (beta)"
+              },
+              "goal": "собрать дашборд из подключённых данных (Pro и выше)",
+              "volatile": true,
+              "free_preview": false,
+              "sources": [
+                "https://support.claude.com/en/articles/17454700-get-started-with-claude-dashboards"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "a2",
+          "title": {
+            "ru": "Документы и таблицы",
+            "uk": "Документи та таблиці",
+            "en": "Documents and spreadsheets",
+            "pl": "Dokumenty i arkusze"
+          },
+          "lessons": [
+            {
+              "id": "a2.1",
+              "title": {
+                "ru": "Включаем создание файлов",
+                "uk": "Вмикаємо створення файлів",
+                "en": "Turning on file creation",
+                "pl": "Włączamy tworzenie plików"
+              },
+              "goal": "найти переключатель «Code execution and file creation» и понять, зачем он нужен",
+              "volatile": false,
+              "free_preview": false,
+              "sources": [
+                "https://support.claude.com/en/articles/12111783-create-and-edit-files-with-claude"
+              ]
+            },
+            {
+              "id": "a2.2",
+              "title": {
+                "ru": "Таблица с формулами",
+                "uk": "Таблиця з формулами",
+                "en": "A spreadsheet with formulas",
+                "pl": "Arkusz z formułami"
+              },
+              "goal": "получить XLSX с работающими формулами по описанию задачи",
+              "volatile": false,
+              "free_preview": false,
+              "sources": []
+            },
+            {
+              "id": "a2.3",
+              "title": {
+                "ru": "Анализ CSV и графики",
+                "uk": "Аналіз CSV і графіки",
+                "en": "CSV analysis and charts",
+                "pl": "Analiza CSV i wykresy"
+              },
+              "goal": "загрузить данные и получить анализ и PNG-график",
+              "volatile": false,
+              "free_preview": false,
+              "sources": []
+            },
+            {
+              "id": "a2.4",
+              "title": {
+                "ru": "Word, PowerPoint и PDF на выходе",
+                "uk": "Результат у Word, PowerPoint і PDF",
+                "en": "Output to Word, PowerPoint and PDF",
+                "pl": "Gotowe pliki Word, PowerPoint i PDF"
+              },
+              "goal": "сформулировать требования к документу (аудитория, структура, объём)",
+              "volatile": false,
+              "free_preview": false,
+              "sources": []
+            },
+            {
+              "id": "a2.5",
+              "title": {
+                "ru": "Риски файлового режима",
+                "uk": "Ризики роботи з файлами",
+                "en": "Risks of working with files",
+                "pl": "Ryzyka pracy z plikami"
+              },
+              "goal": "объяснить, что такое промпт-инъекция в файлах и почему за работой нужно следить",
+              "volatile": false,
+              "free_preview": false,
+              "sources": []
+            },
+            {
+              "id": "a2.6",
+              "title": {
+                "ru": "Claude в Google Docs, Sheets и Slides",
+                "uk": "Claude у Google Docs, Sheets і Slides",
+                "en": "Claude in Google Docs, Sheets and Slides",
+                "pl": "Claude w Google Docs, Sheets i Slides"
+              },
+              "goal": "работать с Claude прямо внутри Google-документа",
+              "volatile": true,
+              "free_preview": false,
+              "sources": [
+                "https://support.claude.com/en/articles/16951679-use-claude-in-google-docs-sheets-and-slides"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "a3",
+          "title": {
+            "ru": "Поиск и исследование",
+            "uk": "Пошук і дослідження",
+            "en": "Search and research",
+            "pl": "Wyszukiwanie i badanie tematu"
+          },
+          "lessons": [
+            {
+              "id": "a3.1",
+              "title": {
+                "ru": "Веб-поиск",
+                "uk": "Вебпошук",
+                "en": "Web search",
+                "pl": "Wyszukiwanie w sieci"
+              },
+              "goal": "включить веб-поиск и проверить ссылки в ответе",
+              "volatile": false,
+              "free_preview": false,
+              "sources": [
+                "https://support.claude.com/en/articles/10684626-enable-and-use-web-search"
+              ]
+            },
+            {
+              "id": "a3.2",
+              "title": {
+                "ru": "Поиск, размышление или Research",
+                "uk": "Пошук, міркування чи Research",
+                "en": "Search, thinking or Research",
+                "pl": "Wyszukiwanie, myślenie czy Research"
+              },
+              "goal": "выбрать нужный инструмент: факт → поиск; рассуждение → thinking/effort; 5+ источников → Research",
+              "volatile": false,
+              "free_preview": false,
+              "sources": [
+                "https://support.claude.com/en/articles/11095361-when-should-i-use-web-search-extended-thinking-and-research"
+              ]
+            },
+            {
+              "id": "a3.3",
+              "title": {
+                "ru": "Research: глубокое исследование",
+                "uk": "Research: глибоке дослідження",
+                "en": "Research: deep dives",
+                "pl": "Research: dogłębna analiza"
+              },
+              "goal": "запустить Research с чёткими критериями успеха и проверить цитаты",
+              "volatile": true,
+              "free_preview": false,
+              "sources": [
+                "https://support.claude.com/en/articles/11088861-use-research-on-claude"
+              ]
+            },
+            {
+              "id": "a3.4",
+              "title": {
+                "ru": "Промпт для исследования",
+                "uk": "Промпт для дослідження",
+                "en": "Writing a research prompt",
+                "pl": "Prompt do badania tematu"
+              },
+              "goal": "сформулировать вопрос, границы, источники и формат отчёта; попросить сверять источники между собой",
+              "volatile": false,
+              "free_preview": false,
+              "sources": [
+                "https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "a4",
+          "title": {
+            "ru": "Коннекторы",
+            "uk": "Конектори",
+            "en": "Connectors",
+            "pl": "Konektory"
+          },
+          "lessons": [
+            {
+              "id": "a4.1",
+              "title": {
+                "ru": "Что такое коннектор",
+                "uk": "Що таке конектор",
+                "en": "What a connector is",
+                "pl": "Czym jest konektor"
+              },
+              "goal": "объяснить, что коннектор даёт Claude доступ к сервису с вашими правами",
+              "volatile": false,
+              "free_preview": false,
+              "sources": [
+                "https://support.claude.com/en/articles/11176164-use-connectors-to-extend-claude-s-capabilities"
+              ]
+            },
+            {
+              "id": "a4.2",
+              "title": {
+                "ru": "Подключаем из каталога",
+                "uk": "Підключаємо з каталогу",
+                "en": "Connecting from the directory",
+                "pl": "Podłączamy z katalogu"
+              },
+              "goal": "подключить сервис через Customize > Connectors и включить его для конкретного чата",
+              "volatile": true,
+              "free_preview": false,
+              "sources": []
+            },
+            {
+              "id": "a4.3",
+              "title": {
+                "ru": "Свой коннектор (remote MCP)",
+                "uk": "Власний конектор (remote MCP)",
+                "en": "Your own connector (remote MCP)",
+                "pl": "Własny konektor (remote MCP)"
+              },
+              "goal": "добавить кастомный коннектор по URL (на Free — только один)",
+              "volatile": false,
+              "free_preview": false,
+              "sources": []
+            },
+            {
+              "id": "a4.4",
+              "title": {
+                "ru": "Доступ к инструментам",
+                "uk": "Доступ до інструментів",
+                "en": "Tool access",
+                "pl": "Dostęp do narzędzi"
+              },
+              "goal": "настроить загрузку инструментов («Auto» или «On demand») и понять, почему много инструментов расходует лимит",
+              "volatile": false,
+              "free_preview": false,
+              "sources": [
+                "https://support.claude.com/en/articles/13730515-manage-claude-s-tool-access"
+              ]
+            },
+            {
+              "id": "a4.5",
+              "title": {
+                "ru": "Безопасность коннекторов",
+                "uk": "Безпека конекторів",
+                "en": "Connector safety",
+                "pl": "Bezpieczeństwo konektorów"
+              },
+              "goal": "оценить риски: запись данных, непроверенные серверы, обработка у третьих сторон",
+              "volatile": false,
+              "free_preview": false,
+              "sources": [
+                "https://support.claude.com/en/articles/11176164-use-connectors-to-extend-claude-s-capabilities"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "a5",
+          "title": {
+            "ru": "Навыки и плагины",
+            "uk": "Навички та плагіни",
+            "en": "Skills and plugins",
+            "pl": "Skills i wtyczki"
+          },
+          "lessons": [
+            {
+              "id": "a5.1",
+              "title": {
+                "ru": "Что такое навык",
+                "uk": "Що таке навичка",
+                "en": "What a skill is",
+                "pl": "Czym jest skill"
+              },
+              "goal": "объяснить, что навык — это папка с инструкциями и ресурсами, которую Claude загружает по необходимости",
+              "volatile": false,
+              "free_preview": false,
+              "sources": [
+                "https://support.claude.com/en/articles/12512176-what-are-skills"
+              ]
+            },
+            {
+              "id": "a5.2",
+              "title": {
+                "ru": "Встроенные навыки",
+                "uk": "Вбудовані навички",
+                "en": "Built-in skills",
+                "pl": "Wbudowane skille"
+              },
+              "goal": "узнать, какие навыки Anthropic работают автоматически (документы Office и PDF)",
+              "volatile": false,
+              "free_preview": false,
+              "sources": [
+                "https://support.claude.com/en/articles/12512180-use-skills-in-claude"
+              ]
+            },
+            {
+              "id": "a5.3",
+              "title": {
+                "ru": "Свой навык без кода",
+                "uk": "Власна навичка без коду",
+                "en": "Your own skill, no code",
+                "pl": "Własny skill bez kodu"
+              },
+              "goal": "написать простой SKILL.md с понятным описанием, когда его применять",
+              "volatile": false,
+              "free_preview": false,
+              "sources": [
+                "https://support.claude.com/en/articles/12512198-how-to-create-custom-skills"
+              ]
+            },
+            {
+              "id": "a5.4",
+              "title": {
+                "ru": "Навык или инструкция проекта",
+                "uk": "Навичка чи інструкція проєкту",
+                "en": "Skill or project instructions",
+                "pl": "Skill czy instrukcje projektu"
+              },
+              "goal": "выбрать, где хранить правило: в настройках профиля, в проекте или в навыке",
+              "volatile": false,
+              "free_preview": false,
+              "sources": [
+                "https://support.claude.com/en/articles/10185728-understanding-claude-s-personalization-features"
+              ]
+            },
+            {
+              "id": "a5.5",
+              "title": {
+                "ru": "Плагины и каталог",
+                "uk": "Плагіни та каталог",
+                "en": "Plugins and the directory",
+                "pl": "Wtyczki i katalog"
+              },
+              "goal": "найти навыки, коннекторы и плагины в общем каталоге и понимать, что плагин — это пакет из них",
+              "volatile": true,
+              "free_preview": false,
+              "sources": [
+                "https://support.claude.com/en/articles/13837440-use-plugins-in-claude",
+                "https://support.claude.com/en/articles/14328846-browse-skills-connectors-and-plugins-in-one-directory"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "a6",
+          "title": {
+            "ru": "Длинные задачи",
+            "uk": "Довгі завдання",
+            "en": "Long-running tasks",
+            "pl": "Długie zadania"
+          },
+          "lessons": [
+            {
+              "id": "a6.1",
+              "title": {
+                "ru": "Чат и Cowork теперь одно целое",
+                "uk": "Чат і Cowork тепер одне ціле",
+                "en": "Chat and Cowork are now one",
+                "pl": "Czat i Cowork to teraz jedno"
+              },
+              "goal": "понимать, что Claude сам решает, когда задаче нужны инструменты, и что длинная задача продолжает работать в облаке",
+              "volatile": true,
+              "free_preview": false,
+              "sources": [
+                "https://support.claude.com/en/articles/16761823-claude-cowork-and-chat-are-one-claude"
+              ]
+            },
+            {
+              "id": "a6.2",
+              "title": {
+                "ru": "Поставить большую задачу",
+                "uk": "Як поставити велике завдання",
+                "en": "Handing off a big task",
+                "pl": "Jak zlecić duże zadanie"
+              },
+              "goal": "описать многошаговую задачу с результатом, критериями «готово» и границами",
+              "volatile": false,
+              "free_preview": false,
+              "sources": [
+                "https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices"
+              ]
+            },
+            {
+              "id": "a6.3",
+              "title": {
+                "ru": "Безопасно работать с агентом",
+                "uk": "Безпечна робота з агентом",
+                "en": "Working safely with an agent",
+                "pl": "Bezpieczna praca z agentem"
+              },
+              "goal": "следить за ходом работы, останавливать её и не давать доступ к лишнему",
+              "volatile": false,
+              "free_preview": false,
+              "sources": [
+                "https://support.claude.com/en/articles/13364135-use-claude-cowork-safely"
+              ]
+            },
+            {
+              "id": "a6.4",
+              "title": {
+                "ru": "Браузер и компьютер",
+                "uk": "Браузер і комп'ютер",
+                "en": "Browser and computer use",
+                "pl": "Przeglądarka i komputer"
+              },
+              "goal": "понимать, что умеют встроенный браузер, Claude in Chrome и управление компьютером (бета, Pro и Max), и чем это рискованно",
+              "volatile": true,
+              "free_preview": false,
+              "sources": [
+                "https://support.claude.com/en/articles/16607400-use-the-built-in-browser-in-claude-cowork",
+                "https://support.claude.com/en/articles/14128542-let-claude-use-your-computer-in-cowork"
+              ]
+            },
+            {
+              "id": "a6.5",
+              "title": {
+                "ru": "Запланированные задачи",
+                "uk": "Заплановані завдання",
+                "en": "Scheduled tasks",
+                "pl": "Zaplanowane zadania"
+              },
+              "goal": "создать повторяющуюся задачу, например ежедневную сводку, и проверить результаты прогонов",
+              "volatile": true,
+              "free_preview": false,
+              "sources": [
+                "https://support.claude.com/en/articles/13854387-schedule-recurring-tasks-in-claude-cowork"
+              ]
+            },
+            {
+              "id": "a6.6",
+              "title": {
+                "ru": "Задачи с телефона",
+                "uk": "Завдання з телефону",
+                "en": "Tasks from your phone",
+                "pl": "Zadania z telefonu"
+              },
+              "goal": "запустить задачу с мобильного и продолжить её на компьютере",
+              "volatile": false,
+              "free_preview": false,
+              "sources": [
+                "https://support.claude.com/en/articles/15520349-use-claude-cowork-on-web-desktop-and-mobile"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "a7",
+          "title": {
+            "ru": "Продвинутый промптинг",
+            "uk": "Просунутий промптинг",
+            "en": "Advanced prompting",
+            "pl": "Zaawansowany prompting"
+          },
+          "lessons": [
+            {
+              "id": "a7.1",
+              "title": {
+                "ru": "XML-теги",
+                "uk": "XML-теги",
+                "en": "XML tags",
+                "pl": "Tagi XML"
+              },
+              "goal": "разделить инструкцию, контекст и данные тегами",
+              "volatile": false,
+              "free_preview": false,
+              "sources": [
+                "https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices"
+              ]
+            },
+            {
+              "id": "a7.2",
+              "title": {
+                "ru": "Хорошие примеры",
+                "uk": "Вдалі приклади",
+                "en": "Good examples",
+                "pl": "Dobre przykłady"
+              },
+              "goal": "подобрать 3 разнообразных примера в тегах `<example>`",
+              "volatile": false,
+              "free_preview": false,
+              "sources": []
+            },
+            {
+              "id": "a7.3",
+              "title": {
+                "ru": "Длинные документы",
+                "uk": "Довгі документи",
+                "en": "Long documents",
+                "pl": "Długie dokumenty"
+              },
+              "goal": "разместить документы сверху, вопрос снизу и снабдить документы метаданными",
+              "volatile": false,
+              "free_preview": false,
+              "sources": []
+            },
+            {
+              "id": "a7.4",
+              "title": {
+                "ru": "Цитаты как опора",
+                "uk": "Цитати як опора",
+                "en": "Grounding in quotes",
+                "pl": "Cytaty jako podstawa"
+              },
+              "goal": "попросить сначала цитаты, потом вывод, и убрать утверждения без подтверждения",
+              "volatile": false,
+              "free_preview": false,
+              "sources": [
+                "https://platform.claude.com/docs/en/test-and-evaluate/strengthen-guardrails/reduce-hallucinations"
+              ]
+            },
+            {
+              "id": "a7.5",
+              "title": {
+                "ru": "Черновик → критика → доработка",
+                "uk": "Чернетка → критика → доопрацювання",
+                "en": "Draft → critique → revise",
+                "pl": "Szkic → krytyka → poprawki"
+              },
+              "goal": "провести самопроверку в 3 шага",
+              "volatile": false,
+              "free_preview": false,
+              "sources": [
+                "https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices"
+              ]
+            },
+            {
+              "id": "a7.6",
+              "title": {
+                "ru": "Пусть Claude возьмёт у тебя интервью",
+                "uk": "Нехай Claude візьме в тебе інтерв'ю",
+                "en": "Let Claude interview you",
+                "pl": "Niech Claude zrobi z tobą wywiad"
+              },
+              "goal": "попросить Claude задать уточняющие вопросы до начала работы",
+              "volatile": false,
+              "free_preview": false,
+              "sources": [
+                "https://code.claude.com/docs/en/best-practices.md"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "a8",
+          "title": {
+            "ru": "Контекст и лимиты для продвинутых",
+            "uk": "Контекст і ліміти для просунутих",
+            "en": "Context and limits in depth",
+            "pl": "Kontekst i limity dla zaawansowanych"
+          },
+          "lessons": [
+            {
+              "id": "a8.1",
+              "title": {
+                "ru": "Контекстное окно",
+                "uk": "Контекстне вікно",
+                "en": "The context window",
+                "pl": "Okno kontekstu"
+              },
+              "goal": "объяснить, что такое токены и окно (до 1M токенов на новых моделях в платных планах) и почему длинный чат «забывает»",
+              "volatile": true,
+              "free_preview": false,
+              "sources": [
+                "https://support.claude.com/en/articles/11647753-how-do-usage-and-length-limits-work"
+              ]
+            },
+            {
+              "id": "a8.2",
+              "title": {
+                "ru": "Автоматическое сжатие контекста",
+                "uk": "Автоматичне стиснення контексту",
+                "en": "Automatic context compaction",
+                "pl": "Automatyczna kompresja kontekstu"
+              },
+              "goal": "понимать, что значит «organizing its thoughts», и что важное лучше вынести в проект",
+              "volatile": false,
+              "free_preview": false,
+              "sources": []
+            },
+            {
+              "id": "a8.3",
+              "title": {
+                "ru": "Что расходует лимит",
+                "uk": "Що витрачає ліміт",
+                "en": "What uses up your limits",
+                "pl": "Co zużywa limit"
+              },
+              "goal": "расставить по «дороговизне» effort, Research, инструменты и длинные чаты",
+              "volatile": false,
+              "free_preview": false,
+              "sources": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "pro",
+      "title": {
+        "ru": "Профессионал",
+        "uk": "Професіонал",
+        "en": "Professional",
+        "pl": "Profesjonalista"
+      },
+      "goal": "Строить рабочие процессы и продукты с Claude: Claude Code, API, MCP, агенты и автоматизация.",
+      "modules": [
+        {
+          "id": "p1",
+          "title": {
+            "ru": "Claude Code: основы",
+            "uk": "Claude Code: основи",
+            "en": "Claude Code basics",
+            "pl": "Claude Code: podstawy"
+          },
+          "lessons": [
+            {
+              "id": "p1.1",
+              "title": {
+                "ru": "Что такое Claude Code и где он работает",
+                "uk": "Що таке Claude Code і де він працює",
+                "en": "What Claude Code is and where it runs",
+                "pl": "Czym jest Claude Code i gdzie działa"
+              },
+              "goal": "выбрать поверхность: терминал, VS Code, JetBrains, Desktop, веб (claude.ai/code) или мобильное приложение",
+              "volatile": false,
+              "free_preview": true,
+              "sources": [
+                "https://code.claude.com/docs/en/overview"
+              ]
+            },
+            {
+              "id": "p1.2",
+              "title": {
+                "ru": "Установка и первый запуск",
+                "uk": "Встановлення і перший запуск",
+                "en": "Install and first run",
+                "pl": "Instalacja i pierwsze uruchomienie"
+              },
+              "goal": "установить Claude Code нативным установщиком, проверить `claude --version` и войти",
+              "volatile": true,
+              "free_preview": false,
+              "sources": [
+                "https://code.claude.com/docs/en/quickstart"
+              ]
+            },
+            {
+              "id": "p1.3",
+              "title": {
+                "ru": "Как работает агентный цикл",
+                "uk": "Як працює агентний цикл",
+                "en": "How the agentic loop works",
+                "pl": "Jak działa pętla agenta"
+              },
+              "goal": "объяснить цикл «прочитать → действовать → проверить» и роль инструментов",
+              "volatile": false,
+              "free_preview": false,
+              "sources": [
+                "https://code.claude.com/docs/en/how-claude-code-works"
+              ]
+            },
+            {
+              "id": "p1.4",
+              "title": {
+                "ru": "CLAUDE.md",
+                "uk": "CLAUDE.md",
+                "en": "CLAUDE.md",
+                "pl": "CLAUDE.md"
+              },
+              "goal": "создать CLAUDE.md через `/init` и сократить его по правилу «уберёшь строку — будут ли ошибки?»",
+              "volatile": false,
+              "free_preview": false,
+              "sources": [
+                "https://code.claude.com/docs/en/memory.md",
+                "https://code.claude.com/docs/en/best-practices.md"
+              ]
+            },
+            {
+              "id": "p1.5",
+              "title": {
+                "ru": "Режимы разрешений",
+                "uk": "Режими дозволів",
+                "en": "Permission modes",
+                "pl": "Tryby uprawnień"
+              },
+              "goal": "переключать режимы (Shift+Tab: manual, plan, auto) и настроить allowlist",
+              "volatile": true,
+              "free_preview": false,
+              "sources": [
+                "https://code.claude.com/docs/en/permission-modes.md"
+              ]
+            },
+            {
+              "id": "p1.6",
+              "title": {
+                "ru": "Explore → Plan → Code → Commit",
+                "uk": "Explore → Plan → Code → Commit",
+                "en": "Explore → Plan → Code → Commit",
+                "pl": "Explore → Plan → Code → Commit"
+              },
+              "goal": "провести задачу через plan mode и понимать, когда планирование не нужно",
+              "volatile": false,
+              "free_preview": false,
+              "sources": [
+                "https://code.claude.com/docs/en/best-practices.md"
+              ]
+            },
+            {
+              "id": "p1.7",
+              "title": {
+                "ru": "Дай способ проверить",
+                "uk": "Дай спосіб перевірити",
+                "en": "Give it a way to verify",
+                "pl": "Daj sposób na sprawdzenie"
+              },
+              "goal": "сформулировать задачу с тестом, сборкой или скриншотом для самопроверки",
+              "volatile": false,
+              "free_preview": false,
+              "sources": []
+            },
+            {
+              "id": "p1.8",
+              "title": {
+                "ru": "Контекст и откат",
+                "uk": "Контекст і відкат",
+                "en": "Context and rewinding",
+                "pl": "Kontekst i cofanie zmian"
+              },
+              "goal": "применять `/clear`, `/compact`, `Esc`, `/rewind` и checkpoints; знать, что checkpoints — не замена git",
+              "volatile": false,
+              "free_preview": false,
+              "sources": [
+                "https://code.claude.com/docs/en/checkpointing.md"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "p2",
+          "title": {
+            "ru": "Расширение Claude Code",
+            "uk": "Розширення Claude Code",
+            "en": "Extending Claude Code",
+            "pl": "Rozszerzanie Claude Code"
+          },
+          "lessons": [
+            {
+              "id": "p2.1",
+              "title": {
+                "ru": "Карта расширений",
+                "uk": "Карта розширень",
+                "en": "The extension map",
+                "pl": "Mapa rozszerzeń"
+              },
+              "goal": "выбрать между CLAUDE.md, skill, subagent, hook, MCP и plugin под конкретную цель",
+              "volatile": false,
+              "free_preview": false,
+              "sources": [
+                "https://code.claude.com/docs/en/features-overview.md"
+              ]
+            },
+            {
+              "id": "p2.2",
+              "title": {
+                "ru": "Навыки в Claude Code",
+                "uk": "Навички в Claude Code",
+                "en": "Skills in Claude Code",
+                "pl": "Skills w Claude Code"
+              },
+              "goal": "создать `.claude/skills/<name>/SKILL.md` и вызвать навык через `/name`",
+              "volatile": false,
+              "free_preview": false,
+              "sources": [
+                "https://code.claude.com/docs/en/skills.md"
+              ]
+            },
+            {
+              "id": "p2.3",
+              "title": {
+                "ru": "Субагенты",
+                "uk": "Субагенти",
+                "en": "Subagents",
+                "pl": "Subagenci"
+              },
+              "goal": "создать субагента в `.claude/agents/`, ограничить его инструменты и делегировать ему исследование",
+              "volatile": false,
+              "free_preview": false,
+              "sources": [
+                "https://code.claude.com/docs/en/sub-agents.md"
+              ]
+            },
+            {
+              "id": "p2.4",
+              "title": {
+                "ru": "Хуки",
+                "uk": "Хуки",
+                "en": "Hooks",
+                "pl": "Hooki"
+              },
+              "goal": "написать хук, который запускает линтер после каждой правки (хуки детерминированы, CLAUDE.md — только совет)",
+              "volatile": false,
+              "free_preview": false,
+              "sources": [
+                "https://code.claude.com/docs/en/hooks-guide.md"
+              ]
+            },
+            {
+              "id": "p2.5",
+              "title": {
+                "ru": "MCP в Claude Code",
+                "uk": "MCP у Claude Code",
+                "en": "MCP in Claude Code",
+                "pl": "MCP w Claude Code"
+              },
+              "goal": "подключить сервер командой `claude mcp add --transport http …`",
+              "volatile": false,
+              "free_preview": false,
+              "sources": [
+                "https://code.claude.com/docs/en/mcp.md"
+              ]
+            },
+            {
+              "id": "p2.6",
+              "title": {
+                "ru": "Плагины",
+                "uk": "Плагіни",
+                "en": "Plugins",
+                "pl": "Wtyczki"
+              },
+              "goal": "установить плагин через `/plugin` и оценить, можно ли ему доверять",
+              "volatile": false,
+              "free_preview": false,
+              "sources": [
+                "https://code.claude.com/docs/en/plugins/overview.md",
+                "https://code.claude.com/docs/en/plugins/security.md"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "p3",
+          "title": {
+            "ru": "Автоматизация и запланированные задачи",
+            "uk": "Автоматизація і заплановані завдання",
+            "en": "Automation and scheduled tasks",
+            "pl": "Automatyzacja i zaplanowane zadania"
+          },
+          "lessons": [
+            {
+              "id": "p3.1",
+              "title": {
+                "ru": "Неинтерактивный режим",
+                "uk": "Неінтерактивний режим",
+                "en": "Non-interactive mode",
+                "pl": "Tryb nieinteraktywny"
+              },
+              "goal": "запустить `claude -p` в скрипте с выводом JSON",
+              "volatile": false,
+              "free_preview": false,
+              "sources": [
+                "https://code.claude.com/docs/en/headless.md"
+              ]
+            },
+            {
+              "id": "p3.2",
+              "title": {
+                "ru": "Routines",
+                "uk": "Routines",
+                "en": "Routines",
+                "pl": "Routines"
+              },
+              "goal": "создать routine с расписанием, API-триггером или GitHub-событием и написать для неё самодостаточный промпт",
+              "volatile": true,
+              "free_preview": false,
+              "sources": [
+                "https://code.claude.com/docs/en/routines.md"
+              ]
+            },
+            {
+              "id": "p3.3",
+              "title": {
+                "ru": "Облако или локально",
+                "uk": "Хмара чи локально",
+                "en": "Cloud or local",
+                "pl": "Chmura czy lokalnie"
+              },
+              "goal": "выбрать между routine (облако), Desktop scheduled task (локальные файлы) и `/loop` (внутри сессии)",
+              "volatile": false,
+              "free_preview": false,
+              "sources": [
+                "https://code.claude.com/docs/en/scheduled-tasks.md",
+                "https://code.claude.com/docs/en/overview"
+              ]
+            },
+            {
+              "id": "p3.4",
+              "title": {
+                "ru": "GitHub Actions и код-ревью",
+                "uk": "GitHub Actions і код-рев'ю",
+                "en": "GitHub Actions and code review",
+                "pl": "GitHub Actions i code review"
+              },
+              "goal": "настроить автоматический ревью PR",
+              "volatile": false,
+              "free_preview": false,
+              "sources": [
+                "https://code.claude.com/docs/en/github-actions"
+              ]
+            },
+            {
+              "id": "p3.5",
+              "title": {
+                "ru": "Безопасность автоматизации",
+                "uk": "Безпека автоматизації",
+                "en": "Automation safety",
+                "pl": "Bezpieczeństwo automatyzacji"
+              },
+              "goal": "ограничить репозитории, сеть и коннекторы routine; помнить, что действия routine выполняются от вашего имени",
+              "volatile": false,
+              "free_preview": false,
+              "sources": [
+                "https://code.claude.com/docs/en/routines.md"
+              ]
+            },
+            {
+              "id": "p3.6",
+              "title": {
+                "ru": "Параллельная работа",
+                "uk": "Паралельна робота",
+                "en": "Working in parallel",
+                "pl": "Praca równoległa"
+              },
+              "goal": "запускать параллельные сессии (worktrees, agent view) и применять паттерн «автор/ревьюер»",
+              "volatile": false,
+              "free_preview": false,
+              "sources": [
+                "https://code.claude.com/docs/en/best-practices.md",
+                "https://code.claude.com/docs/en/agents.md"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "p4",
+          "title": {
+            "ru": "Claude API",
+            "uk": "Claude API",
+            "en": "Claude API",
+            "pl": "Claude API"
+          },
+          "lessons": [
+            {
+              "id": "p4.1",
+              "title": {
+                "ru": "Ключ и первый вызов",
+                "uk": "Ключ і перший виклик",
+                "en": "Your key and first call",
+                "pl": "Klucz i pierwsze wywołanie"
+              },
+              "goal": "получить ключ в Console, сделать первый вызов Messages API и хранить ключ только на сервере",
+              "volatile": false,
+              "free_preview": false,
+              "sources": [
+                "https://platform.claude.com/docs/en/get-started"
+              ]
+            },
+            {
+              "id": "p4.2",
+              "title": {
+                "ru": "Выбор модели и цены",
+                "uk": "Вибір моделі та ціни",
+                "en": "Choosing a model and pricing",
+                "pl": "Wybór modelu i ceny"
+              },
+              "goal": "выбрать модель по задаче и цене и понимать ID моделей и снимки",
+              "volatile": true,
+              "free_preview": false,
+              "sources": [
+                "https://platform.claude.com/docs/en/models/overview.md",
+                "https://platform.claude.com/docs/en/about-claude/pricing.md"
+              ]
+            },
+            {
+              "id": "p4.3",
+              "title": {
+                "ru": "Системный промпт и роль",
+                "uk": "Системний промпт і роль",
+                "en": "System prompt and role",
+                "pl": "Prompt systemowy i rola"
+              },
+              "goal": "написать системный промпт с ролью, контекстом и форматом",
+              "volatile": false,
+              "free_preview": false,
+              "sources": [
+                "https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices"
+              ]
+            },
+            {
+              "id": "p4.4",
+              "title": {
+                "ru": "Thinking и effort",
+                "uk": "Thinking і effort",
+                "en": "Thinking and effort",
+                "pl": "Thinking i effort"
+              },
+              "goal": "управлять глубиной рассуждения через `effort` (adaptive thinking)",
+              "volatile": true,
+              "free_preview": false,
+              "sources": [
+                "https://platform.claude.com/docs/en/build-with-claude/effort"
+              ]
+            },
+            {
+              "id": "p4.5",
+              "title": {
+                "ru": "Структурированный вывод",
+                "uk": "Структурований вивід",
+                "en": "Structured outputs",
+                "pl": "Ustrukturyzowane odpowiedzi"
+              },
+              "goal": "получать JSON по схеме через Structured Outputs вместо prefill",
+              "volatile": false,
+              "free_preview": false,
+              "sources": [
+                "https://platform.claude.com/docs/en/build-with-claude/structured-outputs"
+              ]
+            },
+            {
+              "id": "p4.6",
+              "title": {
+                "ru": "Tool use",
+                "uk": "Tool use",
+                "en": "Tool use",
+                "pl": "Tool use"
+              },
+              "goal": "описать инструмент (имя, описание, схема) и обработать `tool_use` и `tool_result`",
+              "volatile": false,
+              "free_preview": false,
+              "sources": [
+                "https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview.md"
+              ]
+            },
+            {
+              "id": "p4.7",
+              "title": {
+                "ru": "Кеширование промпта",
+                "uk": "Кешування промпту",
+                "en": "Prompt caching",
+                "pl": "Buforowanie promptu"
+              },
+              "goal": "включить `cache_control`, знать минимальную длину префикса и TTL (5 минут или 1 час)",
+              "volatile": true,
+              "free_preview": false,
+              "sources": [
+                "https://platform.claude.com/docs/en/build-with-claude/prompt-caching.md"
+              ]
+            },
+            {
+              "id": "p4.8",
+              "title": {
+                "ru": "Batch и экономия",
+                "uk": "Batch і економія",
+                "en": "Batch and cost savings",
+                "pl": "Batch i oszczędności"
+              },
+              "goal": "отправить пакет запросов со скидкой 50% и посчитать стоимость",
+              "volatile": false,
+              "free_preview": false,
+              "sources": [
+                "https://platform.claude.com/docs/en/build-with-claude/batch-processing.md"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "p5",
+          "title": {
+            "ru": "MCP",
+            "uk": "MCP",
+            "en": "MCP",
+            "pl": "MCP"
+          },
+          "lessons": [
+            {
+              "id": "p5.1",
+              "title": {
+                "ru": "Что такое MCP",
+                "uk": "Що таке MCP",
+                "en": "What MCP is",
+                "pl": "Czym jest MCP"
+              },
+              "goal": "объяснить MCP как «USB-C для ИИ» и назвать хост, клиент и сервер",
+              "volatile": false,
+              "free_preview": false,
+              "sources": [
+                "https://modelcontextprotocol.io/docs/getting-started/intro"
+              ]
+            },
+            {
+              "id": "p5.2",
+              "title": {
+                "ru": "Примитивы",
+                "uk": "Примітиви",
+                "en": "Primitives",
+                "pl": "Prymitywy"
+              },
+              "goal": "различать tools, resources и prompts, а на стороне клиента — elicitation",
+              "volatile": false,
+              "free_preview": false,
+              "sources": [
+                "https://modelcontextprotocol.io/docs/learn/architecture"
+              ]
+            },
+            {
+              "id": "p5.3",
+              "title": {
+                "ru": "Транспорты",
+                "uk": "Транспорти",
+                "en": "Transports",
+                "pl": "Transporty"
+              },
+              "goal": "выбрать stdio (локально) или Streamable HTTP (удалённо, OAuth)",
+              "volatile": false,
+              "free_preview": false,
+              "sources": []
+            },
+            {
+              "id": "p5.4",
+              "title": {
+                "ru": "Свой MCP-сервер",
+                "uk": "Власний MCP-сервер",
+                "en": "Your own MCP server",
+                "pl": "Własny serwer MCP"
+              },
+              "goal": "собрать простой сервер с одним инструментом по официальному гайду",
+              "volatile": false,
+              "free_preview": false,
+              "sources": [
+                "https://modelcontextprotocol.io/docs/develop/build-server"
+              ]
+            },
+            {
+              "id": "p5.5",
+              "title": {
+                "ru": "Подключение к Claude",
+                "uk": "Підключення до Claude",
+                "en": "Connecting to Claude",
+                "pl": "Podłączanie do Claude"
+              },
+              "goal": "подключить сервер к Claude Code, Desktop или claude.ai как custom connector, а через API — как MCP connector",
+              "volatile": false,
+              "free_preview": false,
+              "sources": [
+                "https://platform.claude.com/docs/en/agents-and-tools/mcp-connector.md",
+                "https://code.claude.com/docs/en/mcp.md"
+              ]
+            },
+            {
+              "id": "p5.6",
+              "title": {
+                "ru": "Хорошие инструменты для агентов",
+                "uk": "Добрі інструменти для агентів",
+                "en": "Good tools for agents",
+                "pl": "Dobre narzędzia dla agentów"
+              },
+              "goal": "писать понятные названия и описания инструментов и экономно возвращать данные",
+              "volatile": false,
+              "free_preview": false,
+              "sources": [
+                "https://www.anthropic.com/engineering/writing-tools-for-agents"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "p6",
+          "title": {
+            "ru": "Агенты",
+            "uk": "Агенти",
+            "en": "Agents",
+            "pl": "Agenci"
+          },
+          "lessons": [
+            {
+              "id": "p6.1",
+              "title": {
+                "ru": "Workflow или агент",
+                "uk": "Workflow чи агент",
+                "en": "Workflow or agent",
+                "pl": "Workflow czy agent"
+              },
+              "goal": "отличать заранее заданные пути (workflow) от агента и выбирать самое простое решение",
+              "volatile": false,
+              "free_preview": false,
+              "sources": [
+                "https://www.anthropic.com/engineering/building-effective-agents"
+              ]
+            },
+            {
+              "id": "p6.2",
+              "title": {
+                "ru": "5 паттернов",
+                "uk": "5 патернів",
+                "en": "5 patterns",
+                "pl": "5 wzorców"
+              },
+              "goal": "узнавать паттерны chaining, routing, parallelization, orchestrator-workers и evaluator-optimizer",
+              "volatile": false,
+              "free_preview": false,
+              "sources": []
+            },
+            {
+              "id": "p6.3",
+              "title": {
+                "ru": "Agent SDK",
+                "uk": "Agent SDK",
+                "en": "Agent SDK",
+                "pl": "Agent SDK"
+              },
+              "goal": "запустить агента на Python или TypeScript с инструментами Claude Code и настроить разрешения",
+              "volatile": false,
+              "free_preview": false,
+              "sources": [
+                "https://code.claude.com/docs/en/agent-sdk/overview.md"
+              ]
+            },
+            {
+              "id": "p6.4",
+              "title": {
+                "ru": "Agent SDK, Client SDK или Managed Agents",
+                "uk": "Agent SDK, Client SDK чи Managed Agents",
+                "en": "Agent SDK, Client SDK or Managed Agents",
+                "pl": "Agent SDK, Client SDK czy Managed Agents"
+              },
+              "goal": "выбрать, кто запускает цикл агента: вы, ваш код или Anthropic",
+              "volatile": true,
+              "free_preview": false,
+              "sources": [
+                "https://platform.claude.com/docs/en/managed-agents/overview"
+              ]
+            },
+            {
+              "id": "p6.5",
+              "title": {
+                "ru": "Контекст-инжиниринг",
+                "uk": "Контекст-інжиніринг",
+                "en": "Context engineering",
+                "pl": "Inżynieria kontekstu"
+              },
+              "goal": "применять для агентов сжатие контекста, заметки, субагентов и память",
+              "volatile": false,
+              "free_preview": false,
+              "sources": [
+                "https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents"
+              ]
+            },
+            {
+              "id": "p6.6",
+              "title": {
+                "ru": "Безопасный агент",
+                "uk": "Безпечний агент",
+                "en": "Building a safe agent",
+                "pl": "Bezpieczny agent"
+              },
+              "goal": "применять подтверждение необратимых действий, sandbox, минимальные права и защиту от инъекций",
+              "volatile": false,
+              "free_preview": false,
+              "sources": [
+                "https://code.claude.com/docs/en/agent-sdk/secure-deployment.md"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "p7",
+          "title": {
+            "ru": "Промпт-инжиниринг для продакшена",
+            "uk": "Промпт-інжиніринг для продакшну",
+            "en": "Production prompt engineering",
+            "pl": "Prompt engineering na produkcji"
+          },
+          "lessons": [
+            {
+              "id": "p7.1",
+              "title": {
+                "ru": "Сначала критерии успеха",
+                "uk": "Спершу критерії успіху",
+                "en": "Success criteria first",
+                "pl": "Najpierw kryteria sukcesu"
+              },
+              "goal": "сформулировать измеримые критерии до того, как писать промпт",
+              "volatile": false,
+              "free_preview": false,
+              "sources": [
+                "https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/overview"
+              ]
+            },
+            {
+              "id": "p7.2",
+              "title": {
+                "ru": "Evals",
+                "uk": "Evals",
+                "en": "Evals",
+                "pl": "Evals"
+              },
+              "goal": "собрать набор тестов и сравнивать версии промпта",
+              "volatile": false,
+              "free_preview": false,
+              "sources": [
+                "https://platform.claude.com/docs/en/test-and-evaluate/develop-tests",
+                "https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents"
+              ]
+            },
+            {
+              "id": "p7.3",
+              "title": {
+                "ru": "Ограничители (guardrails)",
+                "uk": "Запобіжники (guardrails)",
+                "en": "Guardrails",
+                "pl": "Zabezpieczenia (guardrails)"
+              },
+              "goal": "снизить галлюцинации и утечку системного промпта и повысить согласованность ответов",
+              "volatile": false,
+              "free_preview": false,
+              "sources": [
+                "https://platform.claude.com/docs/en/test-and-evaluate/strengthen-guardrails/reduce-hallucinations"
+              ]
+            },
+            {
+              "id": "p7.4",
+              "title": {
+                "ru": "Миграция между моделями",
+                "uk": "Міграція між моделями",
+                "en": "Migrating between models",
+                "pl": "Migracja między modelami"
+              },
+              "goal": "читать модельные гайды и проверять промпт на новой модели через evals",
+              "volatile": true,
+              "free_preview": false,
+              "sources": [
+                "https://platform.claude.com/docs/en/about-claude/models/migration-guide"
+              ]
+            },
+            {
+              "id": "p7.5",
+              "title": {
+                "ru": "Промпт для агента",
+                "uk": "Промпт для агента",
+                "en": "Writing an agent prompt",
+                "pl": "Prompt dla agenta"
+              },
+              "goal": "написать промпт агента с масштабом задачи, проверкой, правилами автономии и отчётом о прогрессе",
+              "volatile": false,
+              "free_preview": false,
               "sources": [
                 "https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices"
               ]

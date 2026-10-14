@@ -1,0 +1,150 @@
+{
+  "_about": "Изменчивые значения модуля a2 «Документы и таблицы»: названия элементов интерфейса Claude и Google (на английском, как в приложении), планы и лимиты. Подставляются в {{data.<раздел>.<ключ>}} при сборке. Источники и даты — content/data/volatile/a2.md. Проверено 2026-10-14. Переводы uk/en/pl добавлены 2026-10-14.",
+  "ui_paths": {
+    "a2_settings_capabilities": {
+      "label": "Settings → Capabilities",
+      "hint": {
+        "ru": "настройки → возможности",
+        "uk": "налаштування → можливості",
+        "en": "",
+        "pl": "ustawienia → funkcje"
+      }
+    },
+    "a2_mobile_capabilities": {
+      "label": "Capabilities",
+      "hint": {
+        "ru": "возможности; меню открывается нажатием на твои инициалы или имя в боковой панели",
+        "uk": "можливості; меню відкривається натисканням на твої ініціали або ім'я в бічній панелі",
+        "en": "tap your initials or name in the sidebar to open the menu",
+        "pl": "funkcje; menu otwierasz, dotykając swoich inicjałów lub imienia w panelu bocznym"
+      }
+    },
+    "a2_code_execution_toggle": {
+      "label": "Code execution and file creation",
+      "hint": {
+        "ru": "выполнение кода и создание файлов",
+        "uk": "виконання коду й створення файлів",
+        "en": "",
+        "pl": "wykonywanie kodu i tworzenie plików"
+      }
+    },
+    "a2_network_egress_toggle": {
+      "label": "Allow network egress",
+      "hint": {
+        "ru": "разрешить выход в интернет из рабочей среды Claude",
+        "uk": "дозволити вихід в інтернет із робочого середовища Claude",
+        "en": "lets Claude's working environment access the internet",
+        "pl": "zezwól na dostęp do internetu ze środowiska roboczego Claude"
+      }
+    },
+    "a2_org_capabilities": {
+      "label": "Organization settings → Capabilities",
+      "hint": {
+        "ru": "настройки организации; их меняет владелец рабочего аккаунта Team или Enterprise",
+        "uk": "налаштування організації; їх змінює власник робочого акаунта Team чи Enterprise",
+        "en": "changed by the owner of a Team or Enterprise account",
+        "pl": "ustawienia organizacji; zmienia je właściciel konta Team lub Enterprise"
+      }
+    },
+    "a2_download": {
+      "label": "Download",
+      "hint": {
+        "ru": "скачать файл из чата; рядом есть сохранение в Google Drive",
+        "uk": "завантажити файл із чату; поруч є збереження в Google Drive",
+        "en": "next to it there's an option to save to Google Drive",
+        "pl": "pobierz plik z czatu; obok jest zapis na Google Drive"
+      }
+    },
+    "a2_gws_marketplace_app": {
+      "label": "Claude",
+      "hint": {
+        "ru": "приложение в Google Workspace Marketplace; одна установка сразу для Docs, Sheets и Slides",
+        "uk": "з Google Workspace Marketplace; одне встановлення одразу для Docs, Sheets і Slides",
+        "en": "from the Google Workspace Marketplace; one install covers Docs, Sheets and Slides",
+        "pl": "z Google Workspace Marketplace; jedna instalacja od razu dla Docs, Sheets i Slides"
+      }
+    },
+    "a2_gws_open": {
+      "label": "Extensions → Claude → Open Claude",
+      "hint": {
+        "ru": "меню «Расширения» в Google-документе → Claude → открыть Claude",
+        "uk": "меню «Розширення» в Google-документі → Claude → відкрити Claude",
+        "en": "",
+        "pl": "menu „Rozszerzenia” w dokumencie Google → Claude → otwórz Claude"
+      }
+    },
+    "a2_gws_mode_ask": {
+      "label": "Ask before edits",
+      "hint": {
+        "ru": "«спрашивать перед правками», режим по умолчанию",
+        "uk": "«питати перед правками», режим за замовчуванням",
+        "en": "the default mode",
+        "pl": "„pytaj przed zmianami”, tryb domyślny"
+      }
+    },
+    "a2_gws_mode_accept": {
+      "label": "Accept all edits",
+      "hint": {
+        "ru": "«принимать все правки» без паузы",
+        "uk": "«приймати всі правки» без паузи",
+        "en": "applies edits without pausing",
+        "pl": "„akceptuj wszystkie zmiany” bez zatrzymywania"
+      }
+    },
+    "a2_gws_version_history": {
+      "label": "File → Version history",
+      "hint": {
+        "ru": "история версий Google-файла: меню «Файл»",
+        "uk": "історія версій Google-файлу: меню «Файл»",
+        "en": "",
+        "pl": "historia wersji pliku Google: menu „Plik”"
+      }
+    }
+  },
+  "plans": {
+    "a2_file_creation_default": {
+      "ru": "на Free, Pro и Max функция включена по умолчанию; на Team и Enterprise тоже, но владелец организации может её выключить",
+      "uk": "на Free, Pro і Max функцію ввімкнено за замовчуванням; на Team і Enterprise теж, але власник організації може її вимкнути",
+      "en": "it's on by default on Free, Pro and Max; on Team and Enterprise too, but the organisation owner can turn it off",
+      "pl": "w Free, Pro i Max funkcja jest domyślnie włączona; w Team i Enterprise też, ale właściciel organizacji może ją wyłączyć"
+    },
+    "a2_network_default": {
+      "ru": "на Free, Pro и Max доступ в сеть включён, чтобы Claude мог ставить программные пакеты из одобренных источников; на Team и Enterprise он по умолчанию выключен и настраивается владельцем",
+      "uk": "на Free, Pro і Max доступ до мережі ввімкнено, щоб Claude міг встановлювати програмні пакети зі схвалених джерел; на Team і Enterprise його за замовчуванням вимкнено, і налаштовує його власник",
+      "en": "on Free, Pro and Max, network access is on so Claude can install software packages from approved sources; on Team and Enterprise it's off by default and set by the owner",
+      "pl": "w Free, Pro i Max dostęp do sieci jest włączony, żeby Claude mógł instalować pakiety oprogramowania z zatwierdzonych źródeł; w Team i Enterprise jest domyślnie wyłączony i ustawia go właściciel"
+    },
+    "a2_gws_plans": {
+      "ru": "бета для планов Pro, Max, Team и Enterprise",
+      "uk": "бета для планів Pro, Max, Team і Enterprise",
+      "en": "in beta on Pro, Max, Team and Enterprise plans",
+      "pl": "wersja beta dla planów Pro, Max, Team i Enterprise"
+    }
+  },
+  "limits": {
+    "a2_file_size": {
+      "ru": "30 МБ на файл",
+      "uk": "30 МБ на файл",
+      "en": "30 MB per file",
+      "pl": "30 MB na plik"
+    },
+    "a2_gws_refs_per_message": {
+      "ru": "до 20 файлов-справок в одном сообщении",
+      "uk": "до 20 файлів-довідок в одному повідомленні",
+      "en": "up to 20 reference files per message",
+      "pl": "do 20 plików pomocniczych w jednej wiadomości"
+    },
+    "a2_gws_operation_time": {
+      "ru": "до шести минут",
+      "uk": "до шести хвилин",
+      "en": "up to six minutes",
+      "pl": "do sześciu minut"
+    },
+    "a2_gws_browsers": {
+      "ru": "Chrome, Edge и Safari",
+      "uk": "Chrome, Edge і Safari",
+      "en": "Chrome, Edge and Safari",
+      "pl": "Chrome, Edge i Safari"
+    }
+  }
+}

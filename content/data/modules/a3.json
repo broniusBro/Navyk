@@ -1,0 +1,75 @@
+{
+  "_about": "Изменчивые значения модуля a3 «Поиск и исследование»: названия элементов интерфейса Claude (на английском, как в приложении), планы и лимиты. Подставляются в {{data.<раздел>.<ключ>}} при сборке. Источники и даты — content/data/volatile/a3.md. Проверено 2026-10-14. Переводы uk/en/pl добавят переводчики.",
+  "ui_paths": {
+    "a3_web_search": {
+      "label": "Web search",
+      "hint": {
+        "ru": "веб-поиск, пункт в меню «+»; галочка рядом — поиск включён",
+        "uk": "вебпошук, пункт у меню «+»; галочка поруч — пошук увімкнено",
+        "en": "an item in the + menu; a checkmark next to it means search is on",
+        "pl": "wyszukiwanie w sieci, opcja w menu „+”; ptaszek obok — wyszukiwanie włączone"
+      }
+    },
+    "a3_research": {
+      "label": "Research",
+      "hint": {
+        "ru": "исследование, пункт в меню «+»; внизу чата появится синий индикатор",
+        "uk": "дослідження, пункт у меню «+»; унизу чату з'явиться синій індикатор",
+        "en": "an item in the + menu; a blue indicator appears at the bottom of the chat",
+        "pl": "badanie, opcja w menu „+”; na dole czatu pojawi się niebieski wskaźnik"
+      }
+    },
+    "a3_model_name": {
+      "ru": "название модели рядом с кнопкой отправки",
+      "uk": "назву моделі поруч із кнопкою надсилання",
+      "en": "the model name next to the send button",
+      "pl": "nazwę modelu obok przycisku wysyłania"
+    },
+    "a3_effort": {
+      "label": "Effort",
+      "hint": {
+        "ru": "уровень усилий: Low, Medium, High, Max; в меню модели",
+        "uk": "рівень зусиль: Low, Medium, High, Max; у меню моделі",
+        "en": "Low, Medium, High or Max; in the model menu",
+        "pl": "poziom wysiłku: Low, Medium, High, Max; w menu modelu"
+      }
+    },
+    "a3_thinking": {
+      "label": "Thinking",
+      "hint": {
+        "ru": "переключатель размышления; у части моделей называется Extended",
+        "uk": "перемикач міркування; у частини моделей називається Extended",
+        "en": "the thinking toggle; called Extended on some models",
+        "pl": "przełącznik myślenia; w części modeli nazywa się Extended"
+      }
+    }
+  },
+  "plans": {
+    "a3_web_search_plans": {
+      "ru": "на всех планах, включая бесплатный; на Team и Enterprise его сначала включает владелец организации",
+      "uk": "на всіх планах, включно з безкоштовним; на Team і Enterprise його спершу вмикає власник організації",
+      "en": "on all plans, including Free; on Team and Enterprise, the organization owner has to turn it on first",
+      "pl": "we wszystkich planach, także w darmowym; w Team i Enterprise najpierw włącza je właściciel organizacji"
+    },
+    "a3_research_plans": {
+      "ru": "только на платных планах: Pro, Max, Team и Enterprise",
+      "uk": "лише на платних планах: Pro, Max, Team і Enterprise",
+      "en": "only on paid plans: Pro, Max, Team and Enterprise",
+      "pl": "tylko w płatnych planach: Pro, Max, Team i Enterprise"
+    }
+  },
+  "limits": {
+    "a3_research_time": {
+      "ru": "несколько минут",
+      "uk": "кілька хвилин",
+      "en": "a few minutes",
+      "pl": "kilka minut"
+    },
+    "a3_research_tool_calls": {
+      "ru": "пять и больше",
+      "uk": "п'ять і більше",
+      "en": "five or more",
+      "pl": "pięć i więcej"
+    }
+  }
+}

@@ -75,6 +75,46 @@
     "save_progress": "Postęp jest zapisany tylko na tym urządzeniu. Załóż konto, żeby go nie stracić.",
     "save_progress_cta": "Zapisz"
   },
+  "levels": {
+    "heading": "Wybierz poziom",
+    "lead": "Trzy poziomy: od pierwszego promptu do agentów. Możesz zacząć od dowolnego.",
+    "kicker": "Poziom {n}",
+    "desc": {
+      "beginner": "Czat, jasne prompty, pliki, projekty i pamięć",
+      "advanced": "Artefakty, dokumenty, badania, konektory i umiejętności",
+      "pro": "Claude Code, API, MCP, agenci i automatyzacja"
+    },
+    "modules": {
+      "one": "{count} moduł",
+      "few": "{count} moduły",
+      "many": "{count} modułów",
+      "other": "{count} modułu"
+    },
+    "lessons": {
+      "one": "{count} lekcja",
+      "few": "{count} lekcje",
+      "many": "{count} lekcji",
+      "other": "{count} lekcji"
+    },
+    "progress": "{done} z {total}",
+    "progress_label": {
+      "one": "Ukończono {done} z {total} lekcji",
+      "few": "Ukończono {done} z {total} lekcji",
+      "many": "Ukończono {done} z {total} lekcji",
+      "other": "Ukończono {done} z {total} lekcji"
+    },
+    "continue": "Kontynuuj: {title}",
+    "start": "Zacznij",
+    "soon": "Wkrótce",
+    "completed": "Poziom ukończony",
+    "recommended": "Polecamy",
+    "back": "Poziomy",
+    "back_label": "Wróć do poziomów",
+    "page_kicker": "Poziom {n} · {done} z {total}",
+    "soon_note": "Lekcje tego poziomu właśnie powstają. Droga jest już gotowa, zajrzyj trochę później.",
+    "doc_title": "{title}",
+    "stats": "{modules} · {lessons}"
+  },
   "lesson": {
     "loading": "Otwieramy lekcję…",
     "not_found": "Ta lekcja nie jest jeszcze dostępna w wybranym języku. Wróć do ścieżki i wybierz inną.",

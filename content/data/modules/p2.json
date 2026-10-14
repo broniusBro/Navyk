@@ -1,0 +1,86 @@
+{
+  "_about": "Изменчивые значения модуля p2 «Расширение Claude Code»: названия элементов интерфейса Claude Code (на английском, как в приложении). Подставляются в {{data.<раздел>.<ключ>}} при сборке. Источники и даты — content/data/volatile/p2.md. Проверено 2026-10-14. Переводы uk/en/pl добавят переводчики.",
+  "ui_paths": {
+    "p2_plugin_discover": {
+      "label": "Discover",
+      "hint": {
+        "ru": "каталог плагинов",
+        "uk": "каталог плагінів",
+        "en": "the plugin catalogue",
+        "pl": "katalog wtyczek"
+      }
+    },
+    "p2_plugin_installed": {
+      "label": "Installed",
+      "hint": {
+        "ru": "установленные плагины",
+        "uk": "установлені плагіни",
+        "en": "",
+        "pl": "zainstalowane wtyczki"
+      }
+    },
+    "p2_plugin_marketplaces": {
+      "label": "Marketplaces",
+      "hint": {
+        "ru": "подключённые каталоги",
+        "uk": "підключені каталоги",
+        "en": "connected catalogues",
+        "pl": "dodane katalogi"
+      }
+    },
+    "p2_plugin_errors": {
+      "label": "Errors",
+      "hint": {
+        "ru": "ошибки загрузки",
+        "uk": "помилки завантаження",
+        "en": "loading errors",
+        "pl": "błędy ładowania"
+      }
+    },
+    "p2_plugin_will_install": {
+      "label": "Will install",
+      "hint": {
+        "ru": "раздел карточки плагина: что именно он добавит",
+        "uk": "розділ картки плагіна: що саме він додасть",
+        "en": "the part of the plugin card listing what it will add",
+        "pl": "sekcja karty wtyczki: co dokładnie doda"
+      }
+    },
+    "p2_plugin_homepage": {
+      "label": "Open homepage / View on GitHub",
+      "hint": {
+        "ru": "ссылки на исходники плагина под кнопками установки",
+        "uk": "посилання на вихідний код плагіна під кнопками встановлення",
+        "en": "links to the plugin's source, below the install buttons",
+        "pl": "linki do kodu źródłowego wtyczki pod przyciskami instalacji"
+      }
+    },
+    "p2_scope_user": {
+      "label": "Install for you (user scope)",
+      "hint": {
+        "ru": "для тебя во всех проектах на этом компьютере",
+        "uk": "для тебе в усіх проєктах на цьому комп'ютері",
+        "en": "",
+        "pl": "dla ciebie we wszystkich projektach na tym komputerze"
+      }
+    },
+    "p2_scope_project": {
+      "label": "Install for all collaborators on this repository (project scope)",
+      "hint": {
+        "ru": "для всех, кто работает в этом репозитории",
+        "uk": "для всіх, хто працює в цьому репозиторії",
+        "en": "",
+        "pl": "dla wszystkich, którzy pracują w tym repozytorium"
+      }
+    },
+    "p2_scope_local": {
+      "label": "Install for you, in this repo only (local scope)",
+      "hint": {
+        "ru": "только для тебя и только в этом репозитории",
+        "uk": "лише для тебе й лише в цьому репозиторії",
+        "en": "",
+        "pl": "tylko dla ciebie i tylko w tym repozytorium"
+      }
+    }
+  }
+}

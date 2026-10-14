@@ -1,0 +1,185 @@
+{
+  "_about": "Изменчивые значения модуля p4 «Claude API». Подставляются в {{data.<раздел>.<ключ>}}. Префикс ключей pfour_ (а не p4_): регулярное выражение плейсхолдеров в scripts/build_content.py допускает только [a-z_]. Источники и даты — content/data/volatile/p4.md. Проверено 2026-10-14.",
+  "ui_paths": {
+    "pfour_console_keys": {
+      "label": "Settings → API keys",
+      "hint": {
+        "ru": "настройки Console, раздел ключей API",
+        "uk": "налаштування Console, розділ ключів API",
+        "en": "",
+        "pl": "ustawienia Console, sekcja kluczy API"
+      }
+    },
+    "pfour_create_key": {
+      "label": "Create key",
+      "hint": {
+        "ru": "кнопка создания ключа",
+        "uk": "кнопка створення ключа",
+        "en": "",
+        "pl": "przycisk tworzenia klucza"
+      }
+    }
+  },
+  "models": {
+    "pfour_fable_name": {
+      "ru": "Claude Fable 5.1",
+      "uk": "Claude Fable 5.1",
+      "en": "Claude Fable 5.1",
+      "pl": "Claude Fable 5.1"
+    },
+    "pfour_opus_name": {
+      "ru": "Claude Opus 5.5",
+      "uk": "Claude Opus 5.5",
+      "en": "Claude Opus 5.5",
+      "pl": "Claude Opus 5.5"
+    },
+    "pfour_sonnet_name": {
+      "ru": "Claude Sonnet 5.5",
+      "uk": "Claude Sonnet 5.5",
+      "en": "Claude Sonnet 5.5",
+      "pl": "Claude Sonnet 5.5"
+    },
+    "pfour_haiku_name": {
+      "ru": "Claude Haiku 5.5",
+      "uk": "Claude Haiku 5.5",
+      "en": "Claude Haiku 5.5",
+      "pl": "Claude Haiku 5.5"
+    },
+    "pfour_fable_id": {
+      "ru": "claude-fable-5-1",
+      "uk": "claude-fable-5-1",
+      "en": "claude-fable-5-1",
+      "pl": "claude-fable-5-1"
+    },
+    "pfour_opus_id": {
+      "ru": "claude-opus-5-5",
+      "uk": "claude-opus-5-5",
+      "en": "claude-opus-5-5",
+      "pl": "claude-opus-5-5"
+    },
+    "pfour_sonnet_id": {
+      "ru": "claude-sonnet-5-5",
+      "uk": "claude-sonnet-5-5",
+      "en": "claude-sonnet-5-5",
+      "pl": "claude-sonnet-5-5"
+    },
+    "pfour_haiku_id": {
+      "ru": "claude-haiku-5-5",
+      "uk": "claude-haiku-5-5",
+      "en": "claude-haiku-5-5",
+      "pl": "claude-haiku-5-5"
+    },
+    "pfour_effort_defaults": {
+      "ru": "medium у Claude Opus 5.5 и Claude Haiku 5.5, high у большинства других моделей",
+      "uk": "medium у Claude Opus 5.5 і Claude Haiku 5.5, high у більшості інших моделей",
+      "en": "medium for Claude Opus 5.5 and Claude Haiku 5.5, high for most other models",
+      "pl": "medium w Claude Opus 5.5 i Claude Haiku 5.5, high w większości pozostałych modeli"
+    }
+  },
+  "prices": {
+    "pfour_fable_price": {
+      "ru": "$10 за 1 млн входных токенов и $50 за 1 млн выходных",
+      "uk": "$10 за 1 млн вхідних токенів і $50 за 1 млн вихідних",
+      "en": "$10 per 1M input tokens and $50 per 1M output tokens",
+      "pl": "$10 za 1 mln tokenów wejściowych i $50 za 1 mln wyjściowych"
+    },
+    "pfour_opus_price": {
+      "ru": "$4 за 1 млн входных токенов и $20 за 1 млн выходных",
+      "uk": "$4 за 1 млн вхідних токенів і $20 за 1 млн вихідних",
+      "en": "$4 per 1M input tokens and $20 per 1M output tokens",
+      "pl": "$4 za 1 mln tokenów wejściowych i $20 za 1 mln wyjściowych"
+    },
+    "pfour_sonnet_price": {
+      "ru": "$2 за 1 млн входных токенов и $10 за 1 млн выходных",
+      "uk": "$2 за 1 млн вхідних токенів і $10 за 1 млн вихідних",
+      "en": "$2 per 1M input tokens and $10 per 1M output tokens",
+      "pl": "$2 za 1 mln tokenów wejściowych i $10 za 1 mln wyjściowych"
+    },
+    "pfour_haiku_price": {
+      "ru": "$0,10 за 1 млн входных токенов и $0,50 за 1 млн выходных (если в запросе до 100 тыс. токенов; длиннее — дороже)",
+      "uk": "$0,10 за 1 млн вхідних токенів і $0,50 за 1 млн вихідних (якщо в запиті до 100 тис. токенів; довші — дорожче)",
+      "en": "$0.10 per 1M input tokens and $0.50 per 1M output tokens (for requests up to 100K tokens; longer ones cost more)",
+      "pl": "$0,10 za 1 mln tokenów wejściowych i $0,50 za 1 mln wyjściowych (przy zapytaniach do 100 tys. tokenów; dłuższe są droższe)"
+    },
+    "pfour_cache_write_5m": {
+      "ru": "1,25 базовой цены входных токенов",
+      "uk": "1,25 базової ціни вхідних токенів",
+      "en": "1.25× the base input token price",
+      "pl": "1,25 × cena bazowa tokenów wejściowych"
+    },
+    "pfour_cache_write_1h": {
+      "ru": "2 базовые цены входных токенов",
+      "uk": "2 базові ціни вхідних токенів",
+      "en": "2× the base input token price",
+      "pl": "2 × cena bazowa tokenów wejściowych"
+    },
+    "pfour_cache_read": {
+      "ru": "0,1 базовой цены входных токенов (у Claude Opus 5.5 и Claude Sonnet 5.5 — 0,05, у Claude Fable 5.1 — 0,025)",
+      "uk": "0,1 базової ціни вхідних токенів (у Claude Opus 5.5 і Claude Sonnet 5.5 — 0,05, у Claude Fable 5.1 — 0,025)",
+      "en": "0.1× the base input token price (0.05× for Claude Opus 5.5 and Claude Sonnet 5.5, 0.025× for Claude Fable 5.1)",
+      "pl": "0,1 × cena bazowa tokenów wejściowych (w Claude Opus 5.5 i Claude Sonnet 5.5 — 0,05, w Claude Fable 5.1 — 0,025)"
+    },
+    "pfour_batch_discount": {
+      "ru": "50%",
+      "uk": "50%",
+      "en": "50%",
+      "pl": "50%"
+    }
+  },
+  "limits": {
+    "pfour_effort_levels": {
+      "ru": "low, medium, high, xhigh, max",
+      "uk": "low, medium, high, xhigh, max",
+      "en": "low, medium, high, xhigh, max",
+      "pl": "low, medium, high, xhigh, max"
+    },
+    "pfour_cache_min_tokens": {
+      "ru": "512 токенов у текущих моделей, у части старых — от 1024 до 4096",
+      "uk": "512 токенів у поточних моделей, у частини старих — від 1024 до 4096",
+      "en": "512 tokens on current models, 1,024 to 4,096 on some older ones",
+      "pl": "512 tokenów w obecnych modelach, w części starszych — od 1024 do 4096"
+    },
+    "pfour_cache_ttl_default": {
+      "ru": "5 минут",
+      "uk": "5 хвилин",
+      "en": "5 minutes",
+      "pl": "5 minut"
+    },
+    "pfour_cache_ttl_long": {
+      "ru": "1 час",
+      "uk": "1 година",
+      "en": "1 hour",
+      "pl": "1 godzina"
+    },
+    "pfour_cache_breakpoints": {
+      "ru": "4",
+      "uk": "4",
+      "en": "4",
+      "pl": "4"
+    },
+    "pfour_batch_max": {
+      "ru": "100 000 запросов или 256 МБ (что наступит раньше)",
+      "uk": "100 000 запитів або 256 МБ (що настане раніше)",
+      "en": "100,000 requests or 256 MB, whichever comes first",
+      "pl": "100 000 zapytań lub 256 MB (w zależności od tego, co nastąpi wcześniej)"
+    },
+    "pfour_batch_typical": {
+      "ru": "большинство пакетов — в течение часа",
+      "uk": "більшість пакетів — протягом години",
+      "en": "most batches finish within an hour",
+      "pl": "większość paczek — w ciągu godziny"
+    },
+    "pfour_batch_expire": {
+      "ru": "24 часа",
+      "uk": "24 години",
+      "en": "24 hours",
+      "pl": "24 godziny"
+    },
+    "pfour_batch_results_days": {
+      "ru": "29 дней",
+      "uk": "29 днів",
+      "en": "29 days",
+      "pl": "29 dni"
+    }
+  }
+}

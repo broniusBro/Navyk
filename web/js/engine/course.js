@@ -34,21 +34,73 @@ export function flattenCourse(course) {
  * Status of each lesson on the path.
  * available: Set of lesson ids that have content on the server.
  * Status: "done" | "current" | "open" | "soon".
- * "current" is the first available lesson not yet done (the path's focus).
+ * Levels do not block each other, so every level has its own "current": the first available lesson
+ * of that level not yet done (the focus of that level's road).
  */
 export function pathStatus(course, available, completed) {
-  const flat = flattenCourse(course);
   const status = {};
-  let currentSet = false;
-  for (const { lesson } of flat) {
-    if (completed.has(lesson.id)) status[lesson.id] = "done";
-    else if (!available.has(lesson.id)) status[lesson.id] = "soon";
-    else if (!currentSet) {
-      status[lesson.id] = "current";
-      currentSet = true;
-    } else status[lesson.id] = "open";
+  for (const level of course?.levels ?? []) {
+    let currentSet = false;
+    for (const mod of level.modules ?? []) {
+      for (const lesson of mod.lessons ?? []) {
+        if (completed.has(lesson.id)) status[lesson.id] = "done";
+        else if (!available.has(lesson.id)) status[lesson.id] = "soon";
+        else if (!currentSet) {
+          status[lesson.id] = "current";
+          currentSet = true;
+        } else status[lesson.id] = "open";
+      }
+    }
   }
   return status;
+}
+
+/**
+ * Summary of one level for the levels screen.
+ * Returns { id, modules, total, done, available, current: lesson|null, complete }.
+ * done counts completed lessons of the level; available counts lessons with content (done or not);
+ * current is the first available lesson not yet done; complete means every lesson is done.
+ */
+export function levelSummary(level, available, completed) {
+  const mods = level?.modules ?? [];
+  let total = 0;
+  let done = 0;
+  let avail = 0;
+  let current = null;
+  for (const mod of mods) {
+    for (const lesson of mod.lessons ?? []) {
+      total++;
+      const isDone = completed.has(lesson.id);
+      const isAvail = available.has(lesson.id);
+      if (isDone) done++;
+      if (isAvail) avail++;
+      if (!isDone && isAvail && !current) current = lesson;
+    }
+  }
+  return { id: level?.id ?? null, modules: mods.length, total, done, available: avail, current, complete: total > 0 && done === total };
+}
+
+/**
+ * Which level to recommend next: the first unfinished level that has a lesson to take now;
+ * if none has, the first unfinished level; null when the whole course is done.
+ * summaries: levelSummary() results in course order.
+ */
+export function recommendedLevel(summaries) {
+  const open = summaries.find((s) => !s.complete && s.current);
+  return (open ?? summaries.find((s) => !s.complete))?.id ?? null;
+}
+
+/** Level of the course by id, or null. */
+export const findLevel = (course, id) => (course?.levels ?? []).find((l) => l.id === id) ?? null;
+
+/** Id of the level a lesson belongs to, or null if the lesson is not in the course. */
+export function levelOfLesson(course, lessonId) {
+  for (const level of course?.levels ?? []) {
+    for (const mod of level.modules ?? []) {
+      if ((mod.lessons ?? []).some((l) => l.id === lessonId)) return level.id;
+    }
+  }
+  return null;
 }
 
 /**

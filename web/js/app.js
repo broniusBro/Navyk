@@ -1,5 +1,5 @@
 // App entry: routing between path, lesson, review, completion and account screens.
-// Routes (hash): #/  |  #/lesson/<id>  |  #/review  |  #/login  |  #/register  |  #/check-email
+// Routes (hash): #/  |  #/level/<id>  |  #/lesson/<id>  |  #/review  |  #/login  |  #/register  |  #/check-email
 //                #/forgot  |  #/confirm/<token>  |  #/reset/<token>
 
 import { initI18n, t, getLang, setLang, onLangChange, applyStatic } from "./ui/i18n.js";
@@ -13,7 +13,7 @@ import { fetchCourse, fetchLesson, probeAvailable } from "./platform/api.js";
 import { deviceId, now, onConnectivityChange } from "./platform/device.js";
 import { registerServiceWorker } from "./platform/sw.js";
 import { dayKey } from "./engine/dates.js";
-import { flattenCourse, sourcesBlock, normalizeExercise, localized, LANGS } from "./engine/course.js";
+import { flattenCourse, sourcesBlock, normalizeExercise, localized, findLevel, levelOfLesson, LANGS } from "./engine/course.js";
 import { completeLesson, streak, activeToday, dueItems, nextDue, applyReviews, pickReviewExercise } from "./engine/progress.js";
 import { sessionResults } from "./engine/session.js";
 import { canOpenLesson, parseTokenRoute } from "./engine/auth.js";
@@ -23,7 +23,8 @@ import { initAccount, currentUser, isSignedIn, accountChecked, onAccountChange, 
 import { renderLogin, renderRegister, renderCheckEmail, renderConfirm, renderForgot, renderReset, openSignupSheet, openAccountSheet } from "./ui/auth.js";
 
 const app = document.getElementById("app");
-const state = { course: null, available: null, loading: true, devId: deviceId(), seed: shuffleSeed(), roadAnimated: false };
+// animated: screens ("levels", "level:<id>") whose entrance has already played this session
+const state = { course: null, available: null, loading: true, devId: deviceId(), seed: shuffleSeed(), animated: new Set() };
 let screenToken = 0;
 
 const today = () => dayKey(now());
@@ -47,6 +48,12 @@ function go(hash) {
   else location.hash = hash;
 }
 
+/** Where a lesson returns to: the road of its level, or the levels screen if the level is unknown. */
+function levelHash(lessonId) {
+  const id = levelOfLesson(state.course, lessonId);
+  return id ? `#/level/${encodeURIComponent(id)}` : "#/";
+}
+
 // ---- screens ----------------------------------------------------------------------------
 
 function openLesson(lesson) {
@@ -57,20 +64,28 @@ function openLesson(lesson) {
 
 const isCompleted = (id) => Boolean(getProgress().lessons[id]);
 
-function showPath({ refresh = false } = {}) {
+function showPath({ refresh = false, levelId = currentLevelId() } = {}) {
+  // an unknown level (once the course is known) goes back to the levels screen
+  if (levelId && state.course && !findLevel(state.course, levelId)) {
+    history.replaceState(null, "", "#/");
+    levelId = null;
+  }
   const p = getProgress();
   const d = today();
-  setTitle("path.title");
+  const level = levelId ? findLevel(state.course, levelId) : null;
+  setTitle(level ? "levels.doc_title" : "path.title", level ? { title: localized(level.title, getLang()) } : undefined);
   const due = dueItems(p.repeat, d).filter((it) => state.available === null || state.available.has(it.lessonId));
   const ready = Boolean(state.course && state.available);
-  const animate = ready && !state.roadAnimated;
-  if (ready) state.roadAnimated = true;
+  const screenKey = levelId ? `level:${levelId}` : "levels";
+  const animate = ready && !state.animated.has(screenKey);
+  if (ready) state.animated.add(screenKey);
   const scroll = refresh ? globalThis.scrollY : 0;
   app.replaceChildren(
     renderPath({
       course: state.course,
       available: state.available,
       loading: state.loading,
+      levelId,
       progress: p,
       user: currentUser(),
       animate,
@@ -83,7 +98,19 @@ function showPath({ refresh = false } = {}) {
     }),
   );
   if (refresh) globalThis.scrollTo?.(0, scroll);
-  else app.querySelector("h1")?.focus({ preventScroll: true });
+  else {
+    app.querySelector("h1")?.focus({ preventScroll: true });
+    globalThis.scrollTo?.(0, 0);
+    if (level) revealCurrent();
+  }
+}
+
+/** On a level's road, bring the current lesson into view if it is below the fold. */
+function revealCurrent() {
+  const node = app.querySelector(".node--current");
+  if (!node) return;
+  const r = node.getBoundingClientRect();
+  if (r.bottom > globalThis.innerHeight - 40) node.scrollIntoView({ block: "center" });
 }
 
 async function showLesson(lessonId, token) {
@@ -93,9 +120,10 @@ async function showLesson(lessonId, token) {
   if (token !== screenToken) return;
   if (!lesson) return showError("lesson.not_found");
   if (!canOpenLesson(lesson.meta, isSignedIn()) && !isCompleted(lessonId)) {
-    // deep link to a members-only lesson: back to the path with the friendly sign-up sheet
-    history.replaceState(null, "", "#/");
-    showPath();
+    // deep link to a members-only lesson: back to its level's road with the friendly sign-up sheet
+    const back = levelHash(lessonId);
+    history.replaceState(null, "", back);
+    showPath({ levelId: levelIdFromHash(back) });
     openSignupSheet({ go, lessonHash: `#/lesson/${encodeURIComponent(lessonId)}`, lessonTitle: lesson.meta.title });
     return;
   }
@@ -106,7 +134,7 @@ async function showLesson(lessonId, token) {
     deviceId: state.devId,
     seed: state.seed,
     data: null,
-    onClose: () => go("#/"),
+    onClose: () => go(levelHash(lessonId)),
     onFinish: (session) => {
       const r = completeLesson(getProgress(), { lessonId, results: sessionResults(session), meta: lesson.meta, today: today() });
       saveProgress(r.progress);
@@ -123,7 +151,7 @@ async function showLesson(lessonId, token) {
           nextReview: nextDue(r.progress.repeat),
           sources: src?.markdown ?? null,
           verifiedAt: lesson.meta.verified_at,
-          onBack: () => go("#/"),
+          onBack: () => go(levelHash(lessonId)),
         }),
       );
     },
@@ -207,6 +235,8 @@ function route() {
   const lessonMatch = /^#\/lesson\/([\w.-]+)$/.exec(hash);
   if (lessonMatch) return showLesson(decodeURIComponent(lessonMatch[1]), token);
   if (hash === "#/review") return showReview(token);
+  const levelId = levelIdFromHash(hash);
+  if (levelId) return showPath({ levelId });
   const tokenRoute = parseTokenRoute(hash);
   if (tokenRoute?.kind === "confirm") return showScreen(renderConfirm({ token: tokenRoute.token, go }), "auth.confirm_title");
   if (tokenRoute?.kind === "reset") return showScreen(renderReset({ token: tokenRoute.token, go }), "auth.reset_title");
@@ -238,11 +268,19 @@ async function refreshAvailability() {
   await probeAvailable(lang, ids, (set) => {
     if (lang !== getLang()) return;
     state.available = set;
-    if (isPathVisible()) showPath({ refresh: state.roadAnimated });
+    if (isPathVisible()) showPath({ refresh: state.animated.size > 0 });
   });
 }
 
-const isPathVisible = () => location.hash === "" || location.hash === "#/" || location.hash === "#";
+const isLevelsVisible = () => location.hash === "" || location.hash === "#/" || location.hash === "#";
+/** Level id from "#/level/<id>", else null. */
+const levelIdFromHash = (hash) => {
+  const m = /^#\/level\/([\w.-]+)$/.exec(hash);
+  return m ? decodeURIComponent(m[1]) : null;
+};
+const currentLevelId = () => levelIdFromHash(location.hash);
+/** The levels screen or a level's road is on screen (both re-render on course/language/account changes). */
+const isPathVisible = () => isLevelsVisible() || Boolean(currentLevelId());
 
 async function main() {
   await initI18n();

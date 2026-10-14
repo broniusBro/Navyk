@@ -23,7 +23,16 @@ COURSE_LESSONS = {l["id"]: l for lvl in course["levels"] for m in lvl["modules"]
 RUBRIC_IDS = {c["id"] for c in json.loads((CONTENT / "reviewer" / "rubric.json").read_text())["criteria"]}
 
 UI_DATA = json.loads((CONTENT / "data" / "ui.json").read_text(encoding="utf-8"))
-DATA_RE = re.compile(r"\{\{\s*data\.([a-z_]+)\.([a-z_]+)\s*\}\}")
+# Values for a module live next to it: content/data/modules/<module>.json, same sections as ui.json.
+for extra in sorted((CONTENT / "data" / "modules").glob("*.json")):
+    for section, values in json.loads(extra.read_text(encoding="utf-8")).items():
+        if section.startswith("_"):
+            continue
+        clash = set(UI_DATA.get(section, {})) & set(values)
+        if clash:
+            raise SystemExit(f"{extra.name}: keys already defined elsewhere: {', '.join(sorted(clash))}")
+        UI_DATA.setdefault(section, {}).update(values)
+DATA_RE = re.compile(r"\{\{\s*data\.([a-z_]+)\.([a-z0-9_]+)\s*\}\}")
 
 
 def data_value(section: str, key: str, lang: str, markdown: bool, where: str) -> str:

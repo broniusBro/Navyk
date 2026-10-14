@@ -1,0 +1,174 @@
+{
+  "_about": "Изменчивые значения модуля a6 «Длинные задачи»: названия элементов интерфейса Claude (на английском, как в приложении), планы и лимиты. Подставляются в {{data.<раздел>.<ключ>}} при сборке. Источники и даты — content/data/volatile/a6.md. Проверено 2026-10-14. Переводы uk/en/pl добавят переводчики.",
+  "ui_paths": {
+    "a6_cowork_switch": {
+      "label": "Cowork",
+      "hint": {
+        "ru": "в левом нижнем углу поля сообщения",
+        "uk": "у лівому нижньому куті поля повідомлення",
+        "en": "in the bottom-left corner of the message box",
+        "pl": "w lewym dolnym rogu pola wiadomości"
+      }
+    },
+    "a6_approve_manual": {
+      "label": "Manually approve",
+      "hint": {
+        "ru": "спрашивать перед каждым действием",
+        "uk": "питати перед кожною дією",
+        "en": "ask before every action",
+        "pl": "pytaj przed każdym działaniem"
+      }
+    },
+    "a6_approve_auto": {
+      "label": "Automatically approve",
+      "hint": {
+        "ru": "Claude работает сам, но проверяет каждое действие",
+        "uk": "Claude працює сам, але перевіряє кожну дію",
+        "en": "Claude works on its own but checks every action",
+        "pl": "Claude działa sam, ale sprawdza każde działanie"
+      }
+    },
+    "a6_approve_skip": {
+      "label": "Skip all approvals",
+      "hint": {
+        "ru": "без пауз и без проверок",
+        "uk": "без пауз і без перевірок",
+        "en": "no pauses, no checks",
+        "pl": "bez przerw i bez sprawdzania"
+      }
+    },
+    "a6_allow": {
+      "label": "Allow",
+      "hint": {
+        "ru": "разрешить, кнопка в запросе разрешения",
+        "uk": "дозволити, кнопка в запиті дозволу",
+        "en": "the button in the permission request",
+        "pl": "zezwól, przycisk w prośbie o pozwolenie"
+      }
+    },
+    "a6_scheduled": {
+      "label": "Scheduled",
+      "hint": {
+        "ru": "запланированные задачи, в боковой панели слева",
+        "uk": "заплановані завдання, на бічній панелі ліворуч",
+        "en": "in the left sidebar",
+        "pl": "zaplanowane zadania, na pasku bocznym po lewej"
+      }
+    },
+    "a6_new_task": {
+      "label": "New task",
+      "hint": {
+        "ru": "новая задача, справа вверху",
+        "uk": "нове завдання, праворуч угорі",
+        "en": "top right",
+        "pl": "nowe zadanie, w prawym górnym rogu"
+      }
+    },
+    "a6_create_with_claude": {
+      "label": "Create with Claude",
+      "hint": {
+        "ru": "создать вместе с Claude",
+        "uk": "створити разом із Claude",
+        "en": "",
+        "pl": "utwórz razem z Claude"
+      }
+    },
+    "a6_set_up_manually": {
+      "label": "Set up manually",
+      "hint": {
+        "ru": "настроить вручную",
+        "uk": "налаштувати вручну",
+        "en": "",
+        "pl": "skonfiguruj ręcznie"
+      }
+    },
+    "a6_schedule_button": {
+      "label": "Schedule",
+      "hint": {
+        "ru": "запланировать",
+        "uk": "запланувати",
+        "en": "",
+        "pl": "zaplanuj"
+      }
+    },
+    "a6_enable_computer_use": {
+      "label": "Settings → General → Enable computer use",
+      "hint": {
+        "ru": "включить управление компьютером",
+        "uk": "увімкнути керування комп'ютером",
+        "en": "",
+        "pl": "włącz sterowanie komputerem"
+      }
+    },
+    "a6_preferred_browser": {
+      "label": "Settings → Cowork → Preferred browser",
+      "hint": {
+        "ru": "настройки → браузер по умолчанию",
+        "uk": "налаштування → браузер за замовчуванням",
+        "en": "",
+        "pl": "ustawienia → domyślna przeglądarka"
+      }
+    },
+    "a6_import_cookies": {
+      "label": "Import cookies",
+      "hint": {
+        "ru": "перенести входы на сайты",
+        "uk": "перенести входи на сайти",
+        "en": "",
+        "pl": "przenieś logowania do stron"
+      }
+    }
+  },
+  "plans": {
+    "a6_long_tasks_plans": {
+      "ru": "только на платных планах: Pro, Max, Team и Enterprise; на Free их пока нет",
+      "uk": "лише на платних планах: Pro, Max, Team і Enterprise; на Free їх поки немає",
+      "en": "paid plans only: Pro, Max, Team and Enterprise; not on Free yet",
+      "pl": "tylko w płatnych planach: Pro, Max, Team i Enterprise; w Free na razie ich nie ma"
+    },
+    "a6_merge_rollout": {
+      "ru": "с 16 сентября 2026 года постепенно для Pro и Max, Team и Free — позже",
+      "uk": "з 16 вересня 2026 року поступово для Pro і Max, для Team і Free — пізніше",
+      "en": "rolling out gradually from 16 September 2026 to Pro and Max, with Team and Free to follow",
+      "pl": "od 16 września 2026 r. stopniowo dla Pro i Max, dla Team i Free — później"
+    },
+    "a6_cloud_plans": {
+      "ru": "на Pro и Max — все новые задачи с 6 октября 2026 года, на Team — в бете",
+      "uk": "на Pro і Max — усі нові завдання з 6 жовтня 2026 року, на Team — у беті",
+      "en": "on Pro and Max, all new tasks since 6 October 2026; in beta on Team",
+      "pl": "w Pro i Max — wszystkie nowe zadania od 6 października 2026 r., w Team — w becie"
+    },
+    "a6_computer_use_plans": {
+      "ru": "бета, только на Pro и Max, в приложении Claude для macOS и Windows",
+      "uk": "бета, лише на Pro і Max, у застосунку Claude для macOS і Windows",
+      "en": "in beta, Pro and Max only, in the Claude app for macOS and Windows",
+      "pl": "beta, tylko w Pro i Max, w aplikacji Claude na macOS i Windows"
+    },
+    "a6_builtin_browser_plans": {
+      "ru": "раскатывается постепенно на Pro, Max и Team, на Enterprise — если включил владелец; приложение для macOS, Windows и Linux (бета)",
+      "uk": "розгортається поступово на Pro, Max і Team, на Enterprise — якщо ввімкнув власник; застосунок для macOS, Windows і Linux (бета)",
+      "en": "rolling out gradually to Pro, Max and Team, and to Enterprise if the owner has turned it on; desktop app for macOS, Windows and Linux (beta)",
+      "pl": "wdrażana stopniowo w Pro, Max i Team, w Enterprise — jeśli włączył ją właściciel; aplikacja na macOS, Windows i Linux (beta)"
+    },
+    "a6_scheduled_plans": {
+      "ru": "Pro, Max, Team и Enterprise",
+      "uk": "Pro, Max, Team і Enterprise",
+      "en": "Pro, Max, Team and Enterprise",
+      "pl": "Pro, Max, Team i Enterprise"
+    },
+    "a6_mobile_plans": {
+      "ru": "в вебе и на телефоне — Pro и Max, на Team это бета, на Enterprise — если включил администратор",
+      "uk": "у вебі й на телефоні — Pro і Max, на Team це бета, на Enterprise — якщо ввімкнув адміністратор",
+      "en": "on the web and on your phone for Pro and Max; in beta on Team; on Enterprise if your admin has turned it on",
+      "pl": "w przeglądarce i na telefonie — Pro i Max, w Team to beta, w Enterprise — jeśli włączył to administrator"
+    }
+  },
+  "limits": {
+    "a6_schedule_frequency": {
+      "ru": "каждый час, каждый день, каждую неделю, по будням или только вручную",
+      "uk": "щогодини, щодня, щотижня, у будні або лише вручну",
+      "en": "hourly, daily, weekly, on weekdays, or manually only",
+      "pl": "co godzinę, codziennie, co tydzień, w dni robocze albo tylko ręcznie"
+    }
+  }
+}

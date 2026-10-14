@@ -1,0 +1,108 @@
+{
+  "_about": "Изменчивые значения модуля a8 «Контекст и лимиты для продвинутых»: названия элементов интерфейса Claude (на английском, как в приложении), планы и лимиты. Подставляются в {{data.<раздел>.<ключ>}} при сборке. Источники и даты — content/data/volatile/a8.md. Проверено 2026-10-14. Переводы uk/en/pl добавят переводчики.",
+  "ui_paths": {
+    "a8_settings_capabilities": {
+      "label": "Settings → Capabilities",
+      "hint": {
+        "ru": "настройки → возможности",
+        "uk": "налаштування → можливості",
+        "en": "",
+        "pl": "ustawienia → możliwości"
+      }
+    },
+    "a8_code_execution_toggle": {
+      "label": "Code execution and file creation",
+      "hint": {
+        "ru": "переключатель «выполнение кода и создание файлов»",
+        "uk": "перемикач «виконання коду і створення файлів»",
+        "en": "",
+        "pl": "przełącznik „wykonywanie kodu i tworzenie plików”"
+      }
+    },
+    "a8_organizing_thoughts": {
+      "label": "organizing its thoughts",
+      "hint": {
+        "ru": "надпись в длинном чате: Claude «приводит мысли в порядок»",
+        "uk": "напис у довгому чаті: Claude «упорядковує думки»",
+        "en": "",
+        "pl": "komunikat w długim czacie: Claude „porządkuje myśli”"
+      }
+    },
+    "a8_effort_menu": {
+      "label": "Effort",
+      "hint": {
+        "ru": "уровень усилия: нажми на название модели рядом с кнопкой отправки",
+        "uk": "рівень зусилля: натисни на назву моделі поруч із кнопкою надсилання",
+        "en": "click the model name next to the send button",
+        "pl": "poziom wysiłku: kliknij nazwę modelu obok przycisku wysyłania"
+      }
+    },
+    "a8_effort_routine": {
+      "label": "Low / Medium",
+      "hint": {
+        "ru": "лёгкие уровни усилия",
+        "uk": "легкі рівні зусилля",
+        "en": "the lighter effort levels",
+        "pl": "niższe poziomy wysiłku"
+      }
+    },
+    "a8_thinking_toggle": {
+      "label": "Thinking",
+      "hint": {
+        "ru": "переключатель размышления в меню Effort; у моделей без уровней усилия он называется Extended",
+        "uk": "перемикач міркування в меню Effort; у моделей без рівнів зусилля він називається Extended",
+        "en": "the thinking toggle in the Effort menu; on models without effort levels it's called Extended",
+        "pl": "przełącznik rozumowania w menu Effort; w modelach bez poziomów wysiłku nazywa się Extended"
+      }
+    },
+    "a8_research": {
+      "label": "Research",
+      "hint": {
+        "ru": "глубокое исследование, включается в меню «+» в поле сообщения",
+        "uk": "глибоке дослідження, вмикається в меню «+» у полі повідомлення",
+        "en": "in-depth research, turned on from the “+” menu in the message box",
+        "pl": "pogłębione badanie, włącza się je w menu „+” w polu wiadomości"
+      }
+    }
+  },
+  "plans": {
+    "a8_code_execution_default": {
+      "ru": "на Free, Pro и Max он включён по умолчанию, в Team и Enterprise им управляет владелец организации",
+      "uk": "на Free, Pro і Max він увімкнений за замовчуванням, у Team і Enterprise ним керує власник організації",
+      "en": "on Free, Pro and Max it's on by default; on Team and Enterprise, the organisation owner controls it",
+      "pl": "w planach Free, Pro i Max jest domyślnie włączony, w Team i Enterprise zarządza nim właściciel organizacji"
+    },
+    "a8_research_plans": {
+      "ru": "только на платных планах: Pro, Max, Team и Enterprise",
+      "uk": "тільки на платних планах: Pro, Max, Team і Enterprise",
+      "en": "only on paid plans: Pro, Max, Team and Enterprise",
+      "pl": "tylko w planach płatnych: Pro, Max, Team i Enterprise"
+    }
+  },
+  "limits": {
+    "a8_context_window_paid": {
+      "ru": "до 1M (миллиона) токенов у новейших моделей на платных планах",
+      "uk": "до 1M (мільйона) токенів у найновіших моделей на платних планах",
+      "en": "up to 1M (a million) tokens with the newest models on paid plans",
+      "pl": "do 1M (miliona) tokenów w najnowszych modelach w planach płatnych"
+    },
+    "a8_context_window_other": {
+      "ru": "500K или 200K токенов",
+      "uk": "500K або 200K токенів",
+      "en": "500K or 200K tokens",
+      "pl": "500K lub 200K tokenów"
+    },
+    "a8_million_tokens_words": {
+      "ru": "около 555 тысяч слов (оценка Anthropic для текущего токенизатора)",
+      "uk": "близько 555 тисяч слів (оцінка Anthropic для поточного токенізатора)",
+      "en": "around 555,000 words (Anthropic's estimate for the current tokenizer)",
+      "pl": "około 555 tysięcy słów (szacunek Anthropic dla obecnego tokenizera)"
+    },
+    "a8_session_reset": {
+      "ru": "сессионный лимит, который сбрасывается каждые пять часов, и недельные лимиты",
+      "uk": "сесійний ліміт, який скидається кожні п'ять годин, і тижневі ліміти",
+      "en": "session limit that resets every five hours, plus weekly limits",
+      "pl": "limit sesji, który odnawia się co pięć godzin, oraz limity tygodniowe"
+    }
+  }
+}
