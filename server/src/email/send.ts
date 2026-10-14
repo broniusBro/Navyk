@@ -79,6 +79,34 @@ export function buildProviderRequest(p: "brevo" | "resend", m: OutgoingEmail, ap
   };
 }
 
+/** Код и текст ошибки провайдера без адресов почты (до 300 символов). */
+export async function providerReason(res: Response): Promise<{ code?: string; message?: string }> {
+  try {
+    const raw = (await res.text()).slice(0, 2000);
+    const redact = (v: unknown) => String(v ?? "").replace(/[^\s"'<>]+@[^\s"'<>]+/g, "<email>").slice(0, 300);
+    try {
+      const j = JSON.parse(raw);
+      const code = j.code ?? j.name ?? j.error?.code;
+      const message = j.message ?? j.error?.message ?? j.error;
+      return { code: code ? redact(code) : undefined, message: message ? redact(message) : undefined };
+    } catch {
+      return raw ? { message: redact(raw) } : {};
+    }
+  } catch {
+    return {};
+  }
+}
+
+let lastError: { status?: number; code?: string; message?: string } | null = null;
+
+/** Отправить одно письмо и вернуть результат (для проверки настройки почты на сервере). */
+export async function sendTest(to: string, lang: EmailLang = "ru") {
+  lastError = null;
+  const rendered = renderEmail("confirm", lang, "https://navyk.app/#/email-test");
+  const status = await deliver({ ...rendered, to, kind: "confirm", link: "https://navyk.app/#/email-test" });
+  return { provider: provider(), from: process.env.EMAIL_FROM || DEFAULT_FROM, status, error: lastError };
+}
+
 async function deliver(m: OutgoingEmail): Promise<"sent" | "logged" | "failed"> {
   const p = provider();
   if (p === "log") {
@@ -90,6 +118,7 @@ async function deliver(m: OutgoingEmail): Promise<"sent" | "logged" | "failed"> 
   const apiKey = process.env.EMAIL_API_KEY ?? "";
   if (!apiKey) {
     log({ event: "email_error", kind: m.kind, provider: p, code: "no_api_key" });
+    lastError = { code: "no_api_key" };
     return "failed";
   }
   const { url, init } = buildProviderRequest(p, m, apiKey, process.env.EMAIL_FROM || DEFAULT_FROM);
@@ -99,12 +128,14 @@ async function deliver(m: OutgoingEmail): Promise<"sent" | "logged" | "failed"> 
       await res.body?.cancel();
       return "sent";
     }
-    // Тело ответа провайдера может содержать адрес — в журнал не пишем.
-    await res.body?.cancel();
-    log({ event: "email_error", kind: m.kind, provider: p, status: res.status });
+    // Причину отказа пишем в журнал без адресов (их вырезаем): так видно, что чинить в кабинете провайдера.
+    const reason = await providerReason(res);
+    log({ event: "email_error", kind: m.kind, provider: p, status: res.status, ...reason });
+    lastError = { status: res.status, ...reason };
     return "failed";
   } catch (e) {
     log({ event: "email_error", kind: m.kind, provider: p, code: (e as Error).name });
+    lastError = { code: (e as Error).name, message: String((e as Error).message).slice(0, 300) };
     return "failed";
   }
 }

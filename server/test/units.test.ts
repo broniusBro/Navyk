@@ -218,3 +218,12 @@ test("same-site check without PUBLIC_ORIGIN compares Origin with Host", async ()
     if (saved !== undefined) process.env.PUBLIC_ORIGIN = saved;
   }
 });
+
+test("email: provider error reason is logged without addresses", async () => {
+  const { providerReason } = await import("../src/email/send.ts");
+  const r = await providerReason(new Response(JSON.stringify({ code: "unauthorized", message: "We have detected you are using an unrecognised IP address 1.2.3.4 for user a.b@site.co" }), { status: 401 }));
+  assert.equal(r.code, "unauthorized");
+  assert.ok(r.message?.includes("unrecognised IP"));
+  assert.ok(!r.message?.includes("a.b@site.co") && r.message?.includes("<email>"));
+  assert.deepEqual(await providerReason(new Response("", { status: 500 })), {});
+});

@@ -108,3 +108,16 @@ ssh root@65.108.234.212 'cd /srv/navyk && ./deploy/update.sh'   # обновит
 
 Правила общего сервера: после правки Caddy — `caddy validate` и `systemctl restart caddy`
 (скрипты делают это сами, с откатом); секреты в чат не передавать.
+
+### Проверка почты
+
+Если письма не приходят, отправь тестовое письмо прямо из контейнера и посмотри ответ почтового сервиса:
+
+```bash
+ssh -t root@65.108.234.212 /srv/navyk/deploy/test-email.sh
+```
+
+Скрипт печатает `status` (`sent` / `failed` / `logged`) и причину отказа (`code`, `message`) без адресов.
+Частые причины у Brevo: `unauthorized` с текстом про unrecognised IP — добавить IP сервера в Security → Authorised IPs;
+ошибка про sender — подтвердить отправителя или домен в Senders, Domains & Dedicated IPs; `logged` — почта не настроена
+(запусти `deploy/set-email.sh`).
