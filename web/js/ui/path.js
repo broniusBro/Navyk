@@ -143,19 +143,30 @@ function mountRoad(road, { animate }) {
     const box = road.getBoundingClientRect();
     if (!box.width) return true;
     const stops = [...road.querySelectorAll("[data-road]")];
+    const rel = (r) => ({ left: r.left - box.left, right: r.right - box.left, top: r.top - box.top, bottom: r.bottom - box.top });
     const points = stops.map((el) => {
-      const r = el.getBoundingClientRect();
-      // signposts: the road meets the card's top edge centre and leaves from the bottom centre
-      return { x: r.left + r.width / 2 - box.left, y: r.top + r.height / 2 - box.top };
+      const r = rel(el.getBoundingClientRect());
+      const x = (r.left + r.right) / 2;
+      if (el.dataset.road === "sign") return { kind: "sign", x, y: (r.top + r.bottom) / 2, top: r.top, bottom: r.bottom };
+      const label = el.closest(".node")?.querySelector(".node__label");
+      const l = label ? rel(label.getBoundingClientRect()) : null;
+      return {
+        kind: "node",
+        x,
+        y: (r.top + r.bottom) / 2,
+        r: (r.right - r.left) / 2,
+        labelHalf: l ? (l.right - l.left) / 2 : 0,
+        labelBottom: l ? l.bottom : r.bottom,
+      };
     });
     const kinds = stops.map((el) => el.dataset.road);
-    const key = `${Math.round(box.width)}x${Math.round(box.height)}:${points.map((q) => `${Math.round(q.x)},${Math.round(q.y)}`).join(";")}`;
+    const key = `${Math.round(box.width)}x${Math.round(box.height)}:${points.map((q) => `${Math.round(q.x)},${Math.round(q.y)},${Math.round(q.labelBottom ?? 0)}`).join(";")}`;
     if (key === lastKey) return true;
     lastKey = key;
     svg.setAttribute("viewBox", `0 0 ${box.width} ${box.height}`);
     svg.setAttribute("width", String(box.width));
     svg.setAttribute("height", String(box.height));
-    const parts = splitRoad(points, travelledIndex(kinds));
+    const parts = splitRoad(points, box.width, travelledIndex(kinds));
     todo.setAttribute("d", parts.todo);
     done.setAttribute("d", parts.done);
     doneEdge.setAttribute("d", parts.done);

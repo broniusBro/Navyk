@@ -324,12 +324,12 @@ strong, b { font-weight: 800; }
 /* the road: one SVG line behind every node and signpost (geometry in engine/road.js) */
 .road {
   position: relative; padding-bottom: var(--s-xl);
-  /* lessons swing left and right of the centre line by up to --amp (keeps a 184px node inside the column) */
-  container-type: inline-size; --amp: clamp(0px, (100cqw - 176px) / 2, 130px);
+  /* lessons stand left / right of the centre line by --amp, leaving room for the road to pass beside titles */
+  container-type: inline-size; --amp: clamp(0px, (100cqw - 190px) / 2, 120px);
 }
 .road__svg { position: absolute; left: 0; top: 0; z-index: 0; overflow: visible; pointer-events: none; }
 .road__svg path { fill: none; stroke-linecap: round; stroke-linejoin: round; }
-.road__todo { stroke: var(--ink-soft); stroke-width: 4; stroke-dasharray: 2 13; }
+.road__todo { stroke: var(--border-soft); stroke-width: 3; stroke-dasharray: 8 9; }
 .road__done-edge { stroke: var(--border); stroke-width: 14; }
 .road__done { stroke: var(--success-strong); stroke-width: 9; }
 .road .level, .road .module, .road .nodes { position: relative; z-index: 1; }
@@ -363,13 +363,13 @@ strong, b { font-weight: 800; }
 .save-banner__text { flex: 1; font-size: var(--fs-small); font-weight: 700; line-height: 1.35; }
 .save-banner__btn { flex: none; }
 
-/* the path: lessons on a smooth wave (--wave from engine/road.js), title centred under each circle */
-.nodes { list-style: none; margin: 0; padding: 0 0 var(--s-s); display: flex; flex-direction: column; gap: 30px; }
+/* the path: lessons left / right of the centre (--wave from engine/road.js), title centred under each circle */
+.nodes { list-style: none; margin: 0; padding: 0 0 var(--s-s); display: flex; flex-direction: column; gap: 26px; }
 .nodes__item { display: flex; justify-content: center; }
 
 .node {
   display: flex; flex-direction: column; align-items: center; gap: 6px;
-  width: 176px; max-width: 100%; padding: 0; margin: 0;
+  width: 150px; max-width: 100%; padding: 0; margin: 0;
   background: none; border: 0; color: var(--ink); text-align: center;
   transform: translateX(calc(var(--wave, 0) * var(--amp, 0px)));
 }
@@ -382,13 +382,8 @@ button.node { cursor: pointer; }
 }
 .node__icon { width: 26px; height: 26px; }
 .node__dot { position: relative; }
-.node__label {
-  display: flex; flex-direction: column; align-items: center; min-width: 0; max-width: 100%; padding: 5px 10px 6px;
-  /* a little signboard: the road visibly runs under it instead of vanishing behind the text */
-  background: var(--surface); border: var(--bw) solid var(--border-soft); border-radius: 12px;
-}
-.node--current .node__label { border-color: var(--border); box-shadow: 0 3px 0 var(--border); }
-.node--soon .node__label { border-style: dashed; background: var(--paper); }
+/* the title floats free under the circle (no plate): the road goes round it, see engine/road.js */
+.node__label { display: flex; flex-direction: column; align-items: center; width: fit-content; min-width: 0; max-width: 100%; }
 .node__title { font-size: 0.9375rem; font-weight: 800; line-height: 1.25; }
 .node__meta { display: inline-flex; align-items: center; gap: 4px; margin-top: 2px; font-size: var(--fs-caption); font-weight: 700; color: var(--ink-muted); }
 .node__meta .icon { width: 14px; height: 14px; }

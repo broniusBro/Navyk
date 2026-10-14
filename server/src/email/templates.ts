@@ -120,7 +120,7 @@ const COPY: Record<EmailLang, Record<EmailKind, Copy> & { footer: string; fallba
     },
     footer: "Navyk to niezależny kurs, niezwiązany z Anthropic.",
     fallback: "Jeśli przycisk nie działa, otwórz ten link:",
-    ignore: "Jeśli nie prosiłeś(-aś) o tę wiadomość, po prostu ją usuń.",
+    ignore: "Jeśli nie prosiłeś o tę wiadomość, po prostu ją usuń.",
   },
 };
 
