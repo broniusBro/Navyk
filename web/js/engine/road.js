@@ -1,81 +1,74 @@
 // Geometry of the "road" on the path screen. Pure: stops in, SVG path data out.
-// Lessons sit left / right of the centre line (waveOffset). The road joins the circles edge to edge
-// and never runs through a title: towards a lesson on the other side it leaves the circle sideways,
-// runs above the title and drops into the next circle from the top; between lessons on the same side
-// it swings round the outside of the title; signposts are entered at the top and left at the bottom.
+// Lessons sit on a gentle sine wave (waveOffset): each step moves only a little sideways, so the eye
+// glides from one lesson to the next. The road is one smooth curve (Catmull-Rom turned into cubic
+// Béziers) through every circle and signpost and, between lessons, past a waypoint beside the title
+// on the side the wave is heading (roadPoints) — so it winds round the words instead of crossing them.
 
 const r1 = (n) => Math.round(n * 10) / 10;
 
 /**
- * Horizontal position of a lesson, in [-1, 1] (0 = centre line). The first lesson of a module stands
- * right under its signpost; then left, right, right, left, ... Neighbouring modules are mirrored.
+ * Horizontal position of a lesson on the wave, in [-1, 1] (0 = centre line).
+ * A module starts right under its signpost and swings out and back over 8 lessons;
+ * neighbouring modules swing to opposite sides.
  */
 export function waveOffset(indexInModule, moduleIndex = 0) {
-  if (indexInModule <= 0) return 0;
-  const v = [-1, 1, 1, -1][(indexInModule - 1) % 4] * (moduleIndex % 2 ? -1 : 1);
-  return v || 0;
+  const v = Math.sin((Math.max(0, indexInModule) * Math.PI) / 4) * (moduleIndex % 2 ? -1 : 1);
+  return Math.round(v * 1000) / 1000 || 0;
 }
-
-const cubic = (c1, c2, p) => `C${r1(c1.x)} ${r1(c1.y)} ${r1(c2.x)} ${r1(c2.y)} ${r1(p.x)} ${r1(p.y)}`;
-const move = (p) => `M${r1(p.x)} ${r1(p.y)}`;
 
 /**
- * One piece of road from stop a to stop b (b is below a).
- * Stop: { kind: "sign" | "node", x, y, r?, top?, bottom?, labelHalf?, labelBottom? } in road coordinates.
- *  - sign: x = centre, top / bottom = card edges.
- *  - node: x, y = circle centre, r = radius, labelHalf = half the title width, labelBottom = title bottom.
- * width: road width (detours stay inside it).
+ * Cubic segment from points[i] to points[i + 1]. Tangents come from the neighbours (Catmull-Rom),
+ * so the road has no corners and any split keeps both halves on the same curve. The vertical pull
+ * keeps it flowing downwards through each stop.
  */
-export function segment(a, b, width) {
-  const centre = width / 2;
-  const clampX = (x) => Math.min(width - 6, Math.max(6, x));
-  // a signpost: leave from the bottom centre, arrive at the top of the circle (or the next signpost)
-  if (a.kind === "sign") {
-    const p0 = { x: a.x, y: a.bottom };
-    const p3 = b.kind === "sign" ? { x: b.x, y: b.top } : { x: b.x, y: b.y - b.r };
-    const k = (p3.y - p0.y) * 0.5;
-    return move(p0) + cubic({ x: p0.x, y: p0.y + k }, { x: p3.x, y: p3.y - k }, p3);
-  }
-  const halfTitle = Math.max(a.labelHalf ?? 0, a.r);
-  // the way round a's title: beside it, at its lower part
-  const around = (s) => ({ x: clampX(a.x + s * (halfTitle + 16)), y: Math.max(a.y + a.r, (a.labelBottom ?? a.y + a.r) - 6) });
-  if (b.kind === "sign") {
-    const s = a.x < centre - 1 ? -1 : 1;
-    const p0 = { x: a.x + s * a.r, y: a.y };
-    const w = around(s);
-    const p3 = { x: b.x, y: b.top };
-    const k = (p3.y - w.y) * 0.55;
-    return move(p0) + cubic({ x: w.x, y: p0.y }, { x: w.x, y: w.y - (w.y - p0.y) * 0.5 }, w) + cubic({ x: w.x, y: w.y + k }, { x: p3.x, y: p3.y - k }, p3);
-  }
-  const dx = b.x - a.x;
-  if (Math.abs(dx) > a.r + b.r) {
-    const s = Math.sign(dx);
-    const p0 = { x: a.x + s * a.r, y: a.y };
-    const p3 = { x: b.x, y: b.y - b.r };
-    if (Math.abs(dx) > halfTitle + 10) {
-      // opposite sides: out of a's facing side, along the top of a's title, then down into b's top
-      return move(p0) + cubic({ x: p0.x + (p3.x - p0.x) * 0.75, y: p0.y }, { x: p3.x, y: p0.y + (p3.y - p0.y) * 0.25 }, p3);
-    }
-    // b is too close to clear a's title on the way: go round the title first, then down into b's top
-    const w = around(s);
-    const k = (p3.y - w.y) * 0.5;
-    return move(p0) + cubic({ x: w.x, y: p0.y }, { x: w.x, y: w.y - (w.y - p0.y) * 0.5 }, w) + cubic({ x: w.x, y: w.y + k }, { x: p3.x, y: p3.y - k }, p3);
-  }
-  // same side: swing round the outside of a's title and come back into b from the same side
-  const s = a.x < centre - 1 ? -1 : 1;
-  const p0 = { x: a.x + s * a.r, y: a.y };
-  const w = around(s);
-  const p3 = { x: b.x + s * b.r, y: b.y };
-  return move(p0) + cubic({ x: w.x, y: p0.y }, { x: w.x, y: w.y - (w.y - p0.y) * 0.5 }, w) + cubic({ x: w.x, y: w.y + (p3.y - w.y) * 0.5 }, { x: w.x, y: p3.y }, p3);
+function segment(points, i) {
+  const p0 = points[Math.max(0, i - 1)];
+  const p1 = points[i];
+  const p2 = points[i + 1];
+  const p3 = points[Math.min(points.length - 1, i + 2)];
+  const dy = (p2.y - p1.y) * 0.35;
+  const c1 = { x: p1.x + (p2.x - p0.x) / 6, y: p1.y + Math.max(dy, (p2.y - p0.y) / 6) };
+  const c2 = { x: p2.x - (p3.x - p1.x) / 6, y: p2.y - Math.max(dy, (p3.y - p1.y) / 6) };
+  return `C${r1(c1.x)} ${r1(c1.y)} ${r1(c2.x)} ${r1(c2.y)} ${r1(p2.x)} ${r1(p2.y)}`;
 }
 
-/** SVG path data for the road from stops[from] to stops[to] (inclusive). "" for fewer than two stops. */
-export function roadPath(stops, width, from = 0, to = stops.length - 1) {
+/**
+ * SVG path data through points[from..to] (inclusive). Returns "" for fewer than two points.
+ * points: [{ x, y }] in document order (y grows downwards).
+ */
+export function roadPath(points, from = 0, to = points.length - 1) {
   const lo = Math.max(0, from);
-  const hi = Math.min(stops.length - 1, to);
-  let d = "";
-  for (let i = lo; i < hi; i++) d += segment(stops[i], stops[i + 1], width);
+  const hi = Math.min(points.length - 1, to);
+  if (hi - lo < 1) return "";
+  let d = `M${r1(points[lo].x)} ${r1(points[lo].y)}`;
+  for (let i = lo; i < hi; i++) d += segment(points, i);
   return d;
+}
+
+/**
+ * Waypoints for the road. stops: [{ kind: "sign" | "node", x, y, label?: { top, bottom, half } }] in
+ * road order, in road coordinates; width: road width. Returns { points, at } where at[i] is the index
+ * of stop i in points (for splitting the road at a stop).
+ */
+export function roadPoints(stops, width) {
+  const points = [];
+  const at = [];
+  const centre = width / 2;
+  let lastDir = 1;
+  stops.forEach((st, i) => {
+    at.push(points.length);
+    points.push({ x: st.x, y: st.y });
+    const next = stops[i + 1];
+    if (st.kind !== "node" || !next || !st.label) return;
+    // which side of the title to pass: towards the next lesson (or the centre for a signpost)
+    const target = next.kind === "sign" ? centre : next.x;
+    const dx = target - st.x;
+    const dir = Math.abs(dx) > 4 ? Math.sign(dx) : st.x > centre + 4 ? -1 : st.x < centre - 4 ? 1 : lastDir;
+    lastDir = dir;
+    const x = Math.min(width - 8, Math.max(8, st.x + dir * (st.label.half + 14)));
+    points.push({ x, y: st.label.top + (st.label.bottom - st.label.top) * 0.6 });
+  });
+  return { points, at };
 }
 
 /**
@@ -92,7 +85,7 @@ export function travelledIndex(kinds) {
 }
 
 /** Split the road into the travelled (solid) and upcoming (dashed) parts at index. */
-export function splitRoad(stops, width, index) {
-  if (index <= 0) return { done: "", todo: roadPath(stops, width) };
-  return { done: roadPath(stops, width, 0, index), todo: roadPath(stops, width, index) };
+export function splitRoad(points, index) {
+  if (index <= 0) return { done: "", todo: roadPath(points) };
+  return { done: roadPath(points, 0, index), todo: roadPath(points, index) };
 }

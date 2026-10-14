@@ -8,7 +8,7 @@ import { langPicker, statChips, footer, wordmark, accountButton } from "./chrome
 import { popIn, drawStroke, reduced } from "./motion.js";
 import { localized, pathStatus } from "../engine/course.js";
 import { canOpenLesson } from "../engine/auth.js";
-import { splitRoad, travelledIndex, waveOffset } from "../engine/road.js";
+import { roadPoints, splitRoad, travelledIndex, waveOffset } from "../engine/road.js";
 
 const SVG = "http://www.w3.org/2000/svg";
 
@@ -130,10 +130,17 @@ function svgEl(tag, attrs) {
  */
 function mountRoad(road, { animate }) {
   const svg = svgEl("svg", { class: "road__svg", "aria-hidden": "true", focusable: "false" });
+  const maskId = `road-mask-${Math.random().toString(36).slice(2, 8)}`;
+  // the road passes behind the lesson titles: a mask cuts it out under each title
+  const mask = svgEl("mask", { id: maskId, maskUnits: "userSpaceOnUse" });
+  const defs = svgEl("defs", {});
+  defs.append(mask);
+  const group = svgEl("g", { mask: `url(#${maskId})` });
   const todo = svgEl("path", { class: "road__todo" });
   const doneEdge = svgEl("path", { class: "road__done-edge" });
   const done = svgEl("path", { class: "road__done" });
-  svg.append(todo, doneEdge, done);
+  group.append(todo, doneEdge, done);
+  svg.append(defs, group);
   road.prepend(svg);
 
   let first = true;
@@ -143,30 +150,34 @@ function mountRoad(road, { animate }) {
     const box = road.getBoundingClientRect();
     if (!box.width) return true;
     const stops = [...road.querySelectorAll("[data-road]")];
-    const rel = (r) => ({ left: r.left - box.left, right: r.right - box.left, top: r.top - box.top, bottom: r.bottom - box.top });
-    const points = stops.map((el) => {
-      const r = rel(el.getBoundingClientRect());
-      const x = (r.left + r.right) / 2;
-      if (el.dataset.road === "sign") return { kind: "sign", x, y: (r.top + r.bottom) / 2, top: r.top, bottom: r.bottom };
-      const label = el.closest(".node")?.querySelector(".node__label");
-      const l = label ? rel(label.getBoundingClientRect()) : null;
-      return {
-        kind: "node",
-        x,
-        y: (r.top + r.bottom) / 2,
-        r: (r.right - r.left) / 2,
-        labelHalf: l ? (l.right - l.left) / 2 : 0,
-        labelBottom: l ? l.bottom : r.bottom,
-      };
+    const stopsGeo = stops.map((el) => {
+      const r = el.getBoundingClientRect();
+      const geo = { kind: el.dataset.road === "sign" ? "sign" : "node", x: r.left + r.width / 2 - box.left, y: r.top + r.height / 2 - box.top };
+      const label = geo.kind === "node" ? el.closest(".node")?.querySelector(".node__label") : null;
+      if (label) {
+        const l = label.getBoundingClientRect();
+        geo.label = { top: l.top - box.top, bottom: l.bottom - box.top, half: l.width / 2 };
+      }
+      return geo;
+    });
+    const { points, at } = roadPoints(stopsGeo, box.width);
+    const holes = [...road.querySelectorAll(".node__label")].map((el) => {
+      const r = el.getBoundingClientRect();
+      return { x: r.left - box.left - 6, y: r.top - box.top - 4, w: r.width + 12, h: r.height + 8 };
     });
     const kinds = stops.map((el) => el.dataset.road);
-    const key = `${Math.round(box.width)}x${Math.round(box.height)}:${points.map((q) => `${Math.round(q.x)},${Math.round(q.y)},${Math.round(q.labelBottom ?? 0)}`).join(";")}`;
+    const key = `${Math.round(box.width)}x${Math.round(box.height)}:${points.map((q) => `${Math.round(q.x)},${Math.round(q.y)}`).join(";")}:${holes.map((q) => Math.round(q.h)).join(",")}`;
     if (key === lastKey) return true;
     lastKey = key;
     svg.setAttribute("viewBox", `0 0 ${box.width} ${box.height}`);
     svg.setAttribute("width", String(box.width));
     svg.setAttribute("height", String(box.height));
-    const parts = splitRoad(points, box.width, travelledIndex(kinds));
+    mask.replaceChildren(
+      svgEl("rect", { x: -50, y: -50, width: box.width + 100, height: box.height + 100, fill: "#fff" }),
+      ...holes.map((q) => svgEl("rect", { x: q.x, y: q.y, width: q.w, height: q.h, rx: 12, fill: "#000" })),
+    );
+    const ti = travelledIndex(kinds);
+    const parts = splitRoad(points, ti < 0 ? -1 : at[ti]);
     todo.setAttribute("d", parts.todo);
     done.setAttribute("d", parts.done);
     doneEdge.setAttribute("d", parts.done);

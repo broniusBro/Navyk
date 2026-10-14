@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { validateCredentials, interpretAuth, normalizeUser, canOpenLesson, parseTokenRoute, retryMinutes, isEmail } from "../js/engine/auth.js";
 import { mergeProgress, sameProgress, lessonsXp, retryDelay } from "../js/engine/sync.js";
 import { emptyProgress, normalizeProgress } from "../js/engine/progress.js";
-import { roadPath, segment, splitRoad, travelledIndex, waveOffset } from "../js/engine/road.js";
+import { roadPath, roadPoints, splitRoad, travelledIndex, waveOffset } from "../js/engine/road.js";
 
 test("validateCredentials", () => {
   assert.deepEqual(validateCredentials({ email: "a@b.co", password: "12345678" }), {});
@@ -87,35 +87,29 @@ test("mergeProgress is commutative, idempotent and tolerant", () => {
 });
 
 test("road geometry", () => {
+  const pts = [{ x: 50, y: 10 }, { x: 150, y: 90 }, { x: 60, y: 170 }];
+  assert.equal(roadPath(pts.slice(0, 1)), "");
+  const d = roadPath(pts);
+  assert.equal(d, "M50 10C66.7 38 148.3 62 150 90C151.7 118 75 142 60 170");
+  // split halves lie on the same curve
+  assert.equal(roadPath(pts, 0, 1) + roadPath(pts, 1, 2).replace(/^M[\d.]+ [\d.]+/, ""), d);
+  assert.deepEqual(splitRoad(pts, -1), { done: "", todo: d });
+  // a gentle wave: each step moves at most ~0.71 of the amplitude sideways
+  const wave = [0, 1, 2, 3, 4, 5, 6, 7].map((i) => waveOffset(i, 0));
+  assert.deepEqual(wave, [0, 0.707, 1, 0.707, 0, -0.707, -1, -0.707]);
+  assert.equal(waveOffset(1, 1), -0.707);
+  // waypoints: beside each title, on the side the road goes next; a signpost is approached via the centre side
   const W = 360;
-  const sign = { kind: "sign", x: 180, y: 40, top: 0, bottom: 80 };
-  const c = { kind: "node", x: 180, y: 140, r: 30, labelHalf: 60, labelBottom: 210 };
-  const L = { kind: "node", x: 96, y: 260, r: 30, labelHalf: 70, labelBottom: 330 };
-  const R1 = { kind: "node", x: 264, y: 380, r: 30, labelHalf: 50, labelBottom: 450 };
-  const R2 = { kind: "node", x: 264, y: 520, r: 30, labelHalf: 50, labelBottom: 590 };
-  const stops = [sign, c, L, R1, R2];
-  assert.equal(roadPath(stops.slice(0, 1), W), "");
-  // signpost bottom centre -> top of the first circle
-  assert.equal(segment(sign, c, W), "M180 80C180 95 180 95 180 110");
-  // other side, far enough: leaves L's right edge, runs above its title, drops into R1's top
-  assert.equal(segment(L, R1, W), "M126 260C229.5 260 264 282.5 264 350");
-  // from the centre lesson to the left one (84px apart, title half 60): same rule
-  assert.match(segment(c, L, W), /^M150 140C[\d.]+ 140 96 [\d.]+ 96 230$/);
-  // too close to clear the title: goes round it first (x = 180 - 100 - 16 = 64)
-  const wideC = { ...c, labelHalf: 100 };
-  assert.match(segment(wideC, L, W), /^M150 140C64 140 64 [\d.]+ 64 204C/);
-  // same side: swings round the outside of R1's title (x = 264 + 50 + 16 = 330) and comes back into R2's right edge
-  const same = segment(R1, R2, W);
-  assert.match(same, /^M294 380C330 380 330 [\d.]+ 330 444C330 [\d.]+ 330 520 294 520$/);
-  // detours stay inside the road
-  const wide = { ...R1, labelHalf: 200 };
-  assert.ok(segment(wide, R2, W).includes("354 "));
-  // the two halves of a split are exactly the whole road
-  assert.equal(roadPath(stops, W, 0, 2) + roadPath(stops, W, 2), roadPath(stops, W));
-  assert.deepEqual(splitRoad(stops, W, -1), { done: "", todo: roadPath(stops, W) });
-  assert.equal(waveOffset(0, 0), 0);
-  assert.deepEqual([1, 2, 3, 4, 5].map((i) => waveOffset(i, 0)), [-1, 1, 1, -1, -1]);
-  assert.deepEqual([1, 2].map((i) => waveOffset(i, 1)), [1, -1]);
+  const stops = [
+    { kind: "sign", x: 180, y: 40 },
+    { kind: "node", x: 180, y: 140, label: { top: 180, bottom: 230, half: 60 } },
+    { kind: "node", x: 240, y: 300, label: { top: 340, bottom: 390, half: 70 } },
+    { kind: "sign", x: 180, y: 480 },
+  ];
+  const { points, at } = roadPoints(stops, W);
+  assert.deepEqual(at, [0, 1, 3, 5]);
+  assert.deepEqual(points[2], { x: 254, y: 210 }, "right of the first title, towards the next lesson");
+  assert.deepEqual(points[4], { x: 156, y: 370 }, "left of the second title, towards the centred signpost");
   assert.equal(travelledIndex(["sign", "done", "done", "current", "open"]), 3);
   assert.equal(travelledIndex(["sign", "done", "soon"]), 1);
   assert.equal(travelledIndex(["sign", "open"]), -1);

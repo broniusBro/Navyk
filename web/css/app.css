@@ -324,8 +324,8 @@ strong, b { font-weight: 800; }
 /* the road: one SVG line behind every node and signpost (geometry in engine/road.js) */
 .road {
   position: relative; padding-bottom: var(--s-xl);
-  /* lessons stand left / right of the centre line by --amp, leaving room for the road to pass beside titles */
-  container-type: inline-size; --amp: clamp(0px, (100cqw - 190px) / 2, 120px);
+  /* lessons follow a gentle wave up to --amp either side of the centre line (engine/road.js) */
+  container-type: inline-size; --amp: clamp(0px, (100cqw - 170px) / 2, 110px);
 }
 .road__svg { position: absolute; left: 0; top: 0; z-index: 0; overflow: visible; pointer-events: none; }
 .road__svg path { fill: none; stroke-linecap: round; stroke-linejoin: round; }
@@ -363,8 +363,8 @@ strong, b { font-weight: 800; }
 .save-banner__text { flex: 1; font-size: var(--fs-small); font-weight: 700; line-height: 1.35; }
 .save-banner__btn { flex: none; }
 
-/* the path: lessons left / right of the centre (--wave from engine/road.js), title centred under each circle */
-.nodes { list-style: none; margin: 0; padding: 0 0 var(--s-s); display: flex; flex-direction: column; gap: 26px; }
+/* the path: lessons on a smooth wave (--wave), title centred under each circle; the road runs behind titles */
+.nodes { list-style: none; margin: 0; padding: 0 0 var(--s-s); display: flex; flex-direction: column; gap: 34px; }
 .nodes__item { display: flex; justify-content: center; }
 
 .node {
@@ -382,7 +382,7 @@ button.node { cursor: pointer; }
 }
 .node__icon { width: 26px; height: 26px; }
 .node__dot { position: relative; }
-/* the title floats free under the circle (no plate): the road goes round it, see engine/road.js */
+/* the title floats free under the circle (no plate); the road is masked out behind it (ui/path.js) */
 .node__label { display: flex; flex-direction: column; align-items: center; width: fit-content; min-width: 0; max-width: 100%; }
 .node__title { font-size: 0.9375rem; font-weight: 800; line-height: 1.25; }
 .node__meta { display: inline-flex; align-items: center; gap: 4px; margin-top: 2px; font-size: var(--fs-caption); font-weight: 700; color: var(--ink-muted); }
