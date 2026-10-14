@@ -227,3 +227,11 @@ test("email: provider error reason is logged without addresses", async () => {
   assert.ok(!r.message?.includes("a.b@site.co") && r.message?.includes("<email>"));
   assert.deepEqual(await providerReason(new Response("", { status: 500 })), {});
 });
+
+test("email: sender from EMAIL_FROM always has an address", async () => {
+  const { parseFrom, senderHeader } = await import("../src/email/send.ts");
+  assert.deepEqual(parseFrom("Navyk"), { name: "Navyk", email: "no-reply@navyk.app" });
+  assert.deepEqual(parseFrom("hi@navyk.app"), { name: "Navyk", email: "hi@navyk.app" });
+  assert.deepEqual(parseFrom('"Navyk Team" <team@navyk.app>'), { name: "Navyk Team", email: "team@navyk.app" });
+  assert.equal(senderHeader("Navyk"), "Navyk <no-reply@navyk.app>");
+});

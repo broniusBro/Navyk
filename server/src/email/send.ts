@@ -20,7 +20,16 @@ const DEFAULT_FROM = "Navyk <no-reply@navyk.app>";
 export function parseFrom(from: string): { name: string; email: string } {
   const m = from.match(/^\s*(.*?)\s*<([^>]+)>\s*$/);
   if (m) return { name: m[1].replace(/^"|"$/g, ""), email: m[2].trim() };
-  return { name: "Navyk", email: from.trim() };
+  const v = from.trim();
+  // Only an address, or only a name (EMAIL_FROM=Navyk): fill the missing part from the default sender.
+  if (v.includes("@")) return { name: "Navyk", email: v };
+  return { name: v || "Navyk", email: "no-reply@navyk.app" };
+}
+
+/** EMAIL_FROM as a full "Name <address>" (a bare name gets the default address). */
+export function senderHeader(from: string): string {
+  const { name, email } = parseFrom(from);
+  return `${name} <${email}>`;
 }
 
 function provider(): Provider {
@@ -104,7 +113,7 @@ export async function sendTest(to: string, lang: EmailLang = "ru") {
   lastError = null;
   const rendered = renderEmail("confirm", lang, "https://navyk.app/#/email-test");
   const status = await deliver({ ...rendered, to, kind: "confirm", link: "https://navyk.app/#/email-test" });
-  return { provider: provider(), from: process.env.EMAIL_FROM || DEFAULT_FROM, status, error: lastError };
+  return { provider: provider(), from: senderHeader(process.env.EMAIL_FROM || DEFAULT_FROM), status, error: lastError };
 }
 
 async function deliver(m: OutgoingEmail): Promise<"sent" | "logged" | "failed"> {
@@ -121,7 +130,7 @@ async function deliver(m: OutgoingEmail): Promise<"sent" | "logged" | "failed"> 
     lastError = { code: "no_api_key" };
     return "failed";
   }
-  const { url, init } = buildProviderRequest(p, m, apiKey, process.env.EMAIL_FROM || DEFAULT_FROM);
+  const { url, init } = buildProviderRequest(p, m, apiKey, senderHeader(process.env.EMAIL_FROM || DEFAULT_FROM));
   try {
     const res = await fetchImpl(url, { ...init, signal: AbortSignal.timeout(10_000) });
     if (res.ok) {

@@ -22,6 +22,8 @@ if [ "$provider" != log ]; then
 fi
 from=""
 read -r -p "Sender, Enter for the default \"Navyk <no-reply@navyk.app>\": " from
+# Only a name was typed (e.g. "Navyk"): add the default address, a sender needs one.
+if [ -n "$from" ] && [[ "$from" != *@* ]]; then from="$from <no-reply@navyk.app>"; fi
 install -d -m 700 /etc/navyk
 touch "$ENV_FILE"; chmod 600 "$ENV_FILE"
 grep -vE '^(EMAIL_PROVIDER|EMAIL_API_KEY|EMAIL_FROM)=' "$ENV_FILE" > "$ENV_FILE.new" || true
