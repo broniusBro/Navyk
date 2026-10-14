@@ -324,8 +324,8 @@ strong, b { font-weight: 800; }
 /* the road: one SVG line behind every node and signpost (geometry in engine/road.js) */
 .road {
   position: relative; padding-bottom: var(--s-xl);
-  /* lessons follow a gentle wave up to --amp either side of the centre line (engine/road.js) */
-  container-type: inline-size; --amp: clamp(0px, (100cqw - 170px) / 2, 110px);
+  /* lessons follow a winding trail up to --amp either side of the centre line (engine/road.js) */
+  container-type: inline-size; --amp: clamp(0px, (100cqw - 150px) / 2, 130px);
 }
 .road__svg { position: absolute; left: 0; top: 0; z-index: 0; overflow: visible; pointer-events: none; }
 .road__svg path { fill: none; stroke-linecap: round; stroke-linejoin: round; }
@@ -363,8 +363,8 @@ strong, b { font-weight: 800; }
 .save-banner__text { flex: 1; font-size: var(--fs-small); font-weight: 700; line-height: 1.35; }
 .save-banner__btn { flex: none; }
 
-/* the path: lessons on a smooth wave (--wave), title centred under each circle; the road runs behind titles */
-.nodes { list-style: none; margin: 0; padding: 0 0 var(--s-s); display: flex; flex-direction: column; gap: 34px; }
+/* the path: lessons along a winding trail (--wave), title centred under each circle */
+.nodes { list-style: none; margin: 0; padding: 0 0 var(--s-s); display: flex; flex-direction: column; gap: 52px; }
 .nodes__item { display: flex; justify-content: center; }
 
 .node {
@@ -382,8 +382,10 @@ button.node { cursor: pointer; }
 }
 .node__icon { width: 26px; height: 26px; }
 .node__dot { position: relative; }
-/* the title floats free under the circle (no plate); the road is masked out behind it (ui/path.js) */
+/* the title floats free under the circle (no plate) */
 .node__label { display: flex; flex-direction: column; align-items: center; width: fit-content; min-width: 0; max-width: 100%; }
+/* where the road crosses a title, a soft paper-coloured halo round the letters keeps it readable */
+.node__title, .node__meta { text-shadow: 0 0 2px var(--paper), 0 0 4px var(--paper), 0 0 6px var(--paper), 0 0 8px var(--paper); }
 .node__title { font-size: 0.9375rem; font-weight: 800; line-height: 1.25; }
 .node__meta { display: inline-flex; align-items: center; gap: 4px; margin-top: 2px; font-size: var(--fs-caption); font-weight: 700; color: var(--ink-muted); }
 .node__meta .icon { width: 14px; height: 14px; }
