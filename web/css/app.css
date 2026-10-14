@@ -329,7 +329,7 @@ strong, b { font-weight: 800; }
 }
 .road__svg { position: absolute; left: 0; top: 0; z-index: 0; overflow: visible; pointer-events: none; }
 .road__svg path { fill: none; stroke-linecap: round; stroke-linejoin: round; }
-.road__todo { stroke: var(--border-soft); stroke-width: 3; stroke-dasharray: 8 9; }
+.road__todo { stroke: color-mix(in srgb, var(--border-soft) 60%, var(--paper)); stroke-width: 3; stroke-dasharray: 8 9; }
 .road__done-edge { stroke: var(--border); stroke-width: 14; }
 .road__done { stroke: var(--success-strong); stroke-width: 9; }
 .road .level, .road .module, .road .nodes { position: relative; z-index: 1; }
