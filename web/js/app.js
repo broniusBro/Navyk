@@ -12,6 +12,8 @@ import { getProgress, saveProgress, shuffleSeed } from "./ui/store.js";
 import { fetchCourse, fetchLesson, probeAvailable } from "./platform/api.js";
 import { deviceId, now, onConnectivityChange } from "./platform/device.js";
 import { registerServiceWorker } from "./platform/sw.js";
+import { loadAnalytics, trackPage } from "./platform/analytics.js";
+import { showConsent } from "./ui/consent.js";
 import { dayKey } from "./engine/dates.js";
 import { flattenCourse, sourcesBlock, normalizeExercise, localized, findLevel, levelOfLesson, LANGS } from "./engine/course.js";
 import { completeLesson, streak, activeToday, dueItems, nextDue, applyReviews, pickReviewExercise } from "./engine/progress.js";
@@ -232,6 +234,7 @@ function route() {
   const token = ++screenToken;
   closeSheet();
   const hash = location.hash || "#/";
+  trackPage(hash, document.title);
   const lessonMatch = /^#\/lesson\/([\w.-]+)$/.exec(hash);
   if (lessonMatch) return showLesson(decodeURIComponent(lessonMatch[1]), token);
   if (hash === "#/review") return showReview(token);
@@ -308,6 +311,8 @@ async function main() {
   loadCourse();
   initAccount();
   registerServiceWorker();
+  loadAnalytics();
+  showConsent();
 }
 
 main();

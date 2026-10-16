@@ -1062,3 +1062,20 @@ button.daycard:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--bo
   .option[aria-pressed="true"], .seg[aria-pressed="true"], .pair--active { outline: 3px solid Highlight; }
   .hl, .md em { background: none; text-decoration: underline; }
 }
+
+/* analytics consent card (ui/consent.js) */
+.ga-consent {
+  position: fixed; z-index: 60; left: 50%; bottom: max(12px, env(safe-area-inset-bottom));
+  transform: translateX(-50%); width: min(calc(100% - 24px), 520px);
+  padding: 14px 16px 12px; background: var(--surface); border: var(--bw) solid var(--border);
+  border-radius: var(--r-card); box-shadow: var(--press-card);
+}
+.ga-consent__title { font-weight: 900; margin: 0 0 4px; }
+.ga-consent__text { font-size: var(--fs-small); color: var(--ink-muted); line-height: 1.4; margin: 0 0 10px; padding: 0; background: none; border: 0; border-radius: 0; }
+.ga-consent__actions { display: flex; gap: var(--s-s); justify-content: flex-end; flex-wrap: wrap; }
+.ga-consent__btn { min-height: var(--touch); padding: 0.5rem 1rem; font-size: var(--fs-small); }
+.footer-link { background: none; border: 0; padding: 0; font: inherit; color: inherit; text-decoration: underline; cursor: pointer; }
+@media (prefers-reduced-motion: no-preference) {
+  .ga-consent { animation: ga-consent-in 0.25s ease-out both; }
+  @keyframes ga-consent-in { from { opacity: 0; transform: translate(-50%, 12px); } to { opacity: 1; transform: translate(-50%, 0); } }
+}

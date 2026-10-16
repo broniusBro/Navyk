@@ -105,3 +105,13 @@ test("road geometry", () => {
   assert.equal(travelledIndex(["sign", "done", "soon", "sign", "current"]), 1, "a locked lesson breaks the travelled part");
   assert.equal(travelledIndex(["sign", "done", "sign", "done", "current", "open"]), 4);
 });
+
+test("analytics: screen paths never carry one-time tokens", async () => {
+  const { analyticsPath } = await import("../js/platform/analytics.js");
+  assert.equal(analyticsPath("#/"), "/");
+  assert.equal(analyticsPath(""), "/");
+  assert.equal(analyticsPath("#/lesson/b1.1"), "/lesson/b1.1");
+  assert.equal(analyticsPath("#/level/advanced"), "/level/advanced");
+  assert.equal(analyticsPath("#/confirm/Qx7_aZ93kLmN0pQrStUvWxYz12345"), "/confirm/:token");
+  assert.equal(analyticsPath("#/reset/abc_DEF-123456789012345678901234"), "/reset/:token");
+});

@@ -40,7 +40,8 @@
     "independent": "Navyk to niezależny kurs, niezwiązany z Anthropic",
     "about": "O projekcie",
     "about_text": "Navyk to nieoficjalna aplikacja edukacyjna o Claude. Uczymy korzystać z Claude i Claude Code w praktyce. Anthropic nie uczestniczy w projekcie i nie sprawdza jego materiałów.",
-    "trademark": "Claude i Anthropic są znakami towarowymi Anthropic, PBC. Navyk nie używa ich logotypów ani identyfikacji wizualnej."
+    "trademark": "Claude i Anthropic są znakami towarowymi Anthropic, PBC. Navyk nie używa ich logotypów ani identyfikacji wizualnej.",
+    "analytics": "Ustawienia analityki"
   },
   "path": {
     "title": "Twoja ścieżka",
@@ -425,5 +426,11 @@
       "network": "Brak połączenia z serwerem. Sprawdź internet i spróbuj ponownie.",
       "generic": "Coś poszło nie tak. Spróbuj ponownie za chwilę."
     }
+  },
+  "consent": {
+    "title": "Czy możemy liczyć wizyty?",
+    "text": "Używamy Google Analytics, żeby wiedzieć, które lekcje są przydatne. Bez reklam i bez twoich odpowiedzi. Decyzję zmienisz na dole strony.",
+    "accept": "Zezwól",
+    "decline": "Nie, dziękuję"
   }
 }

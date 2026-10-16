@@ -3,6 +3,7 @@
 import { h, icon } from "./dom.js";
 import { t, getLang, setLang, formatNumber } from "./i18n.js";
 import { LANGS } from "../engine/course.js";
+import { showConsent } from "./consent.js";
 
 /**
  * Language picker in the app's notebook style: a chip with the short code opens a small card with
@@ -107,5 +108,6 @@ export function footer() {
     "footer.site-footer",
     h("p", t("footer.independent")),
     h("details.about", h("summary", t("footer.about")), h("p", t("footer.about_text")), h("p", t("footer.trademark"))),
+    h("p", h("button.footer-link", { type: "button", onclick: () => showConsent({ force: true }) }, t("footer.analytics"))),
   );
 }

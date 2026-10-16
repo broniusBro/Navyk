@@ -8,7 +8,7 @@ export const SECURITY_HEADERS = {
   // HTTPS only from now on (Caddy already redirects http → https); ignored by browsers on plain http.
   "strict-transport-security": "max-age=31536000",
   "content-security-policy":
-    "default-src 'self'; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'",
+    "default-src 'self'; script-src 'self' https://www.googletagmanager.com; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://*.google-analytics.com https://*.googletagmanager.com; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com",
 };
 
 export function send(

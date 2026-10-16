@@ -36,7 +36,8 @@
     "independent": "Navyk is an independent course, not affiliated with Anthropic",
     "about": "About",
     "about_text": "Navyk is an unofficial learning app about Claude. It teaches you to use Claude and Claude Code through practice. Anthropic is not involved in the project and does not review its materials.",
-    "trademark": "Claude and Anthropic are trademarks of Anthropic, PBC. Navyk does not use their logos or brand identity."
+    "trademark": "Claude and Anthropic are trademarks of Anthropic, PBC. Navyk does not use their logos or brand identity.",
+    "analytics": "Analytics settings"
   },
   "path": {
     "title": "Your path",
@@ -397,5 +398,11 @@
       "network": "Can't reach the server. Check your connection and try again.",
       "generic": "Something went wrong. Please try again a bit later."
     }
+  },
+  "consent": {
+    "title": "Can we count visits?",
+    "text": "We use Google Analytics to see which lessons help. No ads and none of your answers. You can change this at the bottom of the page.",
+    "accept": "Allow",
+    "decline": "No, thanks"
   }
 }
