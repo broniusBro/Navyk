@@ -143,6 +143,7 @@
     "grant": "выдал доступ {email}: {to}",
     "role_change": "изменил роль {email}: {from} → {to}",
     "revoke": "снял доступ у {email} ({from})",
-    "empty": "Записей пока нет."
+    "empty": "Записей пока нет.",
+    "password_set": "задал вход с сервера для {email}"
   }
 }

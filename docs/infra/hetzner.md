@@ -107,6 +107,12 @@ bash deploy/deploy-from-mac.sh
 (`admin_audit`). Время в приложении считается по визитам: приложение раз в 2 минуты шлёт `/api/auth/ping`,
 пока вкладка открыта; пауза больше 30 минут начинает новый визит.
 
+Задать вход принудительно (создать аккаунт или сменить пароль существующему, подтвердить почту, выдать роль;
+пароль вводится скрыто, все прежние сессии аккаунта закрываются):
+```
+ssh -t root@65.108.234.212 /srv/navyk/deploy/set-admin-login.sh
+```
+
 Резервный способ выдать роль из консоли сервера:
 ```
 ssh root@65.108.234.212 'cd /srv/navyk && docker compose exec -T app node --disable-warning=ExperimentalWarning server/src/admin/grant.ts you@example.com owner'

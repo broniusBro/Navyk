@@ -207,3 +207,23 @@ test("progress summary: streak, current level, unknown lessons ignored", () => {
   assert.equal(s.currentLevel, "beginner");
   assert.equal(summarizeProgress(null, "2026-10-16").currentLevel, null);
 });
+
+test("set-admin-login: creates a confirmed owner, or resets the password of an existing account", async () => {
+  const { setAdminLogin } = await import("../src/admin/login.ts");
+  assert.deepEqual(await setAdminLogin(db, "boss@navyk.app", "short", "owner", clock), { ok: false, error: "weak_password" });
+  assert.deepEqual(await setAdminLogin(db, "not-an-email", PW, "owner", clock), { ok: false, error: "bad_email" });
+
+  assert.deepEqual(await setAdminLogin(db, " Boss@Navyk.app ", "forced admin pass 1", "owner", clock), { ok: true, created: true });
+  let r = await call("admin", "POST", "/api/auth/login", { email: "boss@navyk.app", password: "forced admin pass 1" });
+  assert.equal(r.status, 200);
+  const me = await call("admin", "GET", "/api/admin/me", undefined, r.cookie);
+  assert.equal(me.body.role, "owner");
+
+  // existing (unconfirmed) account: password replaced, email confirmed, old sessions dropped
+  await user("late@example.com", undefined, false);
+  assert.deepEqual(await setAdminLogin(db, "late@example.com", "forced admin pass 2", "viewer", clock), { ok: true, created: false });
+  assert.equal((await call("admin", "POST", "/api/auth/login", { email: "late@example.com", password: PW })).status, 401);
+  r = await call("admin", "POST", "/api/auth/login", { email: "late@example.com", password: "forced admin pass 2" });
+  assert.equal(r.status, 200);
+  assert.equal((await call("admin", "GET", "/api/admin/me", undefined, r.cookie)).body.role, "viewer");
+});
