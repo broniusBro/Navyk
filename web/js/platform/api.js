@@ -84,6 +84,7 @@ export const authConfirm = ({ token }) => postJson("/api/auth/confirm", { token 
 export const authLogin = ({ email, password }) => postJson("/api/auth/login", { email, password });
 export const authForgot = ({ email, lang }) => postJson("/api/auth/forgot", { email, lang });
 export const authReset = ({ token, password }) => postJson("/api/auth/reset", { token, password });
+export const authPing = () => postJson("/api/auth/ping", {});
 export const authLogout = () => postJson("/api/auth/logout", {});
 export const authUpdate = (patch) => request("/api/auth/me", { method: "PATCH", json: patch });
 

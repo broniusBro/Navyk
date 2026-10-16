@@ -12,6 +12,7 @@ ENV NODE_ENV=production PORT=8080 HOST=0.0.0.0 TRUST_PROXY=1 DATA_DIR=/data
 WORKDIR /app
 COPY server ./server
 COPY web ./web
+COPY web-admin ./web-admin
 COPY --from=content /build/content ./content
 # SQLite accounts database (named volume navyk-data); the volume inherits this ownership on first mount
 RUN mkdir -p /data/backups && chown -R node:node /data && chmod 700 /data

@@ -3,11 +3,12 @@
 //   - GET /api/auth/me on start; network error -> keep the last known user (offline), 401 -> signed out.
 //   - Sync = GET /api/progress, merge (engine/sync.js), save locally, PUT if the server copy differs.
 //   - Failures are queued: "dirty" flag in storage, retries with backoff and on reconnect.
+//   - Heartbeat: while signed in and on screen, POST /api/auth/ping every 2 min (time-in-app stats).
 //   - Anonymous progress is merged into the account at first sign-in; signing out clears this device.
 
 import * as api from "../platform/api.js";
 import { getItem, setItem, removeItem } from "../platform/storage.js";
-import { onConnectivityChange } from "../platform/device.js";
+import { onConnectivityChange, isForeground, onForegroundChange, isOnline } from "../platform/device.js";
 import { normalizeUser } from "../engine/auth.js";
 import { mergeProgress, sameProgress, retryDelay } from "../engine/sync.js";
 import { emptyProgress } from "../engine/progress.js";
@@ -20,6 +21,8 @@ let syncing = null;
 let again = false;
 let retries = 0;
 let retryTimer = null;
+let pingTimer = null;
+const PING_MS = 2 * 60 * 1000;
 
 export const currentUser = () => user;
 export const isSignedIn = () => Boolean(user);
@@ -37,6 +40,7 @@ const emit = (reason) => {
 function setUser(next) {
   const was = user?.id ?? null;
   user = next;
+  heartbeat();
   if (user) setItem("user", user);
   else removeItem("user");
   if ((user?.id ?? null) !== was) emit("user");
@@ -47,8 +51,13 @@ export async function initAccount() {
   onConnectivityChange((online) => {
     if (online && user && getItem("sync:dirty")) syncNow();
   });
+  onForegroundChange((fg) => {
+    if (fg && user && isOnline()) ping();
+    heartbeat();
+  });
   const res = await api.authMe();
   checked = true;
+  heartbeat();
   if (res.status === 200) {
     const u = normalizeUser(res.body?.user ?? res.body);
     setUser(u);
@@ -97,6 +106,18 @@ export function updateLanguage(lang) {
   user = { ...user, lang };
   setItem("user", user);
   api.authUpdate({ lang }).then((res) => {
+    if (res.status === 401) sessionLost();
+  });
+}
+
+/** Keeps the server's visit open while the learner is actually here; stops in the background. */
+function heartbeat() {
+  clearInterval(pingTimer);
+  pingTimer = null;
+  if (user && checked && isForeground()) pingTimer = setInterval(() => isOnline() && ping(), PING_MS);
+}
+function ping() {
+  api.authPing().then((res) => {
     if (res.status === 401) sessionLost();
   });
 }

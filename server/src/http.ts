@@ -11,10 +11,28 @@ import { DailyLimiter } from "./limits.ts";
 import { send, readJsonBody, clientIp, log, isSameSite } from "./httputil.ts";
 import { openDb, dbHealthy, cleanup, type Db } from "./db.ts";
 import { createAuth } from "./auth/routes.ts";
+import { createAdmin } from "./admin/routes.ts";
+import { touchVisit } from "./activity.ts";
 
 const ROOT = fileURLToPath(new URL("../../", import.meta.url));
 const WEB = join(ROOT, "web");
 const DIST = join(ROOT, "content", "dist");
+const WEB_ADMIN = join(ROOT, "web-admin");
+/** Хост админки (ADMIN_ORIGIN, например https://admin.navyk.app); без него админка выключена. */
+export function adminHost(): string | null {
+  try {
+    return process.env.ADMIN_ORIGIN ? new URL(process.env.ADMIN_ORIGIN).host : null;
+  } catch {
+    return null;
+  }
+}
+// На хосте админки доступны только её API, вход/выход и health.
+const ADMIN_HOST_API = new Set(["/api/health", "/api/auth/login", "/api/auth/logout", "/api/auth/me"]);
+const ADMIN_HEADERS = {
+  "x-robots-tag": "noindex, nofollow",
+  "content-security-policy":
+    "default-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'none'; object-src 'none'",
+};
 const LANGS = new Set(["ru", "uk", "en", "pl"]);
 const ID_RE = /^[a-z]\d+\.\d+$/;
 const EX_RE = /^[a-z]\d+\.\d+\.e\d+$/;
@@ -32,7 +50,7 @@ const MIME: Record<string, string> = {
   ".ico": "image/x-icon",
 };
 
-async function serveFile(req: IncomingMessage, res: ServerResponse, base: string, rel: string, cache: string) {
+async function serveFile(req: IncomingMessage, res: ServerResponse, base: string, rel: string, cache: string, extra: Record<string, string> = {}) {
   const path = normalize(join(base, rel));
   if (!path.startsWith(base)) return send(res, 403, { error: "forbidden" });
   try {
@@ -40,7 +58,7 @@ async function serveFile(req: IncomingMessage, res: ServerResponse, base: string
     if (!s.isFile()) throw new Error("not a file");
     // ETag from size+mtime: with "no-cache" the browser revalidates every time and gets a cheap 304.
     const etag = `W/"${s.size.toString(36)}-${Math.floor(s.mtimeMs).toString(36)}"`;
-    const headers = { "content-type": MIME[extname(path)] ?? "application/octet-stream", "cache-control": cache, etag };
+    const headers = { "content-type": MIME[extname(path)] ?? "application/octet-stream", "cache-control": cache, etag, ...extra };
     if (req.headers["if-none-match"] === etag) {
       res.writeHead(304, headers);
       return res.end();
@@ -57,6 +75,7 @@ interface ReviewDeps {
   ipLimiter: DailyLimiter;
   userIdFor: (req: IncomingMessage) => string | null;
   reviewOptions?: ReviewOptions;
+  track: (userId: string) => void;
 }
 
 async function handleReview(req: IncomingMessage, res: ServerResponse, deps: ReviewDeps) {
@@ -73,6 +92,7 @@ async function handleReview(req: IncomingMessage, res: ServerResponse, deps: Rev
   }
   // Вошедший ученик: лимит на аккаунт (не обходится сменой устройства); анонимный — на устройство.
   const userId = deps.userIdFor(req);
+  if (userId) deps.track(userId);
   const device = userId
     ? `user:${userId}`
     : typeof deviceId === "string" && /^[\w-]{8,64}$/.test(deviceId)
@@ -163,7 +183,9 @@ export function createApp(opts: AppOptions = {}) {
     ipLimiter: new DailyLimiter(opts.ipReviewsPerDay ?? Number(process.env.IP_REVIEWS_PER_DAY ?? 50)),
     userIdFor: auth.userIdFor,
     reviewOptions: opts.reviewOptions,
+    track: (userId: string) => touchVisit(db, userId, (opts.now ?? Date.now)()),
   };
+  const admin = createAdmin({ db, now: opts.now });
   if (db) {
     const sweep = () => {
       try {
@@ -184,9 +206,20 @@ export function createApp(opts: AppOptions = {}) {
       if (p.startsWith("/api/") && !SAFE_METHODS.has(req.method ?? "GET") && !isSameSite(req.headers.origin, req.headers.host)) {
         return send(res, 403, { error: "forbidden_origin" });
       }
+      const onAdminHost = !!adminHost() && req.headers.host === adminHost();
+      if (onAdminHost) {
+        if (await admin.handle(req, res, p)) return;
+        if (p.startsWith("/api/") && !ADMIN_HOST_API.has(p)) return send(res, 404, { error: "not_found" });
+        if (!p.startsWith("/api/")) {
+          if (req.method !== "GET" && req.method !== "HEAD") return send(res, 405, { error: "method_not_allowed" });
+          const rel = p === "/" ? "index.html" : p.slice(1);
+          const exists = await stat(normalize(join(WEB_ADMIN, rel))).then((s) => s.isFile()).catch(() => false);
+          return serveFile(req, res, WEB_ADMIN, exists ? rel : "index.html", "no-cache", ADMIN_HEADERS);
+        }
+      } else if (p.startsWith("/api/admin/")) return send(res, 404, { error: "not_found" });
       if (req.method === "GET" && p === "/api/health")
         return send(res, 200, { ok: true, reviewer: Boolean(process.env.ANTHROPIC_API_KEY), db: dbHealthy(db) });
-      if (await auth.handle(req, res, p)) return;
+      if (await auth.handle(req, res, p, { track: !onAdminHost })) return;
       if (req.method === "GET" && p === "/api/course") return send(res, 200, await courseWithAvailability(), { "cache-control": "no-cache" });
       const m = p.match(/^\/api\/lessons\/([a-z]{2})\/([a-z]\d+\.\d+)$/);
       if (req.method === "GET" && m) {

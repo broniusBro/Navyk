@@ -47,3 +47,11 @@ export function prefersReducedMotion() {
     return false;
   }
 }
+
+/** Is the app on screen? Expo: AppState.currentState === "active". */
+export const isForeground = () => globalThis.document?.visibilityState !== "hidden";
+
+/** cb(foreground) when the app goes to/from the background. Expo: AppState.addEventListener("change"). */
+export function onForegroundChange(cb) {
+  globalThis.document?.addEventListener?.("visibilitychange", () => cb(isForeground()));
+}

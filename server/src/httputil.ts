@@ -89,6 +89,15 @@ export function publicOrigin(): string {
 export function isSameSite(origin: string | undefined, host: string | undefined): boolean {
   if (!origin) return false;
   const configured = process.env.PUBLIC_ORIGIN?.replace(/\/+$/, "");
+  const admin = process.env.ADMIN_ORIGIN?.replace(/\/+$/, "");
+  // Админка на своём хосте: её запросы приходят с её Origin и на её Host.
+  if (admin && origin === admin) {
+    try {
+      return new URL(admin).host === host;
+    } catch {
+      return false;
+    }
+  }
   if (configured) return origin === configured;
   if (!host) return false;
   let u: URL;

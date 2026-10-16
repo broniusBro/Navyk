@@ -153,7 +153,7 @@ test("email provider log: link printed in dev, never in production", async () =>
 
 test("migrations are idempotent and versioned", () => {
   const db = new DatabaseSync(":memory:");
-  assert.deepEqual(migrate(db), [1, 2]);
+  assert.deepEqual(migrate(db), [1, 2, 3]);
   assert.deepEqual(migrate(db), []);
   const tables = (db.prepare("SELECT name FROM sqlite_master WHERE type='table' ORDER BY name").all() as any[]).map((r) => r.name);
   for (const t of ["users", "sessions", "tokens", "progress", "email_log", "migrations"]) assert.ok(tables.includes(t), t);

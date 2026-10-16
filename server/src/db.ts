@@ -66,6 +66,37 @@ const MIGRATIONS: { version: number; name: string; sql: string }[] = [
       CREATE UNIQUE INDEX users_google_sub ON users(google_sub) WHERE google_sub IS NOT NULL;
     `,
   },
+  {
+    version: 3,
+    name: "admin",
+    sql: `
+      -- Визиты: непрерывная активность пользователя (перерыв больше 30 минут — новый визит).
+      CREATE TABLE visits (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+        started_at INTEGER NOT NULL,
+        last_at INTEGER NOT NULL
+      );
+      CREATE INDEX visits_user ON visits(user_id, last_at);
+      CREATE INDEX visits_last ON visits(last_at);
+      -- Доступ к admin.navyk.app: роль определяет права (server/src/admin/roles.ts).
+      CREATE TABLE admin_roles (
+        user_id TEXT PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
+        role TEXT NOT NULL CHECK (role IN ('owner', 'admin', 'viewer')),
+        granted_by TEXT,
+        granted_at INTEGER NOT NULL
+      );
+      CREATE TABLE admin_audit (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        at INTEGER NOT NULL,
+        actor_id TEXT,
+        action TEXT NOT NULL,
+        target_id TEXT,
+        details TEXT
+      );
+      CREATE INDEX admin_audit_at ON admin_audit(at);
+    `,
+  },
 ];
 
 export function dataDir(): string {

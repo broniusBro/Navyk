@@ -8,6 +8,7 @@ import { WindowLimiter } from "../limits.ts";
 import { queueEmail, hashAddress } from "../email/send.ts";
 import type { EmailLang } from "../email/templates.ts";
 import { hashPassword, verifyPassword, dummyVerify, isWeakPassword } from "./password.ts";
+import { touchVisit } from "../activity.ts";
 import { googleConfigured, startGoogle, finishGoogle, clearStateCookie, redirect, logGoogle } from "./google.ts";
 import {
   createSession,
@@ -362,7 +363,7 @@ export function createAuth(opts: AuthOptions) {
   }
 
   /** Обрабатывает /api/auth/* и /api/progress. Возвращает false, если путь не наш. */
-  async function handle(req: IncomingMessage, res: ServerResponse, path: string): Promise<boolean> {
+  async function handle(req: IncomingMessage, res: ServerResponse, path: string, hopts: { track?: boolean } = {}): Promise<boolean> {
     const method = req.method ?? "GET";
     const isAuth = path.startsWith("/api/auth/");
     if (!isAuth && path !== "/api/progress") return false;
@@ -391,6 +392,16 @@ export function createAuth(opts: AuthOptions) {
         send(res, 400, { error: "bad_request" });
         return true;
       }
+    }
+    // Визит ученика (не админки): любой запрос с сессией на основном сайте.
+    if (hopts.track !== false && (path === "/api/auth/me" || path === "/api/progress" || path === "/api/auth/ping")) {
+      const s = readSession(db, req, now());
+      if (s) touchVisit(db, s.user.id, now());
+    }
+    if (method === "POST" && path === "/api/auth/ping") {
+      if (readSession(db, req, now())) send(res, 204, null);
+      else send(res, 401, { error: "unauthorized" });
+      return true;
     }
     if (method === "GET" && path === "/api/auth/providers") send(res, 200, { google: googleConfigured() }, { "cache-control": "no-cache" });
     else if (method === "GET" && path === "/api/auth/google/start") {

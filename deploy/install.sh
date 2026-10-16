@@ -54,8 +54,11 @@ for i in $(seq 1 60); do
 done
 curl -fsS "http://127.0.0.1:$APP_PORT/api/health"; echo
 
-say "3/6 Caddy site $SITE"
-NEW="$(printf '%s {\n\tencode zstd gzip\n\treverse_proxy 127.0.0.1:%s\n}\n' "$SITE" "$APP_PORT")"
+# the admin panel (ADMIN_ORIGIN in the env file, see deploy/enable-admin.sh) shares this site file and port
+ADMIN_HOST="$(grep -E '^ADMIN_ORIGIN=https://' "$ENV_FILE" 2>/dev/null | tail -1 | sed -E 's#^ADMIN_ORIGIN=https://##; s#/.*$##')"
+ADDRS="$SITE"; [ -n "$ADMIN_HOST" ] && ADDRS="$SITE, $ADMIN_HOST"
+say "3/6 Caddy site $ADDRS"
+NEW="$(printf '%s {\n\tencode zstd gzip\n\treverse_proxy 127.0.0.1:%s\n}\n' "$ADDRS" "$APP_PORT")"
 if [ "$(cat "$CADDY_SITE" 2>/dev/null)" != "$NEW" ]; then
   BK=""; [ -f "$CADDY_SITE" ] && { BK="$CADDY_SITE.bak-$(date +%Y%m%d-%H%M%S)"; cp -a "$CADDY_SITE" "$BK"; }
   printf '%s\n' "$NEW" > "$CADDY_SITE"; chmod 644 "$CADDY_SITE"
@@ -139,5 +142,14 @@ for i in $(seq 1 30); do
   [ "$i" = 30 ] && echo "https://$SITE not answering yet (DNS or certificate). The app itself is running; run this script again later."
   sleep 4
 done
+if [ -n "$ADMIN_HOST" ]; then
+  for i in $(seq 1 15); do
+    if curl -fsS -m 5 "https://$ADMIN_HOST/api/health" >/dev/null 2>&1; then echo "https://$ADMIN_HOST ok"; break; fi
+    [ "$i" = 15 ] && echo "https://$ADMIN_HOST not answering yet (DNS record admin.* or certificate)."
+    sleep 4
+  done
+fi
 echo
 echo "Navyk: https://$SITE"
+[ -n "$ADMIN_HOST" ] && echo "Admin: https://$ADMIN_HOST"
+exit 0
