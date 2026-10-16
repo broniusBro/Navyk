@@ -4,6 +4,8 @@ import { readFileSync } from "node:fs";
 import type { IncomingMessage, ServerResponse } from "node:http";
 import type { Db } from "../db.ts";
 import { send, readJsonBody, log } from "../httputil.ts";
+// @ts-ignore — общий с клиентом модуль на чистом JS
+import { normalizeProgress } from "../../../web/js/engine/progress.js";
 import { readSession, sha256, type UserRow } from "../auth/sessions.ts";
 import { parseCookies } from "../httputil.ts";
 import { cookieName } from "../auth/sessions.ts";
@@ -58,7 +60,8 @@ export interface ProgressSummary {
 
 const isDay = (d: unknown): d is string => typeof d === "string" && /^\d{4}-\d{2}-\d{2}$/.test(d);
 
-export function summarizeProgress(data: any, todayIso: string): ProgressSummary {
+export function summarizeProgress(raw: any, todayIso: string): ProgressSummary {
+  const data = normalizeProgress(raw); // старые записи могли сохраниться до строгой проверки
   const c = course();
   const lessons: Record<string, LessonRec> = data && typeof data.lessons === "object" && data.lessons ? data.lessons : {};
   const days = Array.isArray(data?.days) ? [...new Set(data.days.filter(isDay))].sort() : [];
@@ -249,10 +252,10 @@ export function createAdmin(opts: { db: Db | null; now?: () => number }) {
   function users(req: IncomingMessage, res: ServerResponse, url: URL) {
     const c = ctx(req, res, "users.read");
     if (!c) return;
-    const q = (url.searchParams.get("q") ?? "").trim().toLowerCase();
+    const q = (url.searchParams.get("q") ?? "").trim().toLowerCase().slice(0, 254);
     const level = url.searchParams.get("level") ?? "";
     const sort = url.searchParams.get("sort") ?? "created";
-    const page = Math.max(1, Number(url.searchParams.get("page") ?? 1) || 1);
+    const page = Math.min(100_000, Math.max(1, Math.floor(Number(url.searchParams.get("page") ?? 1)) || 1));
     const size = 50;
     let rows = userRows(c.role);
     if (q) rows = rows.filter((r) => r.email.toLowerCase().includes(q) || r.id === q);
@@ -264,7 +267,7 @@ export function createAdmin(opts: { db: Db | null; now?: () => number }) {
       completed: (r) => r.progress.completed,
       time: (r) => r.totalMinutes,
     };
-    const k = key[sort] ?? key.created;
+    const k = Object.hasOwn(key, sort) ? key[sort] : key.created;
     rows.sort((a, b) => (k(a) < k(b) ? 1 : k(a) > k(b) ? -1 : 0));
     send(res, 200, { total: rows.length, page, pageSize: size, users: rows.slice((page - 1) * size, page * size) }, { "cache-control": "no-store" });
   }
@@ -277,7 +280,7 @@ export function createAdmin(opts: { db: Db | null; now?: () => number }) {
     const p = db!.prepare("SELECT data FROM progress WHERE user_id = ?").get(id) as { data: string } | undefined;
     let data: any = null;
     try {
-      data = p ? JSON.parse(p.data) : null;
+      data = p ? normalizeProgress(JSON.parse(p.data)) : null;
     } catch {
       data = null;
     }

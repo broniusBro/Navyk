@@ -15,11 +15,14 @@ const nextId = (p) => `${p}-${++uid}`;
 
 // ---- form building blocks -------------------------------------------------------------------
 
+// Server limits: email 254 characters (RFC 5321), password 128.
+const MAX_LEN = { email: 254, password: 128, text: 200 };
+
 function field({ label, type = "text", autocomplete, value = "", hint = null, inputmode }) {
   const id = nextId("f");
   const errId = `${id}-err`;
   const hintId = hint ? `${id}-hint` : null;
-  const input = h("input.field__input", { id, name: id, type, autocomplete, inputmode, value, spellcheck: "false", autocapitalize: "off", aria: { describedby: [hintId, errId].filter(Boolean).join(" ") } });
+  const input = h("input.field__input", { id, name: id, type, autocomplete, inputmode, value, maxlength: MAX_LEN[type] ?? MAX_LEN.text, spellcheck: "false", autocapitalize: "off", aria: { describedby: [hintId, errId].filter(Boolean).join(" ") } });
   input.value = value;
   const err = h("p.field__error", { id: errId, hidden: true });
   const hintEl = hint ? h("p.field__hint", { id: hintId }, hint) : null;

@@ -3,7 +3,7 @@
 // Запуск: PORT=8080 ANTHROPIC_API_KEY=... node server/src/http.ts
 import { createServer, type IncomingMessage, type ServerResponse } from "node:http";
 import { readFile, readdir, stat } from "node:fs/promises";
-import { extname, normalize, join } from "node:path";
+import { extname, normalize, join, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 import { reviewPrompt, ReviewError, MAX_CHARS, type ReviewOptions } from "./reviewer/review.ts";
 import { loadReviewContext } from "./reviewer/lesson.ts";
@@ -52,7 +52,7 @@ const MIME: Record<string, string> = {
 
 async function serveFile(req: IncomingMessage, res: ServerResponse, base: string, rel: string, cache: string, extra: Record<string, string> = {}) {
   const path = normalize(join(base, rel));
-  if (!path.startsWith(base)) return send(res, 403, { error: "forbidden" });
+  if (!path.startsWith(base + sep) || rel.includes("\0")) return send(res, 403, { error: "forbidden" });
   try {
     const s = await stat(path);
     if (!s.isFile()) throw new Error("not a file");
@@ -240,6 +240,10 @@ export function createApp(opts: AppOptions = {}) {
       res.end();
     }
   });
+  // Медленные клиенты (slowloris) не держат соединения: заголовки за 15 с, весь запрос за 30 с.
+  server.headersTimeout = 15_000;
+  server.requestTimeout = 30_000;
+  server.maxHeadersCount = 64;
   server.on("close", () => {
     if (!ownsDb) return;
     try {

@@ -3,6 +3,7 @@
 // Ключ берётся только из переменной окружения ANTHROPIC_API_KEY на сервере.
 
 import { readFileSync } from "node:fs";
+import { cleanText } from "../input.ts";
 
 const ROOT = new URL("../../../", import.meta.url);
 const read = (path: string) => readFileSync(new URL(path, ROOT), "utf8");
@@ -74,7 +75,8 @@ export const MAX_CHARS = 4000;
 
 /** Текст ученика — данные. Закрывающий тег внутри него обезвреживается. */
 function sanitize(text: string): string {
-  return text.replace(/<\/?\s*student_prompt\s*>/gi, "[tag removed]").trim();
+  // Сначала убираем невидимые символы (ими прячут команды и разбивают теги), потом — наши служебные теги.
+  return cleanText(text).replace(/<\s*\/?\s*(student_prompt|lesson_context|rubric)\b[^>]*>/gi, "[tag removed]");
 }
 
 export function buildUserMessage(ctx: LessonReviewContext, studentPrompt: string): string {
@@ -176,7 +178,7 @@ export async function reviewPrompt(
   studentPrompt: string,
   opts: ReviewOptions = {},
 ): Promise<ReviewResult> {
-  const text = studentPrompt.trim();
+  const text = cleanText(studentPrompt);
   if (text.length < MIN_CHARS) throw new ReviewError("input_too_short", "Prompt is too short");
   if (text.length > MAX_CHARS) throw new ReviewError("input_too_long", "Prompt is too long");
 

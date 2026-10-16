@@ -9,16 +9,78 @@ export function emptyProgress() {
   return { version: PROGRESS_VERSION, xp: 0, days: [], lessons: {}, repeat: {} };
 }
 
-/** Accept anything from storage; return a valid progress object. */
+// Strict shape check. The same function cleans data from local storage (client) and data the server
+// accepts from PUT /api/progress, so a crafted request cannot store anything but valid progress.
+const DAY_RE = /^\d{4}-\d{2}-\d{2}$/;
+const LESSON_RE = /^[a-z]\d{1,2}\.\d{1,2}$/;
+const EXERCISE_RE = /^[a-z]\d{1,2}\.\d{1,2}\.e\d{1,2}$/;
+const CONCEPT_RE = /^[A-Za-z0-9_-]{1,64}$/;
+const TYPE_RE = /^[a-z_]{1,32}$/;
+const LIMITS = Object.freeze({ xp: 10_000_000, days: 4000, lessons: 500, repeat: 2000, list: 20, dayOffset: 3650 });
+
+const isObj = (v) => v !== null && typeof v === "object" && !Array.isArray(v);
+const isDay = (v) => typeof v === "string" && DAY_RE.test(v);
+const int = (v, max) => (Number.isFinite(v) && v >= 0 ? Math.min(Math.floor(v), max) : 0);
+const ownKeys = (o) => Object.keys(o).filter((k) => k !== "__proto__" && k !== "constructor" && k !== "prototype");
+
+function cleanLesson(r) {
+  if (!isObj(r)) return null;
+  const out = {};
+  if (isDay(r.firstCompletedAt)) out.firstCompletedAt = r.firstCompletedAt;
+  if (isDay(r.lastCompletedAt)) out.lastCompletedAt = r.lastCompletedAt;
+  out.bestXp = int(r.bestXp, 10_000);
+  out.runs = int(r.runs, 1_000_000);
+  return out;
+}
+
+function cleanRepeat(key, it) {
+  if (!isObj(it) || it.key !== key || !LESSON_RE.test(it.lessonId ?? "") || !CONCEPT_RE.test(it.concept ?? "")) return null;
+  if (key !== `${it.lessonId}:${it.concept}` || !isDay(it.baseDay) || !isDay(it.due)) return null;
+  const schedule = (Array.isArray(it.schedule) ? it.schedule : [])
+    .slice(0, LIMITS.list)
+    .filter((s) => isObj(s) && Number.isInteger(s.day) && s.day > 0 && s.day <= LIMITS.dayOffset)
+    .map((s) => (typeof s.type === "string" && TYPE_RE.test(s.type) ? { day: s.day, type: s.type } : { day: s.day }));
+  if (!schedule.length) return null;
+  const out = {
+    key,
+    lessonId: it.lessonId,
+    concept: it.concept,
+    exercises: (Array.isArray(it.exercises) ? it.exercises : []).filter((e) => typeof e === "string" && EXERCISE_RE.test(e)).slice(0, LIMITS.list),
+    schedule,
+    baseDay: it.baseDay,
+    step: int(it.step, schedule.length),
+    due: it.due,
+    done: it.done === true,
+  };
+  if (isDay(it.lastReviewed)) out.lastReviewed = it.lastReviewed;
+  if (it.lapses !== undefined) out.lapses = int(it.lapses, 1_000_000);
+  return out;
+}
+
+/** Accept anything (storage, network); return a valid progress object with only known fields. */
 export function normalizeProgress(raw) {
   const base = emptyProgress();
-  if (!raw || typeof raw !== "object" || raw.version !== PROGRESS_VERSION) return base;
+  if (!isObj(raw) || raw.version !== PROGRESS_VERSION) return base;
+  const lessons = {};
+  if (isObj(raw.lessons)) {
+    for (const id of ownKeys(raw.lessons).filter((k) => LESSON_RE.test(k)).slice(0, LIMITS.lessons)) {
+      const r = cleanLesson(raw.lessons[id]);
+      if (r) lessons[id] = r;
+    }
+  }
+  const repeat = {};
+  if (isObj(raw.repeat)) {
+    for (const key of ownKeys(raw.repeat).slice(0, LIMITS.repeat)) {
+      const it = cleanRepeat(key, raw.repeat[key]);
+      if (it) repeat[key] = it;
+    }
+  }
   return {
     version: PROGRESS_VERSION,
-    xp: Number.isFinite(raw.xp) && raw.xp >= 0 ? Math.floor(raw.xp) : 0,
-    days: Array.isArray(raw.days) ? [...new Set(raw.days.filter((d) => /^\d{4}-\d{2}-\d{2}$/.test(d)))].sort() : [],
-    lessons: raw.lessons && typeof raw.lessons === "object" ? raw.lessons : {},
-    repeat: raw.repeat && typeof raw.repeat === "object" ? raw.repeat : {},
+    xp: int(raw.xp, LIMITS.xp),
+    days: Array.isArray(raw.days) ? [...new Set(raw.days.filter(isDay))].sort().slice(-LIMITS.days) : [],
+    lessons,
+    repeat,
   };
 }
 

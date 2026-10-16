@@ -74,12 +74,12 @@ test("mergeProgress: union of lessons with max XP, days, earliest repetition", (
 });
 
 test("mergeProgress is commutative, idempotent and tolerant", () => {
-  const a = { ...emptyProgress(), xp: 10, days: ["2026-10-13"], lessons: { x: { bestXp: 10, runs: 1, firstCompletedAt: "2026-10-13", lastCompletedAt: "2026-10-13" } }, repeat: { "x:a": item("x:a", "2026-10-15", { done: true }) } };
-  const b = { ...emptyProgress(), xp: 0, repeat: { "x:a": item("x:a", "2026-10-20") } };
+  const a = { ...emptyProgress(), xp: 10, days: ["2026-10-13"], lessons: { "b1.1": { bestXp: 10, runs: 1, firstCompletedAt: "2026-10-13", lastCompletedAt: "2026-10-13" } }, repeat: { "b1.1:a": item("b1.1:a", "2026-10-15", { done: true }) } };
+  const b = { ...emptyProgress(), xp: 0, repeat: { "b1.1:a": item("b1.1:a", "2026-10-20") } };
   const ab = mergeProgress(a, b);
   assert.ok(sameProgress(ab, mergeProgress(b, a)));
   assert.ok(sameProgress(ab, mergeProgress(ab, ab)));
-  assert.equal(ab.repeat["x:a"].done, false, "an open item beats a finished copy");
+  assert.equal(ab.repeat["b1.1:a"].done, false, "an open item beats a finished copy");
   assert.ok(sameProgress(mergeProgress(null, "junk"), emptyProgress()));
   assert.ok(sameProgress(mergeProgress(a, null), normalizeProgress(a)));
   assert.equal(retryDelay(0), 5000);

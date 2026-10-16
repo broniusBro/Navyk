@@ -122,8 +122,8 @@ async function logout() {
 // ---------------- login ----------------
 
 function renderLogin(reason) {
-  const email = h("input.input", { type: "email", autocomplete: "username", required: true, id: "email" });
-  const password = h("input.input", { type: "password", autocomplete: "current-password", required: true, id: "password" });
+  const email = h("input.input", { type: "email", autocomplete: "username", required: true, id: "email", maxlength: 254 });
+  const password = h("input.input", { type: "password", autocomplete: "current-password", required: true, id: "password", maxlength: 128 });
   const msg = h("div");
   const show = (key) => msg.replaceChildren(h("p.note.note--error", null, t(key)));
   if (reason) show(`login.${reason}`);
@@ -249,7 +249,7 @@ async function renderUsers() {
     for (const [k, v] of Object.entries(next)) if (v && !(k === "page" && v === 1) && !(k === "sort" && v === "created")) p.set(k, v);
     location.hash = `#/users${p.toString() ? `?${p}` : ""}`;
   };
-  const search = h("input.input.input--wide", { type: "search", value: state.q, placeholder: t("users.search"), "aria-label": t("users.search") });
+  const search = h("input.input.input--wide", { type: "search", maxlength: 254, value: state.q, placeholder: t("users.search"), "aria-label": t("users.search") });
   let timer = 0;
   search.addEventListener("input", () => {
     clearTimeout(timer);
@@ -484,7 +484,7 @@ async function renderAdmins() {
 
   let grantCard = null;
   if (can("admins.manage")) {
-    const email = h("input.input.input--wide", { type: "email", id: "grant-email", required: true, autocomplete: "off" });
+    const email = h("input.input.input--wide", { type: "email", id: "grant-email", required: true, autocomplete: "off", maxlength: 254 });
     const role = h("select.select", { id: "grant-role" }, roles.filter((ro) => me.role === "owner" || ro !== "owner").map((ro) => h("option", { value: ro, selected: ro === "viewer" }, roleTitle(ro))));
     const btn = h("button.btn.btn--primary", { type: "submit" }, t("admins.grant"));
     grantCard = h(

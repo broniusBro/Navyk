@@ -200,7 +200,7 @@ test("visits: a pause over 30 minutes starts a new visit; duration and last sess
 });
 
 test("progress summary: streak, current level, unknown lessons ignored", () => {
-  const s = summarizeProgress({ xp: 10.7, days: ["2026-10-14", "2026-10-15", "bad"], lessons: { "b1.1": { lastCompletedAt: "2026-10-15" }, "zz9.9": {} } }, "2026-10-16");
+  const s = summarizeProgress({ version: 1, xp: 10.7, days: ["2026-10-14", "2026-10-15", "bad"], lessons: { "b1.1": { lastCompletedAt: "2026-10-15" }, "zz9.9": {} } }, "2026-10-16");
   assert.equal(s.xp, 10);
   assert.equal(s.streak, 2, "yesterday still counts");
   assert.equal(s.completed, 1);

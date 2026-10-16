@@ -9,6 +9,8 @@ import { queueEmail, hashAddress } from "../email/send.ts";
 import type { EmailLang } from "../email/templates.ts";
 import { hashPassword, verifyPassword, dummyVerify, isWeakPassword } from "./password.ts";
 import { touchVisit } from "../activity.ts";
+// @ts-ignore — общий с клиентом модуль на чистом JS: одна и та же проверка формы прогресса на обеих сторонах
+import { normalizeProgress } from "../../../web/js/engine/progress.js";
 import { googleConfigured, startGoogle, finishGoogle, clearStateCookie, redirect, logGoogle } from "./google.ts";
 import {
   createSession,
@@ -42,6 +44,8 @@ export interface AuthOptions {
 export function normalizeEmail(v: unknown): string | null {
   if (typeof v !== "string") return null;
   const e = v.trim().toLowerCase();
+  // Только печатные ASCII: без невидимых символов и «похожих» букв (кириллическая «а» в admin@…).
+  if (!/^[\x21-\x7e]+$/.test(e)) return null;
   if (e.length > 254 || !EMAIL_RE.test(e)) return null;
   return e;
 }
@@ -301,10 +305,12 @@ export function createAuth(opts: AuthOptions) {
   function putProgress(req: IncomingMessage, body: any, res: ServerResponse) {
     const s = readSession(db, req, now());
     if (!s) return send(res, 401, { error: "unauthorized" });
-    const data = body?.data;
-    if (data === null || typeof data !== "object") return send(res, 400, { error: "bad_request" });
+    const raw = body?.data;
+    if (raw === null || typeof raw !== "object" || Array.isArray(raw)) return send(res, 400, { error: "bad_request" });
+    if (Buffer.byteLength(JSON.stringify(raw)) > PROGRESS_MAX_BYTES) return send(res, 413, { error: "too_large" });
+    // Храним только прогресс правильной формы: лишние поля, чужие ключи и мусор отбрасываются.
+    const data = normalizeProgress(raw);
     const json = JSON.stringify(data);
-    if (Buffer.byteLength(json) > PROGRESS_MAX_BYTES) return send(res, 413, { error: "too_large" });
     // Сервер хранит блоб целиком, слияние делает клиент. updatedAt строго растёт.
     const prev = db!.prepare("SELECT updated_at FROM progress WHERE user_id = ?").get(s.user.id) as { updated_at: number } | undefined;
     const ts = Math.max(now(), (prev?.updated_at ?? 0) + 1);

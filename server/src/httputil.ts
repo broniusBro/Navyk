@@ -1,5 +1,6 @@
 // Общие помощники HTTP: ответы, чтение JSON, адрес клиента, cookie.
 import type { IncomingMessage, ServerResponse } from "node:http";
+import { parseJsonSafe } from "./input.ts";
 
 export const SECURITY_HEADERS = {
   "x-content-type-options": "nosniff",
@@ -28,7 +29,7 @@ export function send(
 }
 
 export class BodyError extends Error {
-  readonly code: "body_too_large" | "bad_json";
+  readonly code: "body_too_large" | "bad_json" | "bad_content_type";
   constructor(code: BodyError["code"]) {
     super(code);
     this.code = code;
@@ -36,6 +37,8 @@ export class BodyError extends Error {
 }
 
 export async function readJsonBody(req: IncomingMessage, limit: number): Promise<any> {
+  // Заранее объявленный размер больше лимита — отказ без чтения тела.
+  if (Number(req.headers["content-length"] ?? 0) > limit) throw new BodyError("body_too_large");
   let size = 0;
   const chunks: Buffer[] = [];
   for await (const chunk of req) {
@@ -43,8 +46,11 @@ export async function readJsonBody(req: IncomingMessage, limit: number): Promise
     if (size > limit) throw new BodyError("body_too_large");
     chunks.push(chunk);
   }
+  const text = Buffer.concat(chunks).toString("utf8");
+  // Тело — только JSON: формы чужих сайтов (text/plain, form-urlencoded) не проходят даже до проверки Origin.
+  if (text && !/^application\/json\s*(;|$)/i.test(String(req.headers["content-type"] ?? ""))) throw new BodyError("bad_content_type");
   try {
-    return JSON.parse(Buffer.concat(chunks).toString("utf8") || "{}");
+    return parseJsonSafe(text || "{}");
   } catch {
     throw new BodyError("bad_json");
   }
@@ -53,7 +59,8 @@ export async function readJsonBody(req: IncomingMessage, limit: number): Promise
 export function clientIp(req: IncomingMessage): string {
   const fwd = req.headers["x-forwarded-for"];
   // За обратным прокси (Caddy/nginx) берём первый адрес; иначе адрес сокета.
-  if (process.env.TRUST_PROXY === "1" && typeof fwd === "string") return fwd.split(",")[0].trim();
+  // Последний адрес дописал наш Caddy; первые клиент может подставить сам, чтобы обойти лимиты.
+  if (process.env.TRUST_PROXY === "1" && typeof fwd === "string") return fwd.split(",").at(-1)!.trim() || (req.socket.remoteAddress ?? "unknown");
   return req.socket.remoteAddress ?? "unknown";
 }
 

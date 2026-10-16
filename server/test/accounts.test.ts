@@ -328,10 +328,11 @@ test("progress: auth required, put/get, size limit", async () => {
   const empty = await call("GET", "/api/progress", undefined, { cookie });
   assert.deepEqual(empty.body, { data: null, updatedAt: null });
 
-  const data = { xp: 120, streak: { days: 3 }, lessons: { "b1.1": { done: true } } };
+  const data = { version: 1, xp: 120, days: ["2026-10-15"], lessons: { "b1.1": { firstCompletedAt: "2026-10-15", lastCompletedAt: "2026-10-15", bestXp: 25, runs: 1 } }, repeat: {} };
   const put = await call("PUT", "/api/progress", { data, baseUpdatedAt: null }, { cookie });
   assert.equal(put.status, 200);
   assert.deepEqual(put.body.data, data);
+
   assert.ok(!Number.isNaN(Date.parse(put.body.updatedAt)));
 
   const got = await call("GET", "/api/progress", undefined, { cookie });
@@ -340,6 +341,19 @@ test("progress: auth required, put/get, size limit", async () => {
   const put2 = await call("PUT", "/api/progress", { data: { xp: 130 }, baseUpdatedAt: put.body.updatedAt }, { cookie });
   assert.ok(Date.parse(put2.body.updatedAt) > Date.parse(put.body.updatedAt));
 
+  // anything but valid progress is dropped before it is stored
+  const junk = await call(
+    "PUT",
+    "/api/progress",
+    { data: { ...data, xp: 1e12, evil: "<script>", days: ["2026-10-15", "'; DROP TABLE users;--"], lessons: { ...data.lessons, "<img src=x>": { bestXp: 5 }, "b1.2": { bestXp: "9999999", runs: -5, html: "<b>" } }, repeat: { x: { due: "never" } } } },
+    { cookie },
+  );
+  assert.equal(junk.status, 200);
+  assert.deepEqual(junk.body.data, { ...data, xp: 10_000_000, lessons: { ...data.lessons, "b1.2": { bestXp: 0, runs: 0 } } });
+  const raw = await call("PUT", "/api/progress", JSON.parse('{"data":{"version":1,"__proto__":{"admin":true},"lessons":{"__proto__":{"bestXp":1}}}}'), { cookie });
+  assert.equal(raw.status, 200);
+  assert.equal(({} as any).admin, undefined);
+  assert.deepEqual(raw.body.data.lessons, {});
   assert.equal((await call("PUT", "/api/progress", { data: "x" }, { cookie })).status, 400);
   const big = await call("PUT", "/api/progress", { data: { blob: "x".repeat(256 * 1024) } }, { cookie });
   assert.equal(big.status, 413);
