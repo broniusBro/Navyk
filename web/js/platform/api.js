@@ -77,6 +77,7 @@ export function requestReview({ lessonId, exerciseId, lang, prompt, deviceId }) 
 // The session lives in an HttpOnly cookie set by the server; the client never sees a token.
 
 export const authMe = () => getJson("/api/auth/me");
+export const authProviders = () => getJson("/api/auth/providers");
 export const authRegister = ({ email, password, lang }) => postJson("/api/auth/register", { email, password, lang });
 export const authResend = ({ email }) => postJson("/api/auth/resend-confirmation", { email });
 export const authConfirm = ({ token }) => postJson("/api/auth/confirm", { token });

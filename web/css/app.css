@@ -1079,3 +1079,14 @@ button.daycard:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--bo
   .ga-consent { animation: ga-consent-in 0.25s ease-out both; }
   @keyframes ga-consent-in { from { opacity: 0; transform: translate(-50%, 12px); } to { opacity: 1; transform: translate(-50%, 0); } }
 }
+
+/* Continue with Google (ui/auth.js) — white button with the Google "G", as Google's branding asks */
+.google-auth { display: flex; flex-direction: column; gap: var(--s-m); margin-bottom: var(--s-m); }
+.google-auth[hidden] { display: none; }
+.google-btn { width: 100%; gap: 12px; background: #fff; color: #1f1f1f; box-shadow: 0 3px 0 var(--border); margin-bottom: 3px; }
+.google-btn:active { transform: translateY(3px); box-shadow: 0 0 0 var(--border); }
+.google-btn__icon { display: inline-grid; width: 22px; height: 22px; }
+.google-btn__logo { width: 22px; height: 22px; }
+.auth__or { display: flex; align-items: center; gap: var(--s-m); color: var(--ink-muted); font-size: var(--fs-small); font-weight: 800; margin: 0; }
+.auth__or::before, .auth__or::after { content: ""; flex: 1; height: var(--bw); background: var(--border-soft); border-radius: 1px; }
+.alert + .google-auth { margin-top: var(--s-m); }

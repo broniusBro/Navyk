@@ -58,6 +58,14 @@ const MIGRATIONS: { version: number; name: string; sql: string }[] = [
       CREATE INDEX email_log_created ON email_log(created_at);
     `,
   },
+  {
+    version: 2,
+    name: "google_sign_in",
+    sql: `
+      ALTER TABLE users ADD COLUMN google_sub TEXT;
+      CREATE UNIQUE INDEX users_google_sub ON users(google_sub) WHERE google_sub IS NOT NULL;
+    `,
+  },
 ];
 
 export function dataDir(): string {

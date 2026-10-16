@@ -425,7 +425,10 @@
       },
       "network": "Brak połączenia z serwerem. Sprawdź internet i spróbuj ponownie.",
       "generic": "Coś poszło nie tak. Spróbuj ponownie za chwilę."
-    }
+    },
+    "google": "Kontynuuj z Google",
+    "or": "lub",
+    "google_error": "Nie udało się zalogować przez Google. Spróbuj ponownie albo zaloguj się e-mailem i hasłem."
   },
   "consent": {
     "title": "Czy możemy liczyć wizyty?",

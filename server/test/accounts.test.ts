@@ -381,3 +381,78 @@ test("rate limits: per IP on auth, per address on emails", async () => {
     app.close();
   }
 });
+
+// ---------------- Google sign-in ----------------
+
+test("google: providers, start redirect, callback creates a confirmed account and a session", async () => {
+  const { setGoogleFetch } = await import("../src/auth/google.ts");
+  delete process.env.GOOGLE_CLIENT_ID;
+  assert.deepEqual((await call("GET", "/api/auth/providers")).body, { google: false });
+  process.env.GOOGLE_CLIENT_ID = "cid.apps.googleusercontent.com";
+  process.env.GOOGLE_CLIENT_SECRET = "secret";
+  assert.deepEqual((await call("GET", "/api/auth/providers")).body, { google: true });
+
+  const start = await fetch(`${base}/api/auth/google/start?lang=uk`, { redirect: "manual" });
+  assert.equal(start.status, 302);
+  const loc = new URL(start.headers.get("location")!);
+  assert.equal(loc.host, "accounts.google.com");
+  assert.equal(loc.searchParams.get("redirect_uri"), `${ORIGIN}/api/auth/google/callback`);
+  assert.equal(loc.searchParams.get("code_challenge_method"), "S256");
+  const state = loc.searchParams.get("state")!;
+  const oauthCookie = start.headers.get("set-cookie")!.split(";")[0];
+
+  const email = freshEmail();
+  const idToken = (claims: object) => `x.${Buffer.from(JSON.stringify(claims)).toString("base64url")}.y`;
+  let tokenBody = "";
+  setGoogleFetch((async (_u: any, init: any) => {
+    tokenBody = String(init.body);
+    return Response.json({
+      id_token: idToken({ iss: "https://accounts.google.com", aud: "cid.apps.googleusercontent.com", exp: Math.floor(clock / 1000) + 3600, sub: "g-123", email, email_verified: true }),
+    });
+  }) as typeof fetch);
+
+  // wrong state → back to login with an error, no session
+  const bad = await fetch(`${base}/api/auth/google/callback?code=c&state=nope`, { redirect: "manual", headers: { cookie: oauthCookie } });
+  assert.equal(bad.headers.get("location"), "/#/login?e=google");
+
+  const ok = await fetch(`${base}/api/auth/google/callback?code=c&state=${state}`, { redirect: "manual", headers: { cookie: oauthCookie } });
+  assert.equal(ok.status, 302);
+  assert.equal(ok.headers.get("location"), "/#/");
+  assert.ok(tokenBody.includes("code_verifier="), "PKCE verifier sent");
+  const session = ok.headers.getSetCookie().find((c) => c.startsWith("navyk_session="))!.split(";")[0];
+  const me = await call("GET", "/api/auth/me", undefined, { cookie: session });
+  assert.equal(me.status, 200);
+  assert.equal(me.body.user.email, email.toLowerCase());
+  assert.equal(me.body.user.lang, "uk");
+
+  // second sign-in with the same Google account finds the same user
+  const again = await fetch(`${base}/api/auth/google/callback?code=c&state=${state}`, { redirect: "manual", headers: { cookie: oauthCookie } });
+  const session2 = again.headers.getSetCookie().find((c) => c.startsWith("navyk_session="))!.split(";")[0];
+  assert.equal((await call("GET", "/api/auth/me", undefined, { cookie: session2 })).body.user.id, me.body.user.id);
+  setGoogleFetch(null);
+});
+
+test("google: linking an unconfirmed account voids the password someone else may have set", async () => {
+  const { setGoogleFetch, startGoogle } = await import("../src/auth/google.ts");
+  process.env.GOOGLE_CLIENT_ID = "cid.apps.googleusercontent.com";
+  process.env.GOOGLE_CLIENT_SECRET = "secret";
+  const email = freshEmail();
+  assert.equal((await call("POST", "/api/auth/register", { email, password: PASSWORD, lang: "ru" })).status, 202);
+  const g = startGoogle("ru");
+  const state = new URL(g.location).searchParams.get("state")!;
+  setGoogleFetch((async () =>
+    Response.json({
+      id_token: `x.${Buffer.from(JSON.stringify({ iss: "accounts.google.com", aud: "cid.apps.googleusercontent.com", exp: Math.floor(clock / 1000) + 60, sub: "g-777", email, email_verified: true })).toString("base64url")}.y`,
+    })) as typeof fetch);
+  const r = await fetch(`${base}/api/auth/google/callback?code=c&state=${state}`, { redirect: "manual", headers: { cookie: g.cookie.split(";")[0] } });
+  assert.equal(r.headers.get("location"), "/#/");
+  // the password from the unconfirmed registration no longer works
+  assert.equal((await call("POST", "/api/auth/login", { email, password: PASSWORD })).status, 401);
+  // unverified Google email is refused
+  setGoogleFetch((async () =>
+    Response.json({ id_token: `x.${Buffer.from(JSON.stringify({ iss: "accounts.google.com", aud: "cid.apps.googleusercontent.com", exp: Math.floor(clock / 1000) + 60, sub: "g-9", email: "x@y.z", email_verified: false })).toString("base64url")}.y` })) as typeof fetch);
+  const r2 = await fetch(`${base}/api/auth/google/callback?code=c&state=${state}`, { redirect: "manual", headers: { cookie: g.cookie.split(";")[0] } });
+  assert.equal(r2.headers.get("location"), "/#/login?e=google");
+  setGoogleFetch(null);
+  delete process.env.GOOGLE_CLIENT_ID;
+});

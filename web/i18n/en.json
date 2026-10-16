@@ -397,7 +397,10 @@
       },
       "network": "Can't reach the server. Check your connection and try again.",
       "generic": "Something went wrong. Please try again a bit later."
-    }
+    },
+    "google": "Continue with Google",
+    "or": "or",
+    "google_error": "Couldn't sign in with Google. Try again, or sign in with your email and password."
   },
   "consent": {
     "title": "Can we count visits?",

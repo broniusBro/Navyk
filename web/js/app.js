@@ -243,11 +243,12 @@ function route() {
   const tokenRoute = parseTokenRoute(hash);
   if (tokenRoute?.kind === "confirm") return showScreen(renderConfirm({ token: tokenRoute.token, go }), "auth.confirm_title");
   if (tokenRoute?.kind === "reset") return showScreen(renderReset({ token: tokenRoute.token, go }), "auth.reset_title");
-  const screen = AUTH_SCREENS[hash];
+  const [screenHash, screenQuery = ""] = hash.split("?");
+  const screen = AUTH_SCREENS[screenHash];
   if (screen) {
     // redirect only once the server confirmed the session (a cached user may be stale: expired or logged out elsewhere)
-    if (isSignedIn() && accountChecked() && hash !== "#/check-email") return go("#/");
-    return showScreen(screen[0]({ go }), screen[1]);
+    if (isSignedIn() && accountChecked() && screenHash !== "#/check-email") return go("#/");
+    return showScreen(screen[0]({ go, query: screenQuery }), screen[1]);
   }
   return showPath();
 }

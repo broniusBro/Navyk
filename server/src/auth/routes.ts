@@ -8,6 +8,7 @@ import { WindowLimiter } from "../limits.ts";
 import { queueEmail, hashAddress } from "../email/send.ts";
 import type { EmailLang } from "../email/templates.ts";
 import { hashPassword, verifyPassword, dummyVerify, isWeakPassword } from "./password.ts";
+import { googleConfigured, startGoogle, finishGoogle, clearStateCookie, redirect, logGoogle } from "./google.ts";
 import {
   createSession,
   readSession,
@@ -324,6 +325,42 @@ export function createAuth(opts: AuthOptions) {
     "/api/auth/reset": reset,
   };
 
+  /** Вход через Google: найти аккаунт по Google ID или адресу, иначе создать; адрес уже подтверждён Google. */
+  async function googleCallback(req: IncomingMessage, res: ServerResponse) {
+    const url = new URL(req.url ?? "/", "http://localhost");
+    const r = await finishGoogle(req, url, now());
+    if ("error" in r) {
+      logGoogle({ ok: false, code: r.error });
+      return redirect(res, "/#/login?e=google", [clearStateCookie()]);
+    }
+    const t = now();
+    let u = (db!.prepare("SELECT * FROM users WHERE google_sub = ?").get(r.sub) as UserRow | undefined) ?? userByEmail(r.email);
+    if (u) {
+      // Неподтверждённый аккаунт мог создать кто-то другой: его пароль больше не действует.
+      const resetPassword = u.email_confirmed_at === null ? await hashPassword(newSecret()) : null;
+      db!.prepare(
+        "UPDATE users SET google_sub = COALESCE(google_sub, ?), email_confirmed_at = COALESCE(email_confirmed_at, ?), password_hash = COALESCE(?, password_hash), failed_logins = 0, locked_until = NULL WHERE id = ?",
+      ).run(r.sub, t, resetPassword, u.id);
+      u = userById(u.id)!;
+      logGoogle({ ok: true, linked: true });
+    } else {
+      const id = randomUUID();
+      // Пароля нет: вход только через Google или после «Забыли пароль?».
+      db!.prepare("INSERT INTO users (id, email, password_hash, lang, email_confirmed_at, created_at, google_sub) VALUES (?, ?, ?, ?, ?, ?, ?)").run(
+        id,
+        r.email,
+        await hashPassword(newSecret()),
+        r.lang,
+        t,
+        t,
+        r.sub,
+      );
+      u = userById(id)!;
+      logGoogle({ ok: true, created: true });
+    }
+    redirect(res, "/#/", [clearStateCookie(), createSession(db!, u.id, t)]);
+  }
+
   /** Обрабатывает /api/auth/* и /api/progress. Возвращает false, если путь не наш. */
   async function handle(req: IncomingMessage, res: ServerResponse, path: string): Promise<boolean> {
     const method = req.method ?? "GET";
@@ -355,7 +392,18 @@ export function createAuth(opts: AuthOptions) {
         return true;
       }
     }
-    if (method === "POST" && POST_ROUTES[path]) await POST_ROUTES[path](body, res);
+    if (method === "GET" && path === "/api/auth/providers") send(res, 200, { google: googleConfigured() }, { "cache-control": "no-cache" });
+    else if (method === "GET" && path === "/api/auth/google/start") {
+      if (!googleConfigured()) redirect(res, "/#/login?e=google", []);
+      else {
+        const lang = new URL(req.url ?? "/", "http://localhost").searchParams.get("lang") ?? "en";
+        const g = startGoogle(lang);
+        redirect(res, g.location, [g.cookie]);
+      }
+    } else if (method === "GET" && path === "/api/auth/google/callback") {
+      if (!googleConfigured()) redirect(res, "/#/login?e=google", []);
+      else await googleCallback(req, res);
+    } else if (method === "POST" && POST_ROUTES[path]) await POST_ROUTES[path](body, res);
     else if (method === "POST" && path === "/api/auth/logout") logout(req, res);
     else if (method === "GET" && path === "/api/auth/me") me(req, res);
     else if (method === "PATCH" && path === "/api/auth/me") patchMe(req, body, res);

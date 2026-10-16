@@ -43,6 +43,7 @@ bash deploy/deploy-from-mac.sh
 | `PUBLIC_ORIGIN` | `http://localhost:8080` | адрес сайта: ссылки в письмах и защита от CSRF (POST/PUT/PATCH к `/api/*` принимаются только с этим `Origin`). `install.sh` пишет `https://<SITE>` сам |
 | `EMAIL_PROVIDER` | `log` | `brevo`, `resend` или `log` (не отправлять; в продакшене в журнал попадает только «письмо не отправлено», без ссылки) |
 | `EMAIL_API_KEY` | — | ключ API почтового провайдера (`set-email.sh`) |
+| `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET` | — | вход через Google (`set-google.sh`) |
 | `EMAIL_FROM` | `Navyk <no-reply@navyk.app>` | отправитель; домен должен быть подтверждён у провайдера |
 | `COOKIE_SECURE` | `true` | `false` только для локальной разработки по http (cookie `navyk_session` вместо `__Host-navyk_session`) |
 | `AUTH_PER_MINUTE_PER_IP` | 20 | запросов к `/api/auth/*` в минуту с одного IP |
@@ -121,3 +122,22 @@ ssh -t root@65.108.234.212 /srv/navyk/deploy/test-email.sh
 Частые причины у Brevo: `unauthorized` с текстом про unrecognised IP — добавить IP сервера в Security → Authorised IPs;
 ошибка про sender — подтвердить отправителя или домен в Senders, Domains & Dedicated IPs; `logged` — почта не настроена
 (запусти `deploy/set-email.sh`).
+
+### Вход через Google
+
+1. Google Cloud Console → APIs & Services → **OAuth consent screen**: тип External, название Navyk,
+   почта поддержки, домен `navyk.app`, ссылки на политику конфиденциальности. Scopes: `openid`, `email`, `profile`.
+2. **Credentials → Create credentials → OAuth client ID**, тип **Web application**:
+   - Authorized JavaScript origins: `https://navyk.app`
+   - Authorized redirect URIs: `https://navyk.app/api/auth/google/callback`
+3. Внести Client ID и Client secret на сервер (секрет не показывается и не попадает в чат):
+
+```bash
+ssh -t root@65.108.234.212 /srv/navyk/deploy/set-google.sh
+```
+
+Кнопка «Продолжить с Google» появляется на экранах входа и регистрации сама, как только сервер видит
+`GOOGLE_CLIENT_ID` и `GOOGLE_CLIENT_SECRET`. Аккаунт находится по Google ID или по адресу (Google его уже подтвердил);
+если такого нет — создаётся подтверждённый аккаунт без пароля (пароль можно задать через «Забыли пароль?»).
+Сбои входа пишутся в журнал как `"event":"google_auth"` с кодом причины.
+

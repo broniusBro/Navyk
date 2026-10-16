@@ -121,9 +121,44 @@ function authScreen({ title, lead, art = "user", body, onBack, below }) {
 
 const link = (key, hash) => h("a.auth__link", { href: hash }, t(key));
 
+// Google "G" (multicolour), built with DOM APIs: HTML sinks are allowed only in dom.js.
+const GOOGLE_PATHS = [
+  ["#EA4335", "M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"],
+  ["#4285F4", "M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"],
+  ["#FBBC05", "M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"],
+  ["#34A853", "M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"],
+];
+function googleLogo() {
+  const ns = "http://www.w3.org/2000/svg";
+  const svg = document.createElementNS(ns, "svg");
+  svg.setAttribute("viewBox", "0 0 48 48");
+  svg.setAttribute("class", "google-btn__logo");
+  svg.setAttribute("aria-hidden", "true");
+  svg.setAttribute("focusable", "false");
+  for (const [fill, d] of GOOGLE_PATHS) {
+    const path = document.createElementNS(ns, "path");
+    path.setAttribute("fill", fill);
+    path.setAttribute("d", d);
+    svg.append(path);
+  }
+  return svg;
+}
+
+let providers = null;
+/** "Continue with Google" + "or" divider; appears only when the server has Google sign-in configured. */
+function googleBlock() {
+  const btn = h("a.btn.google-btn", { href: `/api/auth/google/start?lang=${encodeURIComponent(getLang())}` }, h("span.google-btn__icon", googleLogo()), h("span", t("auth.google")));
+  const box = h("div.google-auth", { hidden: true }, btn, h("p.auth__or", h("span", t("auth.or"))));
+  providers ??= api.authProviders().catch(() => null);
+  providers.then((p) => {
+    if (p?.body?.google) box.hidden = false;
+  });
+  return box;
+}
+
 // ---- screens --------------------------------------------------------------------------------
 
-export function renderLogin({ go }) {
+export function renderLogin({ go, query = "" }) {
   const email = field({ label: t("auth.email"), type: "email", autocomplete: "username", inputmode: "email", value: pendingEmail() });
   const password = passwordField({ label: t("auth.password"), autocomplete: "current-password" });
   const f = form(
@@ -154,10 +189,13 @@ export function renderLogin({ go }) {
     },
     t("auth.login_submit"),
   );
+  const googleError = /(^|&)e=google(&|$)/.test(query)
+    ? alertBox("danger", null, h("p", t("auth.google_error")))
+    : null;
   return authScreen({
     title: t("auth.login_title"),
     lead: t("auth.login_lead"),
-    body: f.el,
+    body: h("div", googleError, googleBlock(), f.el),
     onBack: () => go("#/"),
     below: [link("auth.forgot_link", "#/forgot"), h("p.auth__switch", h("span", t("auth.no_account")), " ", link("auth.register_link", "#/register"))],
   });
@@ -194,7 +232,7 @@ export function renderRegister({ go }) {
     title: t("auth.register_title"),
     lead: t("auth.register_lead"),
     art: "cloud",
-    body: f.el,
+    body: h("div", googleBlock(), f.el),
     onBack: () => go("#/"),
     below: h("p.auth__switch", h("span", t("auth.have_account")), " ", link("auth.login_link", "#/login")),
   });
