@@ -1074,6 +1074,10 @@ button.daycard:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--bo
 .ga-consent__text { font-size: var(--fs-small); color: var(--ink-muted); line-height: 1.4; margin: 0 0 10px; padding: 0; background: none; border: 0; border-radius: 0; }
 .ga-consent__actions { display: flex; gap: var(--s-s); justify-content: flex-end; flex-wrap: wrap; }
 .ga-consent__btn { min-height: var(--touch); padding: 0.5rem 1rem; font-size: var(--fs-small); }
+.legal-links { font-size: 0.8rem; margin-top: 0.75rem; line-height: 1.9; }
+.legal-links a, .legal-links .footer-link { color: var(--ink-muted); text-decoration: underline; text-underline-offset: 0.18em; padding: 0.35rem 0; }
+.legal-company { font-size: 0.72rem; color: var(--ink-muted); margin-top: 0.25rem; }
+.consent__doc { color: inherit; font-weight: 800; text-decoration: underline; text-underline-offset: 0.18em; }
 .footer-link { background: none; border: 0; padding: 0; font: inherit; color: inherit; text-decoration: underline; cursor: pointer; }
 @media (prefers-reduced-motion: no-preference) {
   .ga-consent { animation: ga-consent-in 0.25s ease-out both; }

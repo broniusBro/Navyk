@@ -37,7 +37,11 @@
     "about": "About",
     "about_text": "Navyk is an unofficial learning app about Claude. It teaches you to use Claude and Claude Code through practice. Anthropic is not involved in the project and does not review its materials.",
     "trademark": "Claude and Anthropic are trademarks of Anthropic, PBC. Navyk does not use their logos or brand identity.",
-    "analytics": "Analytics settings"
+    "analytics": "Analytics settings",
+    "privacy": "Privacy Policy",
+    "cookies": "Cookies",
+    "terms": "Terms of Use",
+    "company": "© {year} BRONIUS AND BRO GROUP SP. Z O.O. · ul. Świeradowska 47, 02-662 Warszawa, Poland · NIP 5214102539"
   },
   "path": {
     "title": "Your path",
@@ -338,9 +342,8 @@
     "register_title": "Save your progress",
     "register_lead": "An account unlocks the whole course and keeps your streak, XP and reviews on every device.",
     "register_submit": "Create account",
-    "consent_before": "By tapping “Create account” you agree to how we store your data.",
     "privacy_link": "What do we store?",
-    "privacy_text": "Just your email and course progress: we need them to run the course and keep your progress safe. We don't sell data or send marketing emails. Navyk is an independent project, not affiliated with Anthropic.",
+    "privacy_text": "Your email, course progress and study time: we need them to run the course and keep your progress safe. We don't sell data or send marketing emails. Navyk is an independent project, not affiliated with Anthropic.",
     "check_title": "Check your inbox",
     "check_lead_before": "We sent a link to",
     "check_lead_after": ".",
@@ -400,7 +403,10 @@
     },
     "google": "Continue with Google",
     "or": "or",
-    "google_error": "Couldn't sign in with Google. Try again, or sign in with your email and password."
+    "google_error": "Couldn't sign in with Google. Try again, or sign in with your email and password.",
+    "consent_accept": "By tapping “Create account” you accept the {terms} and the {privacy}.",
+    "terms_link": "Terms of Use",
+    "privacy_policy_link": "Privacy Policy"
   },
   "consent": {
     "title": "Can we count visits?",

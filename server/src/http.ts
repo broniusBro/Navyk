@@ -38,6 +38,22 @@ const ID_RE = /^[a-z]\d+\.\d+$/;
 const EX_RE = /^[a-z]\d+\.\d+\.e\d+$/;
 
 const REVIEW_BODY_LIMIT = MAX_CHARS * 4 + 2000;
+const LEGAL_DOCS = new Set(["privacy", "cookies", "terms"]);
+
+/** Язык юридической страницы: ?lang=, иначе лучший из Accept-Language, иначе английский. */
+export function legalLang(query: string | null, acceptLanguage: string | undefined): string {
+  if (query && LANGS.has(query)) return query;
+  const prefs = String(acceptLanguage ?? "")
+    .split(",")
+    .map((part) => {
+      const [tag, ...params] = part.trim().toLowerCase().split(";");
+      const q = Number(params.find((x) => x.trim().startsWith("q="))?.split("=")[1] ?? 1);
+      return { lang: tag.split("-")[0], q: Number.isFinite(q) ? q : 0 };
+    })
+    .filter((x) => x.q > 0)
+    .sort((a, b) => b.q - a.q);
+  return prefs.find((x) => LANGS.has(x.lang))?.lang ?? "en";
+}
 
 const MIME: Record<string, string> = {
   ".html": "text/html; charset=utf-8",
@@ -227,6 +243,12 @@ export function createApp(opts: AppOptions = {}) {
         return serveFile(req, res, DIST, `${m[1]}/${m[2]}.json`, "no-cache");
       }
       if (req.method === "POST" && p === "/api/review") return handleReview(req, res, reviewDeps);
+      // Политика конфиденциальности, cookies, условия: статичные страницы (scripts/build_legal.py)
+      const legal = p.match(/^\/(privacy|cookies|terms)\/?$/);
+      if (legal && LEGAL_DOCS.has(legal[1]) && (req.method === "GET" || req.method === "HEAD")) {
+        const lang = legalLang(url.searchParams.get("lang"), req.headers["accept-language"]);
+        return serveFile(req, res, join(DIST, "legal"), `${legal[1]}.${lang}.html`, "no-cache", { vary: "Accept-Language", "content-language": lang });
+      }
       if (p.startsWith("/api/")) return send(res, 404, { error: "not_found" });
       if (req.method !== "GET" && req.method !== "HEAD") return send(res, 405, { error: "method_not_allowed" });
       // Статика веб-клиента; неизвестные пути → index.html (одностраничное приложение).

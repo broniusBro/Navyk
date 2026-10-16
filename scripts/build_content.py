@@ -197,7 +197,11 @@ def main() -> int:
             out.write_text(json.dumps(lesson, ensure_ascii=False, indent=2, default=str), encoding="utf-8")
             built += 1
     print(f"OK: {len(by_id)} уроков, {built} файлов в content/dist/")
-    return 0
+    # юридические страницы собираются вместе с уроками (Docker и CI вызывают только этот скрипт)
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+    import build_legal
+
+    return build_legal.main()
 
 
 if __name__ == "__main__":

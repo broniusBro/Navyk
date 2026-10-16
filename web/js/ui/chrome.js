@@ -108,6 +108,12 @@ export function footer() {
     "footer.site-footer",
     h("p", t("footer.independent")),
     h("details.about", h("summary", t("footer.about")), h("p", t("footer.about_text")), h("p", t("footer.trademark"))),
-    h("p", h("button.footer-link", { type: "button", onclick: () => showConsent({ force: true }) }, t("footer.analytics"))),
+    h(
+      "nav.legal-links",
+      ...["privacy", "cookies", "terms"].flatMap((doc, i) => [i ? h("span", { aria: { hidden: "true" } }, " · ") : null, h("a", { href: `/${doc}?lang=${getLang()}` }, t(`footer.${doc}`))]).filter(Boolean),
+      h("span", { aria: { hidden: "true" } }, " · "),
+      h("button.footer-link", { type: "button", onclick: () => showConsent({ force: true }) }, t("footer.analytics")),
+    ),
+    h("p.legal-company", t("footer.company", { year: new Date().getFullYear() })),
   );
 }

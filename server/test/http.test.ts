@@ -84,3 +84,23 @@ test("static files always revalidate: no-cache + ETag → 304", async () => {
   assert.equal(r2.status, 304);
   assert.equal((await fetch(`${base}/sw.js`)).headers.get("cache-control"), "no-cache");
 });
+
+test("legal pages: privacy, cookies, terms in four languages", async () => {
+  const { legalLang } = await import("../src/http.ts");
+  assert.equal(legalLang("pl", "ru"), "pl");
+  assert.equal(legalLang("de", "de-DE,uk;q=0.8,en;q=0.5"), "uk");
+  assert.equal(legalLang(null, "fr"), "en");
+  for (const doc of ["privacy", "cookies", "terms"]) {
+    for (const lang of ["ru", "uk", "en", "pl"]) {
+      const r = await fetch(`${base}/${doc}?lang=${lang}`);
+      assert.equal(r.status, 200, `${doc}.${lang}`);
+      const html = await r.text();
+      assert.match(html, new RegExp(`<html lang="${lang}">`));
+      assert.ok(html.includes("BRONIUS AND BRO GROUP SP. Z O.O."));
+      assert.ok(html.includes("NIP: 5214102539"));
+      assert.ok(!html.includes("{{"), "all placeholders filled");
+    }
+  }
+  const pl = await fetch(`${base}/terms`, { headers: { "accept-language": "pl-PL,pl;q=0.9" } });
+  assert.equal(pl.headers.get("content-language"), "pl");
+});

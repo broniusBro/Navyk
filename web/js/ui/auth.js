@@ -124,6 +124,11 @@ function authScreen({ title, lead, art = "user", body, onBack, below }) {
 
 const link = (key, hash) => h("a.auth__link", { href: hash }, t(key));
 
+/** "Text {a} more {b}" → [text, nodeA, " more ", nodeB]: links inside a translated sentence, without HTML. */
+function rich(template, parts) {
+  return template.split(/\{(\w+)\}/).map((piece, i) => (i % 2 ? (parts[piece] ?? `{${piece}}`) : piece)).filter((x) => x !== "");
+}
+
 // Google "G" (multicolour), built with DOM APIs: HTML sinks are allowed only in dom.js.
 const GOOGLE_PATHS = [
   ["#EA4335", "M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"],
@@ -214,7 +219,9 @@ export function renderRegister({ go }) {
     privacy.hidden = !privacy.hidden;
     toggle.setAttribute("aria-expanded", String(!privacy.hidden));
   });
-  const consent = h("div.consent", h("p", icon("shield"), h("span", t("auth.consent_before"), " ", toggle)), privacy);
+  const docLink = (doc, key) => h("a.consent__doc", { href: `/${doc}?lang=${getLang()}`, target: "_blank", rel: "noopener" }, t(key));
+  const accept = rich(t("auth.consent_accept"), { terms: docLink("terms", "auth.terms_link"), privacy: docLink("privacy", "auth.privacy_policy_link") });
+  const consent = h("div.consent", h("p", icon("shield"), h("span", ...accept, " ", toggle)), privacy);
   const f = form(
     [email.el, password.el, consent],
     async ({ status }) => {
