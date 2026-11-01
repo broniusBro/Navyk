@@ -1,5 +1,5 @@
 {
-  "_about": "Изменчивые значения модуля a4 «Коннекторы»: названия элементов интерфейса Claude (на английском, как в приложении), планы и лимиты. Подставляются в {{data.<раздел>.<ключ>}} при сборке. Источники и даты — content/data/volatile/a4.md. Проверено 2026-10-14. Переводы uk/en/pl добавлены.",
+  "_about": "Изменчивые значения модуля a4 «Коннекторы»: названия элементов интерфейса Claude (на английском, как в приложении), планы и лимиты. Подставляются в {{data.<раздел>.<ключ>}} при сборке. Источники и даты — content/data/volatile/a4.md. Проверено 2026-11-01. Переводы uk/en/pl добавлены.",
   "ui_paths": {
     "a4_customize_connectors": {
       "label": "Customize → Connectors",
@@ -154,10 +154,10 @@
       "pl": "wszystkich planach, łącznie z Free"
     },
     "a4_custom_plans": {
-      "ru": "Free, Pro, Max, Team и Enterprise",
-      "uk": "Free, Pro, Max, Team і Enterprise",
-      "en": "Free, Pro, Max, Team and Enterprise",
-      "pl": "Free, Pro, Max, Team i Enterprise"
+      "ru": "Free, Pro, Max, Ultra, Team и Enterprise",
+      "uk": "Free, Pro, Max, Ultra, Team і Enterprise",
+      "en": "Free, Pro, Max, Ultra, Team and Enterprise",
+      "pl": "Free, Pro, Max, Ultra, Team i Enterprise"
     },
     "a4_free_custom_max": {
       "ru": "только один",

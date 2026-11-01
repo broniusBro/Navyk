@@ -1,5 +1,5 @@
 {
-  "_about": "Изменчивые значения модуля p3 «Автоматизация и запланированные задачи»: названия элементов интерфейса Claude Code (на английском, как в приложении), планы и лимиты. Подставляются в {{data.<раздел>.<ключ>}} при сборке. Префикс ключей pthree_ вместо p3_: регулярное выражение DATA_RE в scripts/build_content.py не допускает цифр в ключе. Источники и даты — content/data/volatile/p3.md. Проверено 2026-10-14. Переводы uk/en/pl добавлены 2026-10-14.",
+  "_about": "Изменчивые значения модуля p3 «Автоматизация и запланированные задачи»: названия элементов интерфейса Claude Code (на английском, как в приложении), планы и лимиты. Подставляются в {{data.<раздел>.<ключ>}} при сборке. Префикс ключей pthree_ вместо p3_: регулярное выражение DATA_RE в scripts/build_content.py не допускает цифр в ключе. Источники и даты — content/data/volatile/p3.md. Проверено 2026-11-01. Переводы uk/en/pl добавлены 2026-10-14.",
   "ui_paths": {
     "pthree_routines_page": {
       "label": "claude.ai/code/routines",
@@ -11,12 +11,12 @@
       }
     },
     "pthree_new_routine": {
-      "label": "New routine",
+      "label": "New task",
       "hint": {
-        "ru": "кнопка создания новой routine",
-        "uk": "кнопка створення нової routine",
-        "en": "",
-        "pl": "przycisk tworzenia nowej routine"
+        "ru": "кнопка создания задачи; в части аккаунтов она ещё называется New routine",
+        "uk": "кнопка створення завдання; у частині акаунтів вона ще називається New routine",
+        "en": "the button that creates a task; some accounts still show it as New routine",
+        "pl": "przycisk tworzenia zadania; na części kont nadal nazywa się New routine"
       }
     },
     "pthree_select_trigger": {
@@ -128,21 +128,21 @@
       }
     },
     "pthree_desktop_new_routine": {
-      "label": "Code → Routines → New routine",
+      "label": "Code → Scheduled → New task",
       "hint": {
-        "ru": "в приложении Claude Desktop: вкладка Code, раздел Routines, новая задача",
-        "uk": "у застосунку Claude Desktop: вкладка Code, розділ Routines, нове завдання",
-        "en": "in the Claude Desktop app: the Code tab, then Routines, then a new task",
-        "pl": "w aplikacji Claude Desktop: karta Code, sekcja Routines, nowe zadanie"
+        "ru": "в приложении Claude Desktop: вкладка Code, раздел Scheduled в боковой панели, новая задача",
+        "uk": "у застосунку Claude Desktop: вкладка Code, розділ Scheduled на бічній панелі, нове завдання",
+        "en": "in the Claude Desktop app: the Code tab, then Scheduled in the sidebar, then a new task",
+        "pl": "w aplikacji Claude Desktop: karta Code, sekcja Scheduled na pasku bocznym, nowe zadanie"
       }
     },
     "pthree_desktop_local": {
-      "label": "Local",
+      "label": "Only on this computer",
       "hint": {
-        "ru": "локальная задача на твоём компьютере",
-        "uk": "локальне завдання на твоєму комп'ютері",
-        "en": "a local task on your computer",
-        "pl": "lokalne zadanie na twoim komputerze"
+        "ru": "переключатель в Advanced settings: задача выполняется на твоём компьютере",
+        "uk": "перемикач в Advanced settings: завдання виконується на твоєму комп'ютері",
+        "en": "a switch under Advanced settings: the task runs on your computer",
+        "pl": "przełącznik w Advanced settings: zadanie działa na twoim komputerze"
       }
     },
     "pthree_desktop_cloud": {
@@ -196,6 +196,12 @@
       "uk": "1 хвилина",
       "en": "1 minute",
       "pl": "1 minuta"
+    },
+    "pthree_desktop_min_interval": {
+      "ru": "1 час в форме, 1 минута, если расписание задаёт Claude",
+      "uk": "1 година у формі, 1 хвилина, якщо розклад задає Claude",
+      "en": "1 hour in the form, 1 minute if Claude sets the schedule",
+      "pl": "1 godzina w formularzu, 1 minuta, jeśli harmonogram ustawia Claude"
     },
     "pthree_loop_expiry": {
       "ru": "7 дней",

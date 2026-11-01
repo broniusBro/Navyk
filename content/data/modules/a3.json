@@ -1,5 +1,5 @@
 {
-  "_about": "Изменчивые значения модуля a3 «Поиск и исследование»: названия элементов интерфейса Claude (на английском, как в приложении), планы и лимиты. Подставляются в {{data.<раздел>.<ключ>}} при сборке. Источники и даты — content/data/volatile/a3.md. Проверено 2026-10-14. Переводы uk/en/pl добавят переводчики.",
+  "_about": "Изменчивые значения модуля a3 «Поиск и исследование»: названия элементов интерфейса Claude (на английском, как в приложении), планы и лимиты. Подставляются в {{data.<раздел>.<ключ>}} при сборке. Источники и даты — content/data/volatile/a3.md. Проверено 2026-11-01. Переводы uk/en/pl добавят переводчики.",
   "ui_paths": {
     "a3_web_search": {
       "label": "Web search",
@@ -52,10 +52,10 @@
       "pl": "we wszystkich planach, także w darmowym; w Team i Enterprise najpierw włącza je właściciel organizacji"
     },
     "a3_research_plans": {
-      "ru": "только на платных планах: Pro, Max, Team и Enterprise",
-      "uk": "лише на платних планах: Pro, Max, Team і Enterprise",
-      "en": "only on paid plans: Pro, Max, Team and Enterprise",
-      "pl": "tylko w płatnych planach: Pro, Max, Team i Enterprise"
+      "ru": "только на платных планах: Pro, Max, Ultra, Team и Enterprise",
+      "uk": "лише на платних планах: Pro, Max, Ultra, Team і Enterprise",
+      "en": "only on paid plans: Pro, Max, Ultra, Team and Enterprise",
+      "pl": "tylko w płatnych planach: Pro, Max, Ultra, Team i Enterprise"
     }
   },
   "limits": {

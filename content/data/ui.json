@@ -1,5 +1,5 @@
 {
-  "_about": "Изменчивые значения для уроков: названия элементов интерфейса Claude (на английском, как в приложении), тарифы и лимиты. Подставляются в {{data.<раздел>.<ключ>}} при сборке (scripts/build_content.py). Источники и даты проверки — content/data/volatile/*.md. Проверено 2026-10-13.",
+  "_about": "Изменчивые значения для уроков: названия элементов интерфейса Claude (на английском, как в приложении), тарифы и лимиты. Подставляются в {{data.<раздел>.<ключ>}} при сборке (scripts/build_content.py). Источники и даты проверки — content/data/volatile/*.md. Проверено 2026-11-01.",
   "ui_paths": {
     "chat_input": {
       "ru": "внизу экрана",
@@ -107,21 +107,21 @@
       }
     },
     "settings_instructions": {
-      "label": "Settings → Instructions for Claude",
+      "label": "Settings → Your Claude → Instructions",
       "hint": {
-        "ru": "инициалы слева внизу → настройки → инструкции для Claude",
-        "uk": "ініціали ліворуч унизу → налаштування → інструкції для Claude",
-        "en": "your initials, bottom left",
-        "pl": "inicjały w lewym dolnym rogu → ustawienia → instrukcje dla Claude"
+        "ru": "в старой версии настроек: Settings → Account → Instructions for Claude",
+        "uk": "у старій версії налаштувань: Settings → Account → Instructions for Claude",
+        "en": "in the older Settings layout: Settings → Account → Instructions for Claude",
+        "pl": "w starszej wersji ustawień: Settings → Account → Instructions for Claude"
       }
     },
     "settings_memory": {
-      "label": "Settings → Memory",
+      "label": "Settings → Your Claude → Your memory → Manage",
       "hint": {
-        "ru": "настройки → память",
-        "uk": "налаштування → пам'ять",
-        "en": "",
-        "pl": "ustawienia → pamięć"
+        "ru": "в старой версии настроек: Settings → Memory",
+        "uk": "у старій версії налаштувань: Settings → Memory",
+        "en": "in the older Settings layout: Settings → Memory",
+        "pl": "w starszej wersji ustawień: Settings → Memory"
       }
     },
     "memory_topics": {
@@ -241,22 +241,22 @@
       "pl": "5"
     },
     "rag_plans": {
-      "ru": "Pro, Max, Team, Enterprise",
-      "uk": "Pro, Max, Team, Enterprise",
-      "en": "Pro, Max, Team, Enterprise",
-      "pl": "Pro, Max, Team, Enterprise"
+      "ru": "Pro, Max, Ultra, Team, Enterprise",
+      "uk": "Pro, Max, Ultra, Team, Enterprise",
+      "en": "Pro, Max, Ultra, Team, Enterprise",
+      "pl": "Pro, Max, Ultra, Team, Enterprise"
     },
     "memory_availability": {
-      "ru": "на Free, Pro и Max включена по умолчанию; в Team и Enterprise её включает организация",
-      "uk": "на Free, Pro і Max увімкнена за замовчуванням; у Team і Enterprise її вмикає організація",
-      "en": "on by default on Free, Pro and Max; on Team and Enterprise the organization turns it on",
-      "pl": "w planach Free, Pro i Max jest domyślnie włączona; w Team i Enterprise włącza ją organizacja"
+      "ru": "на Free, Pro, Max и Ultra включена по умолчанию; в Team и Enterprise её включает организация",
+      "uk": "на Free, Pro, Max і Ultra увімкнена за замовчуванням; у Team і Enterprise її вмикає організація",
+      "en": "on by default on Free, Pro, Max and Ultra; on Team and Enterprise the organization turns it on",
+      "pl": "w planach Free, Pro, Max i Ultra jest domyślnie włączona; w Team i Enterprise włącza ją organizacja"
     },
     "chat_search_availability": {
-      "ru": "Pro, Max, Team, Enterprise",
-      "uk": "Pro, Max, Team, Enterprise",
-      "en": "Pro, Max, Team, Enterprise",
-      "pl": "Pro, Max, Team, Enterprise"
+      "ru": "Pro, Max, Ultra, Team, Enterprise",
+      "uk": "Pro, Max, Ultra, Team, Enterprise",
+      "en": "Pro, Max, Ultra, Team, Enterprise",
+      "pl": "Pro, Max, Ultra, Team, Enterprise"
     },
     "incognito_availability": {
       "ru": "все тарифы, включая Free",
