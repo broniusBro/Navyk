@@ -1,5 +1,5 @@
 {
-  "_about": "Изменчивые значения модуля a1 «Артефакты»: названия элементов интерфейса Claude (на английском, как в приложении), планы и лимиты. Подставляются в {{data.<раздел>.<ключ>}} при сборке. Источники и даты — content/data/volatile/a1.md. Проверено 2026-10-14. Переводы uk/en/pl добавят переводчики.",
+  "_about": "Изменчивые значения модуля a1 «Артефакты»: названия элементов интерфейса Claude (на английском, как в приложении), планы и лимиты. Подставляются в {{data.<раздел>.<ключ>}} при сборке. Источники и даты — content/data/volatile/a1.md. Проверено 2026-11-01. Переводы uk/en/pl добавят переводчики.",
   "ui_paths": {
     "a1_artifacts_tab": {
       "label": "Artifacts",
@@ -67,10 +67,10 @@
     "a1_code_execution_toggle": {
       "label": "Code execution and file creation",
       "hint": {
-        "ru": "переключатель «выполнение кода и создание файлов»; в части справки он называется Cloud code execution and file creation",
-        "uk": "перемикач «виконання коду і створення файлів»; у частині довідки він називається Cloud code execution and file creation",
-        "en": "a toggle; some help articles call it Cloud code execution and file creation",
-        "pl": "przełącznik „wykonywanie kodu i tworzenie plików”; w części pomocy nazywa się Cloud code execution and file creation"
+        "ru": "переключатель «выполнение кода и создание файлов»; в обновлённых настройках он называется Create and edit files, а в части справки — Cloud code execution and file creation",
+        "uk": "перемикач «виконання коду і створення файлів»; в оновлених налаштуваннях він називається Create and edit files, а в частині довідки — Cloud code execution and file creation",
+        "en": "a toggle; in the updated Settings layout it's called Create and edit files, and some help articles call it Cloud code execution and file creation",
+        "pl": "przełącznik „wykonywanie kodu i tworzenie plików”; w zaktualizowanych ustawieniach nazywa się Create and edit files, a w części pomocy — Cloud code execution and file creation"
       }
     },
     "a1_edit_with_claude": {
@@ -208,10 +208,10 @@
       "pl": "we wszystkich planach, także w Free"
     },
     "a1_dashboards_plans": {
-      "ru": "Pro, Max, Team и Enterprise",
-      "uk": "Pro, Max, Team і Enterprise",
-      "en": "Pro, Max, Team and Enterprise",
-      "pl": "Pro, Max, Team i Enterprise"
+      "ru": "Pro, Max, Ultra, Team и Enterprise",
+      "uk": "Pro, Max, Ultra, Team і Enterprise",
+      "en": "Pro, Max, Ultra, Team and Enterprise",
+      "pl": "Pro, Max, Ultra, Team i Enterprise"
     },
     "a1_motion_plans": {
       "ru": "Team и Enterprise",
@@ -220,10 +220,10 @@
       "pl": "Team i Enterprise"
     },
     "a1_apps_storage_plans": {
-      "ru": "Pro, Max, Team и Enterprise",
-      "uk": "Pro, Max, Team і Enterprise",
-      "en": "Pro, Max, Team and Enterprise",
-      "pl": "Pro, Max, Team i Enterprise"
+      "ru": "Pro, Max, Ultra, Team и Enterprise",
+      "uk": "Pro, Max, Ultra, Team і Enterprise",
+      "en": "Pro, Max, Ultra, Team and Enterprise",
+      "pl": "Pro, Max, Ultra, Team i Enterprise"
     },
     "a1_link_sharing_personal": {
       "ru": "на Free, Pro и Max",

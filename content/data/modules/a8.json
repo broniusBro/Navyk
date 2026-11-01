@@ -1,5 +1,5 @@
 {
-  "_about": "Изменчивые значения модуля a8 «Контекст и лимиты для продвинутых»: названия элементов интерфейса Claude (на английском, как в приложении), планы и лимиты. Подставляются в {{data.<раздел>.<ключ>}} при сборке. Источники и даты — content/data/volatile/a8.md. Проверено 2026-10-14. Переводы uk/en/pl добавят переводчики.",
+  "_about": "Изменчивые значения модуля a8 «Контекст и лимиты для продвинутых»: названия элементов интерфейса Claude (на английском, как в приложении), планы и лимиты. Подставляются в {{data.<раздел>.<ключ>}} при сборке. Источники и даты — content/data/volatile/a8.md. Проверено 2026-11-01. Переводы uk/en/pl добавят переводчики.",
   "ui_paths": {
     "a8_settings_capabilities": {
       "label": "Settings → Capabilities",
@@ -13,10 +13,10 @@
     "a8_code_execution_toggle": {
       "label": "Code execution and file creation",
       "hint": {
-        "ru": "переключатель «выполнение кода и создание файлов»",
-        "uk": "перемикач «виконання коду і створення файлів»",
-        "en": "",
-        "pl": "przełącznik „wykonywanie kodu i tworzenie plików”"
+        "ru": "переключатель «выполнение кода и создание файлов»; в обновлённых настройках — Create and edit files",
+        "uk": "перемикач «виконання коду і створення файлів»; в оновлених налаштуваннях — Create and edit files",
+        "en": "called Create and edit files in the updated Settings layout",
+        "pl": "przełącznik „wykonywanie kodu i tworzenie plików”; w nowym układzie ustawień — Create and edit files"
       }
     },
     "a8_organizing_thoughts": {
@@ -67,16 +67,16 @@
   },
   "plans": {
     "a8_code_execution_default": {
-      "ru": "на Free, Pro и Max он включён по умолчанию, в Team и Enterprise им управляет владелец организации",
-      "uk": "на Free, Pro і Max він увімкнений за замовчуванням, у Team і Enterprise ним керує власник організації",
-      "en": "on Free, Pro and Max it's on by default; on Team and Enterprise, the organisation owner controls it",
-      "pl": "w planach Free, Pro i Max jest domyślnie włączony, w Team i Enterprise zarządza nim właściciel organizacji"
+      "ru": "на Free, Pro, Max и Ultra он включён по умолчанию, в Team и Enterprise им управляет владелец организации",
+      "uk": "на Free, Pro, Max і Ultra він увімкнений за замовчуванням, у Team і Enterprise ним керує власник організації",
+      "en": "on Free, Pro, Max and Ultra it's on by default; on Team and Enterprise, the organisation owner controls it",
+      "pl": "w planach Free, Pro, Max i Ultra jest domyślnie włączony, w Team i Enterprise zarządza nim właściciel organizacji"
     },
     "a8_research_plans": {
-      "ru": "только на платных планах: Pro, Max, Team и Enterprise",
-      "uk": "тільки на платних планах: Pro, Max, Team і Enterprise",
-      "en": "only on paid plans: Pro, Max, Team and Enterprise",
-      "pl": "tylko w planach płatnych: Pro, Max, Team i Enterprise"
+      "ru": "только на платных планах: Pro, Max, Ultra, Team и Enterprise",
+      "uk": "тільки на платних планах: Pro, Max, Ultra, Team і Enterprise",
+      "en": "only on paid plans: Pro, Max, Ultra, Team and Enterprise",
+      "pl": "tylko w planach płatnych: Pro, Max, Ultra, Team i Enterprise"
     }
   },
   "limits": {
@@ -99,10 +99,10 @@
       "pl": "około 555 tysięcy słów (szacunek Anthropic dla obecnego tokenizera)"
     },
     "a8_session_reset": {
-      "ru": "сессионный лимит, который сбрасывается каждые пять часов, и недельные лимиты",
-      "uk": "сесійний ліміт, який скидається кожні п'ять годин, і тижневі ліміти",
-      "en": "session limit that resets every five hours, plus weekly limits",
-      "pl": "limit sesji, który odnawia się co pięć godzin, oraz limity tygodniowe"
+      "ru": "сессионный лимит, который сбрасывается каждые пять часов (у подтверждённых аккаунтов Ultra его нет), и недельные лимиты",
+      "uk": "сесійний ліміт, який скидається кожні п'ять годин (у підтверджених акаунтів Ultra його немає), і тижневі ліміти",
+      "en": "session limit that resets every five hours (verified Ultra accounts don't have one), plus weekly limits",
+      "pl": "limit sesji, który odnawia się co pięć godzin (zweryfikowane konta Ultra go nie mają), oraz limity tygodniowe"
     }
   }
 }

@@ -1,5 +1,5 @@
 {
-  "_about": "Изменчивые значения модуля a6 «Длинные задачи»: названия элементов интерфейса Claude (на английском, как в приложении), планы и лимиты. Подставляются в {{data.<раздел>.<ключ>}} при сборке. Источники и даты — content/data/volatile/a6.md. Проверено 2026-10-14. Переводы uk/en/pl добавят переводчики.",
+  "_about": "Изменчивые значения модуля a6 «Длинные задачи»: названия элементов интерфейса Claude (на английском, как в приложении), планы и лимиты. Подставляются в {{data.<раздел>.<ключ>}} при сборке. Источники и даты — content/data/volatile/a6.md. Проверено 2026-11-01. Переводы uk/en/pl добавят переводчики.",
   "ui_paths": {
     "a6_cowork_switch": {
       "label": "Cowork",
@@ -92,12 +92,12 @@
       }
     },
     "a6_enable_computer_use": {
-      "label": "Settings → General → Enable computer use",
+      "label": "Settings → Capabilities → Enable computer use",
       "hint": {
-        "ru": "включить управление компьютером",
-        "uk": "увімкнути керування комп'ютером",
-        "en": "",
-        "pl": "włącz sterowanie komputerem"
+        "ru": "включить управление компьютером; если раздела нет — Settings → System → This computer",
+        "uk": "увімкнути керування комп'ютером; якщо розділу немає — Settings → System → This computer",
+        "en": "if that section isn't there: Settings → System → This computer",
+        "pl": "włącz sterowanie komputerem; jeśli tej sekcji nie ma — Settings → System → This computer"
       }
     },
     "a6_preferred_browser": {
@@ -121,34 +121,34 @@
   },
   "plans": {
     "a6_long_tasks_plans": {
-      "ru": "только на платных планах: Pro, Max, Team и Enterprise; на Free их пока нет",
-      "uk": "лише на платних планах: Pro, Max, Team і Enterprise; на Free їх поки немає",
-      "en": "paid plans only: Pro, Max, Team and Enterprise; not on Free yet",
-      "pl": "tylko w płatnych planach: Pro, Max, Team i Enterprise; w Free na razie ich nie ma"
+      "ru": "только на платных планах: Pro, Max, Ultra, Team и Enterprise; на Free их пока нет",
+      "uk": "лише на платних планах: Pro, Max, Ultra, Team і Enterprise; на Free їх поки немає",
+      "en": "paid plans only: Pro, Max, Ultra, Team and Enterprise; not on Free yet",
+      "pl": "tylko w płatnych planach: Pro, Max, Ultra, Team i Enterprise; w Free na razie ich nie ma"
     },
     "a6_merge_rollout": {
-      "ru": "с 16 сентября 2026 года постепенно для Pro и Max, Team и Free — позже",
-      "uk": "з 16 вересня 2026 року поступово для Pro і Max, для Team і Free — пізніше",
-      "en": "rolling out gradually from 16 September 2026 to Pro and Max, with Team and Free to follow",
-      "pl": "od 16 września 2026 r. stopniowo dla Pro i Max, dla Team i Free — później"
+      "ru": "с 16 сентября 2026 года постепенно для Pro, Max и Ultra; на Team — в бете, на Enterprise — с 23 октября 2026 года, если включил владелец; Free — позже",
+      "uk": "з 16 вересня 2026 року поступово для Pro, Max і Ultra; на Team — у беті, на Enterprise — з 23 жовтня 2026 року, якщо ввімкнув власник; для Free — пізніше",
+      "en": "rolling out gradually from 16 September 2026 to Pro, Max and Ultra; in beta on Team; on Enterprise since 23 October 2026 where the owner has turned it on; Free to follow",
+      "pl": "od 16 września 2026 r. stopniowo dla Pro, Max i Ultra; w Team — w becie, w Enterprise — od 23 października 2026 r., jeśli włączył to właściciel; dla Free — później"
     },
     "a6_cloud_plans": {
-      "ru": "на Pro и Max — все новые задачи с 6 октября 2026 года, на Team — в бете",
-      "uk": "на Pro і Max — усі нові завдання з 6 жовтня 2026 року, на Team — у беті",
-      "en": "on Pro and Max, all new tasks since 6 October 2026; in beta on Team",
-      "pl": "w Pro i Max — wszystkie nowe zadania od 6 października 2026 r., w Team — w becie"
+      "ru": "на Pro, Max и Ultra — все новые задачи с 6 октября 2026 года",
+      "uk": "на Pro, Max і Ultra — усі нові завдання з 6 жовтня 2026 року",
+      "en": "on Pro, Max and Ultra, all new tasks since 6 October 2026",
+      "pl": "w Pro, Max i Ultra — wszystkie nowe zadania od 6 października 2026 r."
     },
     "a6_computer_use_plans": {
-      "ru": "бета, только на Pro и Max, в приложении Claude для macOS и Windows",
-      "uk": "бета, лише на Pro і Max, у застосунку Claude для macOS і Windows",
-      "en": "in beta, Pro and Max only, in the Claude app for macOS and Windows",
-      "pl": "beta, tylko w Pro i Max, w aplikacji Claude na macOS i Windows"
+      "ru": "бета, только на Pro, Max и Ultra, в приложении Claude для macOS и Windows",
+      "uk": "бета, лише на Pro, Max і Ultra, у застосунку Claude для macOS і Windows",
+      "en": "in beta, Pro, Max and Ultra only, in the Claude app for macOS and Windows",
+      "pl": "beta, tylko w Pro, Max i Ultra, w aplikacji Claude na macOS i Windows"
     },
     "a6_builtin_browser_plans": {
-      "ru": "раскатывается постепенно на Pro, Max и Team, на Enterprise — если включил владелец; приложение для macOS, Windows и Linux (бета)",
-      "uk": "розгортається поступово на Pro, Max і Team, на Enterprise — якщо ввімкнув власник; застосунок для macOS, Windows і Linux (бета)",
-      "en": "rolling out gradually to Pro, Max and Team, and to Enterprise if the owner has turned it on; desktop app for macOS, Windows and Linux (beta)",
-      "pl": "wdrażana stopniowo w Pro, Max i Team, w Enterprise — jeśli włączył ją właściciel; aplikacja na macOS, Windows i Linux (beta)"
+      "ru": "на Pro, Max и Ultra, а на Team и Enterprise — если владелец его не выключил; приложение для macOS, Windows и Linux (бета)",
+      "uk": "на Pro, Max і Ultra, а на Team і Enterprise — якщо власник його не вимкнув; застосунок для macOS, Windows і Linux (бета)",
+      "en": "on Pro, Max and Ultra, and on Team and Enterprise unless an owner has turned it off; desktop app for macOS, Windows and Linux (beta)",
+      "pl": "w Pro, Max i Ultra, a w Team i Enterprise — jeśli właściciel jej nie wyłączył; aplikacja na macOS, Windows i Linux (beta)"
     },
     "a6_scheduled_plans": {
       "ru": "Pro, Max, Team и Enterprise",
@@ -157,10 +157,16 @@
       "pl": "Pro, Max, Team i Enterprise"
     },
     "a6_mobile_plans": {
-      "ru": "в вебе и на телефоне — Pro и Max, на Team это бета, на Enterprise — если включил администратор",
-      "uk": "у вебі й на телефоні — Pro і Max, на Team це бета, на Enterprise — якщо ввімкнув адміністратор",
-      "en": "on the web and on your phone for Pro and Max; in beta on Team; on Enterprise if your admin has turned it on",
-      "pl": "w przeglądarce i na telefonie — Pro i Max, w Team to beta, w Enterprise — jeśli włączył to administrator"
+      "ru": "в вебе и на телефоне — Pro, Max и Ultra, на Team это бета, на Enterprise — если включил владелец",
+      "uk": "у вебі й на телефоні — Pro, Max і Ultra, на Team це бета, на Enterprise — якщо ввімкнув власник",
+      "en": "on the web and on your phone for Pro, Max and Ultra; in beta on Team; on Enterprise if an owner has turned it on",
+      "pl": "w przeglądarce i na telefonie — Pro, Max i Ultra, w Team to beta, w Enterprise — jeśli włączył to właściciel"
+    },
+    "a6_approval_default": {
+      "ru": "в новом интерфейсе на Pro, Max, Ultra и Team по умолчанию стоит автоподтверждение: Claude работает сам и проверяет каждое действие на безопасность, а на Enterprise — спрашивает перед действием",
+      "uk": "у новому інтерфейсі на Pro, Max, Ultra і Team за замовчуванням стоїть автопідтвердження: Claude працює сам і перевіряє кожну дію на безпеку, а на Enterprise — питає перед дією",
+      "en": "in the new interface, Pro, Max, Ultra and Team default to automatic approval: Claude works on its own and checks each action for safety, while on Enterprise it asks before acting",
+      "pl": "w nowym interfejsie w Pro, Max, Ultra i Team domyślnie działa automatyczne zatwierdzanie: Claude pracuje sam i sprawdza każde działanie pod kątem bezpieczeństwa, a w Enterprise — pyta przed działaniem"
     }
   },
   "limits": {

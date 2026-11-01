@@ -1,5 +1,5 @@
 {
-  "_about": "Изменчивые значения модуля p4 «Claude API». Подставляются в {{data.<раздел>.<ключ>}}. Префикс ключей pfour_ (а не p4_): регулярное выражение плейсхолдеров в scripts/build_content.py допускает только [a-z_]. Источники и даты — content/data/volatile/p4.md. Проверено 2026-10-14.",
+  "_about": "Изменчивые значения модуля p4 «Claude API». Подставляются в {{data.<раздел>.<ключ>}}. Префикс ключей pfour_ (а не p4_): регулярное выражение плейсхолдеров в scripts/build_content.py допускает только [a-z_]. Источники и даты — content/data/volatile/p4.md. Проверено 2026-11-01.",
   "ui_paths": {
     "pfour_console_keys": {
       "label": "Settings → API keys",

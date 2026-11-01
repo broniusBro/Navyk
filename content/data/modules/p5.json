@@ -1,5 +1,5 @@
 {
-  "_about": "Изменчивые значения модуля p5 «MCP»: версия спецификации MCP, бета-заголовок MCP connector, названия элементов интерфейса Claude (на английском, как в приложении), планы и лимиты. Подставляются в {{data.<раздел>.<ключ>}} при сборке. Префикс ключей pfive_ (а не p5_): регулярное выражение сборщика принимает в ключах только [a-z_]. Источники и даты — content/data/volatile/p5.md. Проверено 2026-10-14. Переводы uk/en/pl добавят переводчики.",
+  "_about": "Изменчивые значения модуля p5 «MCP»: версия спецификации MCP, бета-заголовок MCP connector, названия элементов интерфейса Claude (на английском, как в приложении), планы и лимиты. Подставляются в {{data.<раздел>.<ключ>}} при сборке. Префикс ключей pfive_ (а не p5_): регулярное выражение сборщика принимает в ключах только [a-z_]. Источники и даты — content/data/volatile/p5.md. Проверено 2026-11-01. Переводы uk/en/pl добавят переводчики.",
   "versions": {
     "pfive_mcp_spec": {
       "ru": "2026-07-28",
@@ -39,7 +39,7 @@
       }
     },
     "pfive_add_custom": {
-      "label": "+ → Add custom connector",
+      "label": "+ Add → Add custom connector",
       "hint": {
         "ru": "добавить свой коннектор по URL",
         "uk": "додати власний конектор за URL",
@@ -47,13 +47,13 @@
         "pl": "dodaj własny konektor po URL"
       }
     },
-    "pfive_advanced_settings": {
-      "label": "Advanced settings",
+    "pfive_oauth_client": {
+      "label": "OAuth client",
       "hint": {
-        "ru": "дополнительные настройки: OAuth Client ID и Client Secret",
-        "uk": "додаткові налаштування: OAuth Client ID і Client Secret",
-        "en": "OAuth Client ID and Client Secret",
-        "pl": "ustawienia zaawansowane: OAuth Client ID i Client Secret"
+        "ru": "Use Claude's published identity (рекомендуется), Register automatically или Use your own OAuth client",
+        "uk": "Use Claude's published identity (рекомендовано), Register automatically або Use your own OAuth client",
+        "en": "Use Claude's published identity (recommended), Register automatically or Use your own OAuth client",
+        "pl": "Use Claude's published identity (zalecane), Register automatically lub Use your own OAuth client"
       }
     },
     "pfive_chat_connectors": {
@@ -68,10 +68,10 @@
   },
   "plans": {
     "pfive_custom_plans": {
-      "ru": "Free, Pro, Max, Team и Enterprise (функция в бете)",
-      "uk": "Free, Pro, Max, Team і Enterprise (функція в беті)",
-      "en": "Free, Pro, Max, Team and Enterprise (beta feature)",
-      "pl": "Free, Pro, Max, Team i Enterprise (funkcja w wersji beta)"
+      "ru": "Free, Pro, Max, Ultra, Team и Enterprise",
+      "uk": "Free, Pro, Max, Ultra, Team і Enterprise",
+      "en": "Free, Pro, Max, Ultra, Team and Enterprise",
+      "pl": "Free, Pro, Max, Ultra, Team i Enterprise"
     },
     "pfive_free_custom_max": {
       "ru": "один",
@@ -80,10 +80,10 @@
       "pl": "jeden"
     },
     "pfive_team_custom_who": {
-      "ru": "только владелец организации (Owner)",
-      "uk": "лише власник організації (Owner)",
-      "en": "only the organisation's Owner",
-      "pl": "tylko właściciel organizacji (Owner)"
+      "ru": "владелец организации (Owner или Primary Owner)",
+      "uk": "власник організації (Owner або Primary Owner)",
+      "en": "an organisation Owner or Primary Owner",
+      "pl": "właściciel organizacji (Owner lub Primary Owner)"
     }
   },
   "limits": {

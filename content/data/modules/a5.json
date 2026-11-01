@@ -1,5 +1,5 @@
 {
-  "_about": "Изменчивые значения модуля a5 «Навыки и плагины»: названия элементов интерфейса Claude (на английском, как в приложении), планы и лимиты. Подставляются в {{data.<раздел>.<ключ>}} при сборке. Источники и даты — content/data/volatile/a5.md. Проверено 2026-10-14. Переводы uk/en/pl добавят переводчики.",
+  "_about": "Изменчивые значения модуля a5 «Навыки и плагины»: названия элементов интерфейса Claude (на английском, как в приложении), планы и лимиты. Подставляются в {{data.<раздел>.<ключ>}} при сборке. Источники и даты — content/data/volatile/a5.md. Проверено 2026-11-01. Переводы uk/en/pl добавят переводчики.",
   "ui_paths": {
     "a5_customize": {
       "label": "Customize",
@@ -20,7 +20,7 @@
       }
     },
     "a5_upload_skill": {
-      "label": "Upload skill",
+      "label": "+ → + Create skill → Upload a skill",
       "hint": {
         "ru": "загрузить навык из ZIP-архива",
         "uk": "завантажити навичку з ZIP-архіву",
@@ -40,10 +40,10 @@
     "a5_code_execution": {
       "label": "Settings → Capabilities → Code execution and file creation",
       "hint": {
-        "ru": "настройки → возможности → выполнение кода и создание файлов",
-        "uk": "налаштування → можливості → виконання коду та створення файлів",
-        "en": "",
-        "pl": "ustawienia → możliwości → wykonywanie kodu i tworzenie plików"
+        "ru": "настройки → возможности → выполнение кода и создание файлов; в обновлённых настройках переключатель называется Create and edit files",
+        "uk": "налаштування → можливості → виконання коду та створення файлів; в оновлених налаштуваннях перемикач називається Create and edit files",
+        "en": "called Create and edit files in the updated Settings layout",
+        "pl": "ustawienia → możliwości → wykonywanie kodu i tworzenie plików; w nowym układzie ustawień przełącznik nazywa się Create and edit files"
       }
     },
     "a5_edit_with_claude": {
@@ -103,10 +103,10 @@
   },
   "plans": {
     "a5_plugins_plans": {
-      "ru": "только на платных планах: Pro, Max, Team и Enterprise",
-      "uk": "лише на платних планах: Pro, Max, Team і Enterprise",
-      "en": "only on paid plans: Pro, Max, Team and Enterprise",
-      "pl": "tylko w płatnych planach: Pro, Max, Team i Enterprise"
+      "ru": "только на платных планах: Pro, Max, Ultra, Team и Enterprise",
+      "uk": "лише на платних планах: Pro, Max, Ultra, Team і Enterprise",
+      "en": "only on paid plans: Pro, Max, Ultra, Team and Enterprise",
+      "pl": "tylko w płatnych planach: Pro, Max, Ultra, Team i Enterprise"
     },
     "a5_org_skills_plans": {
       "ru": "Team и Enterprise",
