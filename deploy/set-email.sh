@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 # Set or replace the email provider and its API key on the server without showing the key. Run as root:
-#   ssh -t root@65.108.234.212 /srv/polish/deploy/set-email.sh
+#   ssh -t root@65.108.234.212 /srv/brolingvo-poland/deploy/set-email.sh
 # Providers: brevo or resend (the sending domain brolingvo.com must be verified there first, see docs/infra/hetzner.md);
 # log = do not send (production then only logs that an email was due).
 set -euo pipefail
-ENV_FILE=/etc/polish/polish.env
+ENV_FILE=/etc/brolingvo-poland/brolingvo-poland.env
 [ "$(id -u)" = 0 ] || { echo "run as root"; exit 1; }
 read -r -p "Email provider (brevo / resend / log): " provider
 provider="$(printf '%s' "$provider" | tr '[:upper:]' '[:lower:]' | tr -d '[:space:]')"
@@ -24,13 +24,13 @@ from=""
 read -r -p "Sender, Enter for the default \"brolingvo <no-reply@brolingvo.com>\": " from
 # Only a name was typed (e.g. "brolingvo"): add the default address, a sender needs one.
 if [ -n "$from" ] && [[ "$from" != *@* ]]; then from="$from <no-reply@brolingvo.com>"; fi
-install -d -m 700 /etc/polish
+install -d -m 700 /etc/brolingvo-poland
 touch "$ENV_FILE"; chmod 600 "$ENV_FILE"
 grep -vE '^(EMAIL_PROVIDER|EMAIL_API_KEY|EMAIL_FROM)=' "$ENV_FILE" > "$ENV_FILE.new" || true
 printf 'EMAIL_PROVIDER=%s\nEMAIL_API_KEY=%s\n' "$provider" "$key" >> "$ENV_FILE.new"
 [ -n "$from" ] && printf 'EMAIL_FROM=%s\n' "$from" >> "$ENV_FILE.new"
 mv "$ENV_FILE.new" "$ENV_FILE"; chmod 600 "$ENV_FILE"
-cd /srv/polish && docker compose up -d --force-recreate app >/dev/null
+cd /srv/brolingvo-poland && docker compose up -d --force-recreate app >/dev/null
 sleep 3
 curl -fsS "http://127.0.0.1:${APP_PORT:-8120}/api/health"; echo
 echo "Email provider: $provider (the key is not printed). Check: register on the site and look for the confirmation email."

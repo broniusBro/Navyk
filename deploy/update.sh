@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Update to the latest polish branch: pull, rebuild, restart, check; roll back automatically if unhealthy.
-# Run as root from /srv/polish (also called by the autoupdate timer).
+# Run as root from /srv/brolingvo-poland (also called by the autoupdate timer).
 set -euo pipefail
 REPO="$(cd "$(dirname "$0")/.." && pwd)"; cd "$REPO"
 APP_PORT="${APP_PORT:-8120}"
@@ -15,20 +15,20 @@ healthy() {
   return 1
 }
 # servers installed before accounts existed: derive PUBLIC_ORIGIN (CSRF check, email links) from the Caddy site
-ENV_FILE=/etc/polish/polish.env
+ENV_FILE=/etc/brolingvo-poland/brolingvo-poland.env
 if [ -f "$ENV_FILE" ] && ! grep -q '^PUBLIC_ORIGIN=' "$ENV_FILE"; then
   site="$(grep -l "reverse_proxy 127.0.0.1:$APP_PORT" /etc/caddy/sites/*.caddy 2>/dev/null | head -1 | xargs -r basename | sed 's/\.caddy$//')"
-  [ -n "$site" ] && { printf 'PUBLIC_ORIGIN=https://%s\n' "$site" >> "$ENV_FILE"; echo "polish: PUBLIC_ORIGIN=https://$site added"; }
+  [ -n "$site" ] && { printf 'PUBLIC_ORIGIN=https://%s\n' "$site" >> "$ENV_FILE"; echo "brolingvo-poland: PUBLIC_ORIGIN=https://$site added"; }
 fi
 APP_PORT="$APP_PORT" docker compose build app
 APP_PORT="$APP_PORT" docker compose up -d app
 if healthy; then
-  echo "polish updated ${prev:0:7} -> ${now:0:7}"
+  echo "brolingvo-poland updated ${prev:0:7} -> ${now:0:7}"
   docker image prune -f >/dev/null 2>&1 || true
   exit 0
 fi
 docker compose logs --tail 80 app >&2
-echo "polish ${now:0:7} unhealthy — rolling back to ${prev:0:7}" >&2
+echo "brolingvo-poland ${now:0:7} unhealthy — rolling back to ${prev:0:7}" >&2
 git checkout -q "$prev"
 APP_PORT="$APP_PORT" docker compose build app && APP_PORT="$APP_PORT" docker compose up -d app
 healthy && echo "rolled back to ${prev:0:7} (the branch stays ahead; fix it in GitHub and the next run retries)" >&2

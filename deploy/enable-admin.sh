@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 # Turn on the admin panel at admin.<site> and make the first owner. Run as root, interactively:
-#   ssh -t root@65.108.234.212 /srv/polish/deploy/enable-admin.sh
+#   ssh -t root@65.108.234.212 /srv/brolingvo-poland/deploy/enable-admin.sh
 # Before: DNS A record admin.<site> -> this server's IP; the owner's account registered on the site
 # with a confirmed email (or signed in with Google). Safe to run again (e.g. to add another owner).
 set -euo pipefail
 REPO="$(cd "$(dirname "$0")/.." && pwd)"; cd "$REPO"
 APP_PORT="${APP_PORT:-8120}"
-ENV_FILE=/etc/polish/polish.env
+ENV_FILE=/etc/brolingvo-poland/brolingvo-poland.env
 die() { printf 'ERROR: %s\n' "$*" >&2; exit 1; }
 [ "$(id -u)" = 0 ] || die "run as root"
 [ -f "$ENV_FILE" ] || die "$ENV_FILE missing — run deploy/install.sh first"

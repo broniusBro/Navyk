@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Отправить тестовое письмо из работающего контейнера и показать ответ почтового сервиса.
-# Запуск на сервере: ssh -t root@65.108.234.212 /srv/polish/deploy/test-email.sh
+# Запуск на сервере: ssh -t root@65.108.234.212 /srv/brolingvo-poland/deploy/test-email.sh
 set -euo pipefail
 cd "$(dirname "$0")/.."
 read -r -p "Send a test email to: " to

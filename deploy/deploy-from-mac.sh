@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # brolingvo · polski on the shared application server 65.108.234.212 (navyk.app and bronus.app live there too;
 # rules: bronus-core/host/README.md). The app gets its own "apartment" and never touches other projects:
-#   code /srv/polish (branch "polish" of the public Navyk repository), Compose project "polish", port 127.0.0.1:8120,
-#   secrets /etc/polish/polish.env, Caddy site /etc/caddy/sites/poland.brolingvo.com.caddy, own timers and backups.
+#   code /srv/brolingvo-poland (branch "polish" of the public Navyk repository), Compose project "polish", port 127.0.0.1:8120,
+#   secrets /etc/brolingvo-poland/brolingvo-poland.env, Caddy site /etc/caddy/sites/poland.brolingvo.com.caddy, own timers and backups.
 #
 # Run on the Mac (any folder — the script needs nothing local except ssh access as root):
 #   curl -fsSL https://raw.githubusercontent.com/broniusBro/Navyk/polish/deploy/deploy-from-mac.sh -o /tmp/polish-deploy.sh && bash /tmp/polish-deploy.sh
@@ -15,7 +15,7 @@ SITE="${SITE:-poland.brolingvo.com}"
 APP_PORT="${APP_PORT:-8120}"
 BRANCH="${BRANCH:-polish}"
 REPO_URL="${REPO_URL:-https://github.com/broniusBro/Navyk.git}"   # public repository: no deploy key needed
-DIR=/srv/polish
+DIR=/srv/brolingvo-poland
 
 step() { printf '\n== %s\n' "$*"; }
 mkdir -p "$HOME/.ssh/cm"; chmod 700 "$HOME/.ssh/cm"
@@ -28,7 +28,7 @@ step "1/5 Проверки: доступ к серверу, свободный �
 ssh -o ConnectTimeout=10 -o StrictHostKeyChecking=accept-new "$SERVER" 'echo "сервер: $(hostname), $(nproc) CPU, $(free -g | awk "/Mem:/{print \$2}") GB RAM, свободно $(df -h / | awk "NR==2{print \$4}")"'
 ssh "$SERVER" 'command -v docker >/dev/null && test -d /etc/caddy/sites' || { echo "На сервере нет базовой настройки (bronus-core/host/bootstrap.sh)."; exit 1; }
 echo "Проекты на сервере (их не трогаем):"; ssh "$SERVER" 'cat /etc/host/projects 2>/dev/null || true'
-busy="$(ssh "$SERVER" "ss -ltnH 'sport = :$APP_PORT' | head -1; awk -v p=$APP_PORT '\$2==p && \$1!=\"polish\" {print \"registered for \"\$1}' /etc/host/projects 2>/dev/null" || true)"
+busy="$(ssh "$SERVER" "ss -ltnH 'sport = :$APP_PORT' | head -1; awk -v p=$APP_PORT '\$2==p && \$1!=\"brolingvo-poland\" {print \"registered for \"\$1}' /etc/host/projects 2>/dev/null" || true)"
 if [ -n "$busy" ] && ! ssh "$SERVER" "test -d $DIR/.git"; then
   echo "Порт $APP_PORT занят ($busy). Запустите с другим портом: APP_PORT=8120 bash deploy-from-mac.sh"; exit 1
 fi

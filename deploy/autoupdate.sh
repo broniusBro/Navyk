@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-# Called by polish-autoupdate.timer. Pulls branch polish; rebuilds only if it changed; rolls back if the new version is unhealthy.
+# Called by brolingvo-poland-autoupdate.timer. Pulls branch polish; rebuilds only if it changed; rolls back if the new version is unhealthy.
 set -euo pipefail
 REPO="$(cd "$(dirname "$0")/.." && pwd)"; cd "$REPO"
 APP_PORT="${APP_PORT:-8120}"
-FAILED=/var/lib/polish/failed-commit
+FAILED=/var/lib/brolingvo-poland/failed-commit
 git fetch -q origin polish
 target="$(git rev-parse origin/polish)"
 [ "$(git rev-parse HEAD)" = "$target" ] && exit 0
@@ -12,6 +12,6 @@ target="$(git rev-parse origin/polish)"
 if "$REPO/deploy/update.sh"; then
   rm -f "$FAILED"
 else
-  install -d /var/lib/polish && echo "$target" > "$FAILED"
+  install -d /var/lib/brolingvo-poland && echo "$target" > "$FAILED"
   exit 1
 fi

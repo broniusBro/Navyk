@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-# Install or re-install brolingvo · polski on the shared application server. Run as root from /srv/polish.
+# Install or re-install brolingvo · polski on the shared application server. Run as root from /srv/brolingvo-poland.
 #   SITE=poland.brolingvo.com ./deploy/install.sh
-# Safe to run again. Follows bronus-core/host/README.md: port 8120, secrets in /etc/polish,
-# own Caddy site file /etc/caddy/sites/<SITE>.caddy, own Compose project "polish". Never touches other projects.
+# Safe to run again. Follows bronus-core/host/README.md: port 8120, secrets in /etc/brolingvo-poland,
+# own Caddy site file /etc/caddy/sites/<SITE>.caddy, own Compose project "brolingvo-poland". Never touches other projects.
 set -euo pipefail
 REPO="$(cd "$(dirname "$0")/.." && pwd)"; cd "$REPO"
 APP_PORT="${APP_PORT:-8120}"
@@ -10,22 +10,22 @@ IP="$(curl -fsS -m 5 http://169.254.169.254/hetzner/v1/metadata/public-ipv4 2>/d
 # without SITE keep the domain this app already serves (so a re-run never falls back to sslip.io)
 CURRENT="$(grep -l "reverse_proxy 127.0.0.1:$APP_PORT" /etc/caddy/sites/*.caddy 2>/dev/null | head -1 | xargs -r basename | sed 's/\.caddy$//')"
 SITE="${SITE:-${CURRENT:-$(echo "$IP" | tr . -).sslip.io}}"
-ENV_FILE=/etc/polish/polish.env
+ENV_FILE=/etc/brolingvo-poland/brolingvo-poland.env
 CADDY_SITE="/etc/caddy/sites/$SITE.caddy"
-say() { printf '\n== polish: %s\n' "$*"; }
+say() { printf '\n== brolingvo-poland: %s\n' "$*"; }
 die() { printf 'ERROR: %s\n' "$*" >&2; exit 1; }
 [ "$(id -u)" = 0 ] || die "run as root"
 command -v docker >/dev/null || die "Docker missing — run bronus-core/host/bootstrap.sh first"
 [ -d /etc/caddy/sites ] || die "/etc/caddy/sites missing — run bronus-core/host/bootstrap.sh first"
-# shared port registry (bronus-core/host/README.md): register "polish <port> /srv/polish" once; refuse a port owned by another project
+# shared port registry (bronus-core/host/README.md): register "brolingvo-poland <port> /srv/brolingvo-poland" once; refuse a port owned by another project
 if [ -f /etc/host/projects ]; then
   owner="$(awk -v p="$APP_PORT" '$2==p {print $1}' /etc/host/projects | head -1)"
-  if [ -n "$owner" ] && [ "$owner" != "polish" ]; then die "port $APP_PORT is registered for $owner in /etc/host/projects"; fi
-  if ! grep -qE '^polish[[:space:]]' /etc/host/projects; then
-    printf 'polish         %s         /srv/polish      /etc/polish       polish\n' "$APP_PORT" >> /etc/host/projects
-    echo "registered polish $APP_PORT in /etc/host/projects"
-  elif ! grep -qE '^polish[[:space:]]+'"$APP_PORT"'[[:space:]]' /etc/host/projects; then
-    die "polish is registered in /etc/host/projects with another port; use APP_PORT=<that port>"
+  if [ -n "$owner" ] && [ "$owner" != "brolingvo-poland" ]; then die "port $APP_PORT is registered for $owner in /etc/host/projects"; fi
+  if ! grep -qE '^brolingvo-poland[[:space:]]' /etc/host/projects; then
+    printf 'brolingvo-poland %s         /srv/brolingvo-poland /etc/brolingvo-poland brolingvo-poland\n' "$APP_PORT" >> /etc/host/projects
+    echo "registered brolingvo-poland $APP_PORT in /etc/host/projects"
+  elif ! grep -qE '^brolingvo-poland[[:space:]]+'"$APP_PORT"'[[:space:]]' /etc/host/projects; then
+    die "brolingvo-poland is registered in /etc/host/projects with another port; use APP_PORT=<that port>"
   fi
 fi
 if ss -ltnH "sport = :$APP_PORT" | grep -q . && ! docker compose ps -q app 2>/dev/null | grep -q .; then
@@ -33,7 +33,7 @@ if ss -ltnH "sport = :$APP_PORT" | grep -q . && ! docker compose ps -q app 2>/de
 fi
 
 say "1/6 secrets ($ENV_FILE)"
-install -d -m 700 /etc/polish
+install -d -m 700 /etc/brolingvo-poland
 if [ ! -f "$ENV_FILE" ]; then
   key=""
   if [ -t 0 ]; then
@@ -92,7 +92,7 @@ else
 fi
 
 say "4/6 automatic updates from GitHub (every 5 minutes, only when branch polish changed)"
-cat > /etc/systemd/system/polish-autoupdate.service <<EOF
+cat > /etc/systemd/system/brolingvo-poland-autoupdate.service <<EOF
 [Unit]
 Description=brolingvo: update from GitHub if branch polish changed
 After=network-online.target docker.service
@@ -103,7 +103,7 @@ WorkingDirectory=$REPO
 Environment=APP_PORT=$APP_PORT
 ExecStart=$REPO/deploy/autoupdate.sh
 EOF
-cat > /etc/systemd/system/polish-autoupdate.timer <<'EOF'
+cat > /etc/systemd/system/brolingvo-poland-autoupdate.timer <<'EOF'
 [Unit]
 Description=brolingvo: check GitHub for updates
 
@@ -116,11 +116,11 @@ RandomizedDelaySec=30
 WantedBy=timers.target
 EOF
 systemctl daemon-reload
-systemctl enable --now polish-autoupdate.timer >/dev/null
+systemctl enable --now brolingvo-poland-autoupdate.timer >/dev/null
 echo "enabled"
 
-say "5/6 daily backup of the accounts database (03:30 UTC, 14 days in /var/backups/polish)"
-cat > /etc/systemd/system/polish-backup.service <<EOF
+say "5/6 daily backup of the accounts database (03:30 UTC, 14 days in /var/backups/brolingvo-poland)"
+cat > /etc/systemd/system/brolingvo-poland-backup.service <<EOF
 [Unit]
 Description=brolingvo: back up the accounts database
 After=docker.service
@@ -131,7 +131,7 @@ WorkingDirectory=$REPO
 Environment=APP_PORT=$APP_PORT
 ExecStart=$REPO/deploy/backup.sh
 EOF
-cat > /etc/systemd/system/polish-backup.timer <<'EOF'
+cat > /etc/systemd/system/brolingvo-poland-backup.timer <<'EOF'
 [Unit]
 Description=brolingvo: daily database backup
 
@@ -143,9 +143,9 @@ RandomizedDelaySec=5min
 [Install]
 WantedBy=timers.target
 EOF
-install -d -m 700 /var/backups/polish
+install -d -m 700 /var/backups/brolingvo-poland
 systemctl daemon-reload
-systemctl enable --now polish-backup.timer >/dev/null
+systemctl enable --now brolingvo-poland-backup.timer >/dev/null
 echo "enabled"
 
 say "6/6 check through HTTPS"
