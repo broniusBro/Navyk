@@ -80,7 +80,7 @@ export function langPicker() {
 /** Header account button: avatar with the e-mail initial, or a person icon that leads to sign-in. */
 export function accountButton(user, onClick) {
   if (user) {
-    const initial = (String(user.email ?? "").trim()[0] ?? "?").toUpperCase();
+    const initial = (String(user.name || user.email || "").trim()[0] ?? "?").toUpperCase();
     return h("button.avatar-btn", { type: "button", onclick: onClick, aria: { label: t("auth.account_label", { email: user.email }) } }, h("span.avatar", { aria: { hidden: "true" } }, initial));
   }
   return h("button.avatar-btn.avatar-btn--guest", { type: "button", onclick: onClick, aria: { label: t("auth.login_short") } }, h("span.avatar", { aria: { hidden: "true" } }, icon("user")));

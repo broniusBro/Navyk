@@ -23,7 +23,8 @@ export function validateCredentials({ email, password, confirm } = {}, { checkLe
 /** Keep only the fields the client uses. Returns null for anything that is not a user. */
 export function normalizeUser(u) {
   if (!u || typeof u !== "object" || typeof u.email !== "string") return null;
-  return { id: String(u.id ?? u.email), email: u.email, lang: typeof u.lang === "string" ? u.lang : null };
+  const name = typeof u.name === "string" && u.name.trim() ? u.name.trim().slice(0, 80) : null;
+  return { id: String(u.id ?? u.email), email: u.email, name, lang: typeof u.lang === "string" ? u.lang : null };
 }
 
 const FIELD_ERRORS = { invalid_email: "email", weak_password: "password" };

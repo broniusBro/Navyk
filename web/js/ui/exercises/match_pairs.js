@@ -42,8 +42,10 @@ export function renderMatch(ex, ctx) {
     b.addEventListener("click", () => {
       if (b.disabled) return;
       const li = Number(b.dataset.index);
-      if (links[li] != null && active !== li) delete links[li];
-      active = active === li ? null : li;
+      // tapping a linked item unlinks it; tapping any left item makes it the active one (the first item is
+      // pre-selected, so a toggle here would deselect it on the learner's natural first tap)
+      if (links[li] != null) delete links[li];
+      active = li;
       paint();
       onChange();
     }),

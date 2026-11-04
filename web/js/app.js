@@ -123,12 +123,20 @@ function revealCurrent() {
   if (r.bottom > globalThis.innerHeight - 40) node.scrollIntoView({ block: "center" });
 }
 
+let accountReady = Promise.resolve(null); // initAccount(): resolves once the server answered /api/auth/me
+
 async function showLesson(lessonId, token) {
   app.replaceChildren(h("div.screen", h("main.loading-screen", { id: "main", role: "status" }, h("p", t("lesson.loading")))));
   const lang = getLang();
   const lesson = await fetchLesson(lang, lessonId);
   if (token !== screenToken) return;
   if (!lesson) return showError("lesson.not_found");
+  // a session cookie without a cached user (after Google sign-in, cleared storage): wait for /api/auth/me
+  // before treating the learner as a guest, or a signed-in deep link bounces to the sign-up sheet
+  if (!canOpenLesson(lesson.meta, isSignedIn()) && !accountChecked()) {
+    await accountReady;
+    if (token !== screenToken) return;
+  }
   if (!canOpenLesson(lesson.meta, isSignedIn()) && !isCompleted(lessonId)) {
     // deep link to a members-only lesson: back to its level's road with the friendly sign-up sheet
     const back = levelHash(lessonId);
@@ -419,9 +427,9 @@ async function main() {
     document.documentElement.classList.toggle("is-offline", !online);
     if (online && !state.course) loadCourse();
   });
+  accountReady = initAccount();
   route();
   loadCourse();
-  initAccount();
   registerServiceWorker();
   loadAnalytics();
   showConsent();

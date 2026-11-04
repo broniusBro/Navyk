@@ -1223,6 +1223,18 @@ button.node:active .node__dot { transform: scale(0.92); }
    14. CHAT
    ====================================================================================== */
 
+/* «Разговор» full-screen header: close · avatar + title/level (two lines) · finish */
+.chat-top__who { flex: 1; min-width: 0; display: flex; align-items: center; gap: 10px; }
+.chat-top__text { min-width: 0; display: flex; flex-direction: column; line-height: 1.25; }
+.chat-top__who > .ai-avatar { width: 32px; height: 32px; }
+.chat-top__text strong { font-size: var(--fs-body); font-weight: 700; overflow: hidden; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; overflow-wrap: anywhere; }
+.chat-top__text span { font-size: var(--fs-caption); color: var(--ink-2); overflow-wrap: anywhere; }
+.talk-chat__finish { flex: none; }
+@media (max-width: 400px) {
+  .chat-top { gap: var(--s-2); }
+  .chat-top__who > .ai-avatar { display: none; } /* the scenario card below already shows who you talk to */
+  .talk-chat__finish { padding-inline: 0.7rem; }
+}
 .chat { display: flex; flex-direction: column; gap: var(--s-3); min-height: 100%; }
 .screen > .chat, main.chat { padding-bottom: var(--s-2); }
 .chat__scenario {
@@ -1293,6 +1305,9 @@ button.bubble { cursor: pointer; font: inherit; text-align: left; border: 0; }
 .chat__chips { display: flex; gap: 8px; overflow-x: auto; padding: 4px 2px 6px; margin: 0 calc(-1 * var(--gutter)); padding-inline: var(--gutter); scrollbar-width: none; }
 .chat__chips::-webkit-scrollbar { display: none; }
 .chat__chips .chip { flex: none; font-size: var(--fs-small); background: var(--surface); }
+/* role-play lines are whole sentences: wrap them instead of cutting them off in a sideways scroller */
+.chat--dialog .chat__chips { flex-wrap: wrap; overflow-x: visible; }
+.chat--dialog .chat__chips .chip { flex: 0 1 auto; max-width: 100%; white-space: normal; overflow-wrap: anywhere; }
 .chat__chips .chip .icon { width: 16px; height: 16px; color: var(--violet); }
 
 .chat__input {
@@ -2033,6 +2048,9 @@ p.alert > .icon { margin-top: 2px; }
 /* lesson content never hides under «Спросить» (fixed above .lesson__bar, ~64px tall incl. gap) */
 .lesson:has(> .helper-fab) .lesson__stage { padding-bottom: calc(var(--s-8) + 72px); }
 .lesson:has(> .helper-fab) .lesson__bar { padding-top: var(--s-5); }
+/* two buttons in the bar («Показать ответ» + «Попробовать ещё раз»): lift the pill above both */
+.lesson:has(.lesson__actions > .btn--ghost:not([hidden])) > .helper-fab { bottom: calc(176px + var(--safe-b)); }
+.lesson:has(.lesson__actions > .btn--ghost:not([hidden])) .lesson__stage { padding-bottom: calc(var(--s-8) + 140px); }
 
 /* helper sheet: tall, chat fills it, input sticks to the bottom */
 .sheet--helper .sheet__panel { height: 88dvh; gap: var(--s-3); padding-bottom: 0; }

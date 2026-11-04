@@ -44,6 +44,7 @@ export function mountTalkChat(app, { scenario, level, onClose, onTurn }) {
     onUnavailable: (reason) => {
       chat.systemNote(t(reason === "limit" ? "talk.limit" : "talk.unavailable"));
       chat.setInputMode("off");
+      finishBtn.hidden = true; // nothing to finish: the conversation cannot go on without the AI
       return true;
     },
     onFinished: () => burst(app.querySelector(".chat__summary") ?? app, { count: 22 }),
@@ -65,7 +66,7 @@ export function mountTalkChat(app, { scenario, level, onClose, onTurn }) {
     h(
       "header.lesson__top.chat-top",
       h("button.btn.btn--icon", { type: "button", aria: { label: t("common.close") }, onclick: () => (destroyTalkChat(), onClose()) }, icon("close")),
-      h("div.chat-top__who", h("span.ai-avatar.ai-avatar--partner", { aria: { hidden: "true" } }), h("span.chat-top__text", h("strong", title), h("span", t(`talk.level.${level}`)))),
+      h("div.chat-top__who", h("span.ai-avatar.ai-avatar--partner", { aria: { hidden: "true" } }), h("span.chat-top__text", h("strong", title), h("span", t("talk.chat_level", { level: level.toUpperCase() })))),
       finishBtn,
     ),
     h("main.talk-chat", { id: "main" }, h("h1.sr-only", { tabindex: "-1" }, title), chat.el),

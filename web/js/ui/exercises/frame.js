@@ -41,7 +41,9 @@ export function whyNote(text, kind = "info", lead = null) {
 /** Scroll so that el is not hidden under the sticky action bar at the bottom of the lesson. */
 function revealAboveBar(el) {
   const bar = document.querySelector(".lesson__bar");
-  const limit = (globalThis.innerHeight ?? 0) - (bar?.getBoundingClientRect().height ?? 0) - 12;
+  const fab = document.querySelector(".lesson > .helper-fab"); // «Помощь» floats above the bar
+  const barTop = (globalThis.innerHeight ?? 0) - (bar?.getBoundingClientRect().height ?? 0);
+  const limit = Math.min(barTop, fab ? fab.getBoundingClientRect().top : barTop) - 12;
   const over = el.getBoundingClientRect().bottom - limit;
   if (over > 0) globalThis.scrollBy?.({ top: over, behavior: reduced() ? "auto" : "smooth" });
 }

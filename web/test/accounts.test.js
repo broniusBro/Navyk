@@ -17,7 +17,7 @@ test("validateCredentials", () => {
 });
 
 test("interpretAuth maps the API contract", () => {
-  assert.deepEqual(interpretAuth({ status: 200, body: { user: { id: 1, email: "a@b.co", lang: "uk" } } }), { ok: true, user: { id: "1", email: "a@b.co", lang: "uk" } });
+  assert.deepEqual(interpretAuth({ status: 200, body: { user: { id: 1, email: "a@b.co", lang: "uk" } } }), { ok: true, user: { id: "1", email: "a@b.co", name: null, lang: "uk" } });
   assert.deepEqual(interpretAuth({ status: 202, body: { ok: true } }, 202), { ok: true, user: null });
   assert.deepEqual(interpretAuth({ status: 0, body: null }), { ok: false, code: "network" });
   assert.deepEqual(interpretAuth({ status: 400, body: { error: "invalid_email" } }), { ok: false, code: "invalid_email", field: "email" });
@@ -31,6 +31,9 @@ test("interpretAuth maps the API contract", () => {
   assert.equal(retryMinutes(125), 3);
   assert.equal(retryMinutes(0), 1);
   assert.equal(normalizeUser({ id: 1 }), null);
+  // the profile shows the name the learner chose (PATCH /api/auth/me returns it)
+  assert.equal(normalizeUser({ id: "u", email: "a@b.pl", name: " Ola " }).name, "Ola");
+  assert.equal(normalizeUser({ id: "u", email: "a@b.pl", name: "" }).name, null);
 });
 
 test("free preview access rule and token routes", () => {
