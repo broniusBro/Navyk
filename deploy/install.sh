@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 # Install or re-install brolingvo · polski on the shared application server. Run as root from /srv/polish.
 #   SITE=poland.brolingvo.com ./deploy/install.sh
-# Safe to run again. Follows bronus-core/host/README.md: port 8110, secrets in /etc/polish,
+# Safe to run again. Follows bronus-core/host/README.md: port 8120, secrets in /etc/polish,
 # own Caddy site file /etc/caddy/sites/<SITE>.caddy, own Compose project "polish". Never touches other projects.
 set -euo pipefail
 REPO="$(cd "$(dirname "$0")/.." && pwd)"; cd "$REPO"
-APP_PORT="${APP_PORT:-8110}"
+APP_PORT="${APP_PORT:-8120}"
 IP="$(curl -fsS -m 5 http://169.254.169.254/hetzner/v1/metadata/public-ipv4 2>/dev/null || hostname -I | awk '{print $1}')"
 # without SITE keep the domain this app already serves (so a re-run never falls back to sslip.io)
 CURRENT="$(grep -l "reverse_proxy 127.0.0.1:$APP_PORT" /etc/caddy/sites/*.caddy 2>/dev/null | head -1 | xargs -r basename | sed 's/\.caddy$//')"
@@ -22,7 +22,7 @@ if [ -f /etc/host/projects ]; then
   owner="$(awk -v p="$APP_PORT" '$2==p {print $1}' /etc/host/projects | head -1)"
   if [ -n "$owner" ] && [ "$owner" != "polish" ]; then die "port $APP_PORT is registered for $owner in /etc/host/projects"; fi
   if ! grep -qE '^polish[[:space:]]' /etc/host/projects; then
-    printf 'polish\t%s\t/srv/polish\t/etc/polish\n' "$APP_PORT" >> /etc/host/projects
+    printf 'polish         %s         /srv/polish      /etc/polish       polish\n' "$APP_PORT" >> /etc/host/projects
     echo "registered polish $APP_PORT in /etc/host/projects"
   elif ! grep -qE '^polish[[:space:]]+'"$APP_PORT"'[[:space:]]' /etc/host/projects; then
     die "polish is registered in /etc/host/projects with another port; use APP_PORT=<that port>"

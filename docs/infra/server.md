@@ -7,9 +7,9 @@
 |---|---|
 | Код | `/srv/polish` — клон ветки `polish` публичного репозитория `broniusBro/Navyk` |
 | Приложение | Docker Compose проект `polish`, контейнер только для чтения, без привилегий |
-| Порт | `127.0.0.1:8110` (регистрируется в `/etc/host/projects` при установке) |
+| Порт | `127.0.0.1:8120` (регистрируется в `/etc/host/projects` при установке) |
 | Секреты | `/etc/polish/polish.env` (chmod 600) |
-| Сайт в Caddy | `/etc/caddy/sites/poland.brolingvo.com.caddy` → `reverse_proxy 127.0.0.1:8110` |
+| Сайт в Caddy | `/etc/caddy/sites/poland.brolingvo.com.caddy` → `reverse_proxy 127.0.0.1:8120` |
 | База | SQLite `/data/brolingvo.sqlite` в томе `polish_polish-data` |
 | Резервные копии | таймер `polish-backup` 03:30 UTC → `/var/backups/polish`, 14 дней |
 | Обновления | таймер `polish-autoupdate` каждые 5 минут: новый коммит в ветке `polish` → сборка, проверка, откат при сбое |

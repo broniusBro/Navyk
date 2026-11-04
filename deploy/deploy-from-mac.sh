@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # brolingvo · polski on the shared application server 65.108.234.212 (navyk.app and bronus.app live there too;
 # rules: bronus-core/host/README.md). The app gets its own "apartment" and never touches other projects:
-#   code /srv/polish (branch "polish" of the public Navyk repository), Compose project "polish", port 127.0.0.1:8110,
+#   code /srv/polish (branch "polish" of the public Navyk repository), Compose project "polish", port 127.0.0.1:8120,
 #   secrets /etc/polish/polish.env, Caddy site /etc/caddy/sites/poland.brolingvo.com.caddy, own timers and backups.
 #
 # Run on the Mac (any folder — the script needs nothing local except ssh access as root):
@@ -12,7 +12,7 @@ set -euo pipefail
 APP_IP="${APP_IP:-65.108.234.212}"
 SERVER="root@$APP_IP"
 SITE="${SITE:-poland.brolingvo.com}"
-APP_PORT="${APP_PORT:-8110}"
+APP_PORT="${APP_PORT:-8120}"
 BRANCH="${BRANCH:-polish}"
 REPO_URL="${REPO_URL:-https://github.com/broniusBro/Navyk.git}"   # public repository: no deploy key needed
 DIR=/srv/polish

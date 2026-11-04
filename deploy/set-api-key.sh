@@ -13,4 +13,4 @@ printf 'ANTHROPIC_API_KEY=%s\n' "$key" >> "$ENV_FILE.new"
 mv "$ENV_FILE.new" "$ENV_FILE"; chmod 600 "$ENV_FILE"
 cd /srv/polish && docker compose up -d --force-recreate app >/dev/null
 sleep 3
-curl -fsS "http://127.0.0.1:${APP_PORT:-8110}/api/health"; echo
+curl -fsS "http://127.0.0.1:${APP_PORT:-8120}/api/health"; echo

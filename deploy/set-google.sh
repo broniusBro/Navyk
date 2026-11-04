@@ -20,5 +20,5 @@ grep -vE '^(GOOGLE_CLIENT_ID|GOOGLE_CLIENT_SECRET)=' "$ENV_FILE" > "$ENV_FILE.ne
 mv "$ENV_FILE.new" "$ENV_FILE"; chmod 600 "$ENV_FILE"
 cd /srv/polish && docker compose up -d --force-recreate app >/dev/null
 sleep 3
-curl -fsS "http://127.0.0.1:${APP_PORT:-8110}/api/auth/providers"; echo
+curl -fsS "http://127.0.0.1:${APP_PORT:-8120}/api/auth/providers"; echo
 echo "Done (the secret is not printed). {\"google\":true} means the \"Continue with Google\" button is on."

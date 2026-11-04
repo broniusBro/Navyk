@@ -2,7 +2,7 @@
 # Called by polish-autoupdate.timer. Pulls branch polish; rebuilds only if it changed; rolls back if the new version is unhealthy.
 set -euo pipefail
 REPO="$(cd "$(dirname "$0")/.." && pwd)"; cd "$REPO"
-APP_PORT="${APP_PORT:-8110}"
+APP_PORT="${APP_PORT:-8120}"
 FAILED=/var/lib/polish/failed-commit
 git fetch -q origin polish
 target="$(git rev-parse origin/polish)"

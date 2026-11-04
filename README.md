@@ -20,7 +20,7 @@ DATA_DIR=/tmp/brolingvo COOKIE_SECURE=false PUBLIC_ORIGIN=http://localhost:8080 
 Тесты: `cd server && npm test`, `cd web && npm test && npm run check`.
 
 ## Развёртывание
-Сервер 65.108.234.212, папка `/srv/polish`, порт 8110 — см. `CLAUDE.md` и `docs/infra/server.md`.
+Сервер 65.108.234.212, папка `/srv/polish`, порт 8120 — см. `CLAUDE.md` и `docs/infra/server.md`.
 Первый раз: `bash deploy/deploy-from-mac.sh`.
 
 Это ветка `polish` репозитория Navyk; с веткой `main` (navyk.app) она не связана.

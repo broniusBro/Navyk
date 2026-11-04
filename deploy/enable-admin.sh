@@ -5,7 +5,7 @@
 # with a confirmed email (or signed in with Google). Safe to run again (e.g. to add another owner).
 set -euo pipefail
 REPO="$(cd "$(dirname "$0")/.." && pwd)"; cd "$REPO"
-APP_PORT="${APP_PORT:-8110}"
+APP_PORT="${APP_PORT:-8120}"
 ENV_FILE=/etc/polish/polish.env
 die() { printf 'ERROR: %s\n' "$*" >&2; exit 1; }
 [ "$(id -u)" = 0 ] || die "run as root"
