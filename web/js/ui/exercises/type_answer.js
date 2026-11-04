@@ -23,7 +23,7 @@ export function plField(id, { rows = 2, placeholder = "", label } = {}) {
     spellcheck: "false",
     aria: { label: label ?? t("typeans.input_label") },
   });
-  const keys = plKeys(input);
+  const keys = plKeys(input, { fixRussianLayout: true });
   return { input, keys };
 }
 

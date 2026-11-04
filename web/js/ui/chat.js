@@ -21,6 +21,7 @@
 import { h, icon, markdown } from "./dom.js";
 import { t } from "./i18n.js";
 import { reduced } from "./motion.js";
+import { plKeys } from "./exercises/pl_keys.js";
 import { audioButton, playWith, stopAudio, uiIcon, hydratePhrases } from "./audio.js";
 import { isSttAvailable, listen, stopListening, abortListening, autoplayEnabled, isTtsAvailable } from "../platform/speech.js";
 
@@ -81,9 +82,13 @@ export function mountChat(opts = {}) {
   const stt = isSttAvailable();
   const micBtn = stt ? h("button.mic-btn", { type: "button", aria: { label: t("chat.mic"), pressed: "false" } }, uiIcon("mic")) : null;
   const form = h("form.chat__input", ta, micBtn, sendBtn);
+  // Polish letters + on-screen keyboard for the conversation (not for the helper, who is asked in Russian).
+  // No layout fix here: a learner may write in Russian on purpose and the partner answers with the Polish version.
+  const keys = helper ? null : plKeys(ta);
+  if (keys) keys.classList.add("chat__keys");
   const status = h("p.chat__status", { aria: { live: "polite" }, hidden: true });
 
-  const el = h(`div.chat.chat--${mode}`, header, log, typing, chipsBox, status, form);
+  const el = h(`div.chat.chat--${mode}`, header, log, typing, chipsBox, status, form, keys);
 
   // ---- helpers
   const scrollDown = () => {
@@ -204,6 +209,7 @@ export function mountChat(opts = {}) {
   function setInputMode(m) {
     inputMode = m;
     form.hidden = m === "off" || (m === "chips" && !micBtn);
+    if (keys) keys.hidden = form.hidden || m === "chips";
     ta.hidden = m === "chips";
     sendBtn.hidden = m === "chips";
     if (m === "off") chipsBox.hidden = true;

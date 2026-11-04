@@ -9,6 +9,40 @@ const DIACRITICS = {
 /** Polish letters with diacritics, in alphabetical order (for the on-screen key row). */
 export const PL_LETTERS = Object.freeze(["ą", "ć", "ę", "ł", "ń", "ó", "ś", "ź", "ż"]);
 
+/** Rows of the Polish programmer's keyboard (QWERTY) for the on-screen keyboard. */
+export const PL_KEYBOARD = Object.freeze([
+  Object.freeze(["q", "w", "e", "r", "t", "y", "u", "i", "o", "p"]),
+  Object.freeze(["a", "s", "d", "f", "g", "h", "j", "k", "l"]),
+  Object.freeze(["z", "x", "c", "v", "b", "n", "m"]),
+]);
+
+// Russian (YCUKEN) key -> the Latin letter on the same physical key (QWERTY). Used when the learner
+// types Polish with the Russian layout switched on (the keys spelling "Tak" give Cyrillic letters).
+// keys are \u escapes of the Cyrillic letters (UI code must not contain Cyrillic text; see i18n.test.js)
+const RU_TO_LAT = {
+  "\u0439": "q", "\u0446": "w", "\u0443": "e", "\u043a": "r", "\u0435": "t", "\u043d": "y", "\u0433": "u",
+  "\u0448": "i", "\u0449": "o", "\u0437": "p", "\u0444": "a", "\u044b": "s", "\u0432": "d", "\u0430": "f",
+  "\u043f": "g", "\u0440": "h", "\u043e": "j", "\u043b": "k", "\u0434": "l", "\u044f": "z", "\u0447": "x",
+  "\u0441": "c", "\u043c": "v", "\u0438": "b", "\u0442": "n", "\u044c": "m", "\u0431": ",", "\u044e": ".",
+};
+const CYRILLIC = /[\u0400-\u04ff]/;
+
+/** True when the text contains Cyrillic letters (a Russian layout or a Russian answer). */
+export const hasCyrillic = (s) => CYRILLIC.test(String(s ?? ""));
+
+/**
+ * Re-type Cyrillic letters as the Latin letters on the same keys (Russian layout → Polish/English layout).
+ * Letters without a Latin twin are left as they are. Case is kept.
+ */
+export function fixLayout(s) {
+  return String(s ?? "").replace(/[\u0400-\u04ff]/g, (c) => {
+    const lower = c.toLowerCase();
+    const lat = RU_TO_LAT[lower];
+    if (!lat) return c;
+    return c === lower ? lat : lat.toUpperCase();
+  });
+}
+
 // Punctuation and quotes of every flavour: Polish „…”, Russian «…», typographic and ASCII.
 const PUNCT = /[.,!?;:…«»„“”"‚‘’'`´()[\]{}\-‐‑–—/\\*_~¡¿]/g;
 

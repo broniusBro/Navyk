@@ -1,7 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
-  normalizePl, stripDiacritics, looseKey, checkTypeAnswer, checkBuildSentence, levenshtein, similarity, checkSpeak, speakLevel, PL_LETTERS,
+  normalizePl, stripDiacritics, looseKey, checkTypeAnswer, checkBuildSentence, levenshtein, similarity, checkSpeak, speakLevel, PL_LETTERS, fixLayout, hasCyrillic, PL_KEYBOARD,
 } from "../js/engine/polish.js";
 
 test("normalizePl: case, spaces, punctuation and every kind of quote", () => {
@@ -95,4 +95,19 @@ test("checkSpeak: levels, alternatives and accept", () => {
   assert.equal(speakLevel(0.6), "ok");
   assert.equal(speakLevel(0.2), "bad");
   assert.equal(checkSpeak({ phrase: "Dzień dobry" }, "dzień dobra").level !== "bad", true);
+});
+
+test("fixLayout: Russian layout typing becomes the Latin letters on the same keys", () => {
+  assert.equal(fixLayout("Ефл"), "Tak");
+  assert.equal(fixLayout("Ефлб вяшулгоу"), "Tak, dziekuje");
+  assert.equal(fixLayout("Nie, dziękuję"), "Nie, dziękuję");
+  assert.equal(fixLayout("ДЩД"), "LOL");
+  assert.equal(hasCyrillic("tak"), false);
+  assert.equal(hasCyrillic("еф"), true);
+});
+
+test("PL_KEYBOARD has the 26 Latin letters minus none of the Polish ones", () => {
+  const letters = PL_KEYBOARD.flat();
+  assert.equal(new Set(letters).size, letters.length);
+  for (const ch of "abcdefghijklmnoprstuwyz") assert.ok(letters.includes(ch), ch);
 });
