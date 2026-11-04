@@ -19,7 +19,7 @@
 1. DNS у регистратора brolingvo.com: запись **A**, имя `poland`, значение `65.108.234.212` (без AAAA).
 2. С Mac (нужен SSH-доступ root к серверу, как для navyk):
    ```
-   curl -fsSL https://raw.githubusercontent.com/broniusBro/Navyk/polish/deploy/deploy-from-mac.sh | bash
+   curl -fsSL https://raw.githubusercontent.com/broniusBro/Navyk/polish/deploy/deploy-from-mac.sh -o /tmp/polish-deploy.sh && bash /tmp/polish-deploy.sh
    ```
    Скрипт проверит сервер, свободный порт и DNS, склонирует код в `/srv/polish`, спросит ключ Claude API
    (можно взять тот же, что у navyk; ввод скрыт), соберёт контейнер, добавит сайт в Caddy, включит автообновление

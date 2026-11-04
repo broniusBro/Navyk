@@ -5,7 +5,7 @@
 #   secrets /etc/polish/polish.env, Caddy site /etc/caddy/sites/poland.brolingvo.com.caddy, own timers and backups.
 #
 # Run on the Mac (any folder — the script needs nothing local except ssh access as root):
-#   curl -fsSL https://raw.githubusercontent.com/broniusBro/Navyk/polish/deploy/deploy-from-mac.sh | bash
+#   curl -fsSL https://raw.githubusercontent.com/broniusBro/Navyk/polish/deploy/deploy-from-mac.sh -o /tmp/polish-deploy.sh && bash /tmp/polish-deploy.sh
 # or from a checkout of the branch:  bash deploy/deploy-from-mac.sh
 # Safe to run again: updates code, keeps secrets and settings. Afterwards the server updates itself from GitHub.
 set -euo pipefail
@@ -19,7 +19,10 @@ DIR=/srv/polish
 
 step() { printf '\n== %s\n' "$*"; }
 mkdir -p "$HOME/.ssh/cm"; chmod 700 "$HOME/.ssh/cm"
-ssh() { command ssh -o ControlMaster=auto -o ControlPath="$HOME/.ssh/cm/%r@%h-%p" -o ControlPersist=15m -o ServerAliveInterval=30 "$@"; }
+# Non-interactive calls must not read stdin: with `curl … | bash` stdin is the rest of this script.
+ssh() { command ssh -o ControlMaster=auto -o ControlPath="$HOME/.ssh/cm/%r@%h-%p" -o ControlPersist=15m -o ServerAliveInterval=30 "$@" </dev/null; }
+# Interactive call (questions on the server): terminal from /dev/tty even when the script itself comes from a pipe.
+ssh_tty() { command ssh -t -o ControlMaster=auto -o ControlPath="$HOME/.ssh/cm/%r@%h-%p" -o ControlPersist=15m -o ServerAliveInterval=30 "$@" </dev/tty; }
 
 step "1/5 Проверки: доступ к серверу, свободный порт, DNS"
 ssh -o ConnectTimeout=10 -o StrictHostKeyChecking=accept-new "$SERVER" 'echo "сервер: $(hostname), $(nproc) CPU, $(free -g | awk "/Mem:/{print \$2}") GB RAM, свободно $(df -h / | awk "NR==2{print \$4}")"'
@@ -41,7 +44,7 @@ step "2/5 Код в $DIR (ветка $BRANCH)"
 ssh "$SERVER" "set -e; if [ -d $DIR/.git ]; then cd $DIR && git fetch -q origin $BRANCH && git checkout -q $BRANCH && git reset -q --hard origin/$BRANCH; else git clone -q --branch $BRANCH --single-branch '$REPO_URL' $DIR; fi; chmod +x $DIR/deploy/*.sh; cd $DIR && git log --oneline -1"
 
 step "3/5 Установка (первый раз 2–4 минуты). Ключ Claude API спросят на сервере (можно взять тот же, что у navyk); он не выводится на экран"
-ssh -t "$SERVER" "cd $DIR && SITE='$SITE' APP_PORT='$APP_PORT' ./deploy/install.sh"
+ssh_tty "$SERVER" "cd $DIR && SITE='$SITE' APP_PORT='$APP_PORT' ./deploy/install.sh"
 
 step "4/5 Проверка снаружи"
 for i in $(seq 1 20); do
