@@ -1,6 +1,7 @@
 // Minimal safe Markdown for lessons. Pure: text in, AST out; AST to escaped HTML string.
 // Supported: paragraphs, **bold**, *italic*, `code`, [links](https://...), - / 1. lists,
-// ### headings, fenced ```prompt / ```claude (chat bubbles) and other fences (code block).
+// ### headings, fenced ```pl (phrase cards: "polski | перевод" per line), ```prompt / ```claude (chat bubbles)
+// and other fences (code block).
 // Anything else stays literal text. Raw HTML is never passed through.
 
 const FENCE = /^```\s*([\w-]*)\s*$/;
@@ -117,7 +118,8 @@ export function parseMarkdown(md) {
       i++;
       while (i < lines.length && lines[i].trim() !== "```") body.push(lines[i++]);
       const text = body.join("\n").replace(/\s+$/, "");
-      if (lang === "prompt") blocks.push({ type: "bubble", role: "user", text });
+      if (lang === "pl") blocks.push({ type: "phrases", items: parsePhrases(body) });
+      else if (lang === "prompt") blocks.push({ type: "bubble", role: "user", text });
       else if (lang === "claude") blocks.push({ type: "bubble", role: "assistant", text });
       else blocks.push({ type: "codeblock", lang, text });
       continue;
@@ -160,6 +162,18 @@ export function parseMarkdown(md) {
   return blocks;
 }
 
+/** Lines "polski | перевод" of a ```pl block. A line without "|" is a phrase without translation. */
+export function parsePhrases(lines) {
+  return lines
+    .map((l) => l.trim())
+    .filter(Boolean)
+    .map((l) => {
+      const i = l.indexOf("|");
+      return i < 0 ? { pl: l, ru: "" } : { pl: l.slice(0, i).trim(), ru: l.slice(i + 1).trim() };
+    })
+    .filter((p) => p.pl);
+}
+
 const ESC = { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" };
 export const escapeHtml = (s) => String(s).replace(/[&<>"']/g, (c) => ESC[c]);
 
@@ -191,6 +205,11 @@ export function toHtml(blocks, { assistantLabel = "Claude", userLabel = "" } = {
           const tag = b.ordered ? "ol" : "ul";
           return `<${tag}>${b.items.map((it) => `<li>${inlineHtml(it)}</li>`).join("")}</${tag}>`;
         }
+        case "phrases":
+          // audio buttons are added by the UI (ui/audio.js hydratePhrases) from data-pl
+          return `<ul class="phrases">${b.items
+            .map((p) => `<li class="phrase" data-pl="${escapeHtml(p.pl)}"><div class="phrase__text"><span class="phrase__pl" lang="pl">${escapeHtml(p.pl)}</span>${p.ru ? `<span class="phrase__ru">${escapeHtml(p.ru)}</span>` : ""}</div></li>`)
+            .join("")}</ul>`;
         case "codeblock": return `<pre><code>${escapeHtml(b.text)}</code></pre>`;
         case "bubble": {
           const label = b.role === "assistant" ? assistantLabel : userLabel;

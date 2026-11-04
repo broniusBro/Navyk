@@ -8,7 +8,7 @@ import { createApp } from "../src/http.ts";
 import { DailyLimiter } from "../src/limits.ts";
 
 delete process.env.ANTHROPIC_API_KEY;
-const dataDir = mkdtempSync(join(tmpdir(), "navyk-http-"));
+const dataDir = mkdtempSync(join(tmpdir(), "brolingvo-http-"));
 process.env.DATA_DIR = dataDir;
 process.env.PUBLIC_ORIGIN = "http://localhost:8080";
 const ORIGIN = "http://localhost:8080";
@@ -25,42 +25,63 @@ after(() => {
 });
 
 test("health and course", async () => {
-  assert.deepEqual(await (await fetch(`${base}/api/health`)).json(), { ok: true, reviewer: false, db: true });
+  assert.deepEqual(await (await fetch(`${base}/api/health`)).json(), { ok: true, ai: false, db: true });
   const course = await (await fetch(`${base}/api/course`)).json();
-  assert.equal(course.levels[0].id, "beginner");
-  assert.ok(course.available.uk.includes("b2.1"));
-  // every lesson of every level listed in course.json is built in all four languages
-  const ids = course.levels.flatMap((lv: any) => lv.modules.flatMap((m: any) => m.lessons.map((l: any) => l.id)));
-  for (const lang of ["ru", "uk", "en", "pl"]) assert.deepEqual([...course.available[lang]].sort(), [...ids].sort());
+  assert.deepEqual(course.levels.map((l: any) => l.id), ["a1", "a2", "b1"]);
+  assert.equal(course.levels[0].modules[0].id, "a1m1");
+  assert.deepEqual(Object.keys(course.available), ["ru"], "content is Russian-only");
+  assert.ok(course.available.ru.includes("a1m1.1"));
+  // every built lesson is listed in course.json (lessons are still being written, so not every lesson is built yet)
+  const ids = new Set(course.levels.flatMap((lv: any) => lv.modules.flatMap((m: any) => m.lessons.map((l: any) => l.id))));
+  for (const id of course.available.ru) assert.ok(ids.has(id), `${id} is in course.json`);
+  for (const id of ids) assert.match(id as string, /^(a1|a2|b1)m\d+\.\d+$/);
 });
 
-test("lessons: existing, missing, bad language", async () => {
-  assert.equal((await fetch(`${base}/api/lessons/uk/b2.1`)).status, 200);
-  assert.equal((await fetch(`${base}/api/lessons/ru/b9.9`)).status, 404);
-  assert.equal((await fetch(`${base}/api/lessons/de/b2.1`)).status, 404);
+test("lessons: existing, missing, bad language, bad id", async () => {
+  const r = await fetch(`${base}/api/lessons/ru/a1m1.1`);
+  assert.equal(r.status, 200);
+  assert.equal((await r.json()).meta.id, "a1m1.1");
+  assert.equal((await fetch(`${base}/api/lessons/ru/a1m99.9`)).status, 404);
+  assert.equal((await fetch(`${base}/api/lessons/uk/a1m1.1`)).status, 404, "only ru content");
+  assert.equal((await fetch(`${base}/api/lessons/de/a1m1.1`)).status, 404);
+  assert.equal((await fetch(`${base}/api/lessons/ru/b2.1`)).status, 404, "old Navyk ids are gone");
+});
+
+test("talk scenarios are served", async () => {
+  const r = await fetch(`${base}/api/talk/scenarios`);
+  assert.equal(r.status, 200);
+  const ids = (await r.json()).scenarios.map((s: any) => s.id);
+  assert.ok(ids.includes("cafe") && ids.includes("free"));
 });
 
 test("static files, SPA fallback, security headers", async () => {
-  const r = await fetch(`${base}/lesson/b2.1`);
+  const r = await fetch(`${base}/lesson/a1m1.1`);
   assert.equal(r.status, 200);
   assert.match(r.headers.get("content-type") ?? "", /text\/html/);
   assert.equal(r.headers.get("x-content-type-options"), "nosniff");
   assert.ok(r.headers.get("content-security-policy"));
 });
 
-const review = (body: unknown) =>
-  fetch(`${base}/api/review`, { method: "POST", headers: { "content-type": "application/json", origin: ORIGIN }, body: JSON.stringify(body) });
+const ai = (kind: string, body: unknown) =>
+  fetch(`${base}/api/ai/${kind}`, { method: "POST", headers: { "content-type": "application/json", origin: ORIGIN }, body: JSON.stringify(body) });
 
-test("review: validation and graceful 503 without API key", async () => {
-  assert.equal((await review({ lessonId: "x" })).status, 400);
-  assert.equal((await review({ lessonId: "b2.1", exerciseId: "b2.1.e5", lang: "ru", prompt: "hi" })).status, 400);
-  const r = await review({ lessonId: "b2.1", exerciseId: "b2.1.e5", lang: "ru", prompt: "Напиши пост для Instagram про скидки", deviceId: "device-123456" });
+test("ai: validation first, then graceful 503 {reason:'no_key'} without API key", async () => {
+  assert.equal((await ai("translate", { lessonId: "x" })).status, 400);
+  assert.equal((await ai("helper", { question: "" })).status, 400);
+  const r = await ai("helper", { question: "Как сказать «спасибо»?", deviceId: "device-123456" });
   assert.equal(r.status, 503);
-  assert.deepEqual(await r.json(), { error: "unavailable" });
+  assert.deepEqual(await r.json(), { error: "unavailable", reason: "no_key" });
+  assert.equal((await ai("dialog", { scenarioId: "cafe" })).status, 503);
 });
 
-test("review without Origin is rejected (CSRF)", async () => {
-  const r = await fetch(`${base}/api/review`, { method: "POST", headers: { "content-type": "application/json" }, body: "{}" });
+test("the old prompt reviewer is gone", async () => {
+  const r = await fetch(`${base}/api/review`, { method: "POST", headers: { "content-type": "application/json", origin: ORIGIN }, body: "{}" });
+  assert.equal(r.status, 404);
+  assert.equal((await fetch(`${base}/api/ai/unknown`, { method: "POST", headers: { "content-type": "application/json", origin: ORIGIN }, body: "{}" })).status, 404);
+});
+
+test("ai without Origin is rejected (CSRF)", async () => {
+  const r = await fetch(`${base}/api/ai/helper`, { method: "POST", headers: { "content-type": "application/json" }, body: '{"question":"hi"}' });
   assert.equal(r.status, 403);
 });
 

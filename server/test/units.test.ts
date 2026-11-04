@@ -33,42 +33,59 @@ test("password rules", () => {
   assert.equal(isWeakPassword("x".repeat(127) + "y", "a@b.co"), false);
 });
 
-test("email templates: all languages, escaping, footer, style D", () => {
-  for (const lang of ["ru", "uk", "en"] as const) {
+test("email templates: all languages, escaping, brolingvo footer and style", () => {
+  const LINK = "https://poland.brolingvo.com/#/confirm/abc";
+  const footers = {
+    ru: "brolingvo — бесплатный курс польского языка.",
+    uk: "brolingvo — безкоштовний курс польської мови.",
+    en: "brolingvo — a free Polish course.",
+    pl: "brolingvo — darmowy kurs języka polskiego.",
+  };
+  for (const lang of ["ru", "uk", "en", "pl"] as const) {
     for (const kind of ["confirm", "reset", "already_registered"] as const) {
-      const m = renderEmail(kind, lang, "https://navyk.app/#/confirm/abc");
+      const m = renderEmail(kind, lang, LINK);
       assert.ok(m.subject.length > 5 && m.subject.length < 60, `${lang}/${kind} subject`);
-      assert.ok(m.text.includes("https://navyk.app/#/confirm/abc"));
-      assert.ok(m.html.includes('href="https://navyk.app/#/confirm/abc"'));
-      assert.match(m.text, /Anthropic/);
+      assert.match(m.subject, /brolingvo/, `${lang}/${kind} subject names the product`);
+      assert.ok(m.text.includes(LINK));
+      assert.ok(m.html.includes(`href="${LINK}"`));
+      assert.ok(m.text.includes(footers[lang]), `${lang}/${kind} text footer`);
+      assert.ok(m.html.includes(footers[lang]), `${lang}/${kind} html footer`);
+      assert.ok(m.html.includes(`<html lang="${lang}">`));
+      assert.match(m.html, />brolingvo</, "wordmark");
       assert.match(m.html, /#FFFDF8/);
-      assert.match(m.html, /background:#FFB020;color:#22223B/);
+      assert.match(m.html, /background:#FFB020;color:#1B1A2E/);
+      // the old brand and the old course subject are gone
+      assert.doesNotMatch(m.text + m.html, /navyk|anthropic|claude/i);
     }
   }
-  assert.match(renderEmail("confirm", "ru", "x").text, /не связан с Anthropic/);
-  assert.match(renderEmail("confirm", "en", "x").text, /not affiliated with Anthropic/);
   assert.ok(renderEmail("reset", "en", 'https://x/"><script>').html.includes("&quot;&gt;&lt;script&gt;"));
 });
 
-const msg: OutgoingEmail = { ...renderEmail("confirm", "en", "https://navyk.app/#/confirm/t"), to: "a@b.co", kind: "confirm", link: "https://navyk.app/#/confirm/t" };
+const msg: OutgoingEmail = {
+  ...renderEmail("confirm", "en", "https://poland.brolingvo.com/#/confirm/t"),
+  to: "a@b.co",
+  kind: "confirm",
+  link: "https://poland.brolingvo.com/#/confirm/t",
+};
 
 test("provider request shapes: Brevo and Resend", () => {
-  assert.deepEqual(parseFrom("Navyk <no-reply@navyk.app>"), { name: "Navyk", email: "no-reply@navyk.app" });
-  assert.deepEqual(parseFrom("hi@navyk.app"), { name: "Navyk", email: "hi@navyk.app" });
+  assert.deepEqual(parseFrom("brolingvo <no-reply@brolingvo.com>"), { name: "brolingvo", email: "no-reply@brolingvo.com" });
+  assert.deepEqual(parseFrom("hi@brolingvo.com"), { name: "brolingvo", email: "hi@brolingvo.com" });
 
-  const b = buildProviderRequest("brevo", msg, "KEY", "Navyk <no-reply@navyk.app>");
+  const b = buildProviderRequest("brevo", msg, "KEY", "brolingvo <no-reply@brolingvo.com>");
   assert.equal(b.url, "https://api.brevo.com/v3/smtp/email");
   assert.equal((b.init.headers as any)["api-key"], "KEY");
   const bb = JSON.parse(b.init.body);
-  assert.deepEqual(bb.sender, { name: "Navyk", email: "no-reply@navyk.app" });
+  assert.deepEqual(bb.sender, { name: "brolingvo", email: "no-reply@brolingvo.com" });
+  assert.deepEqual(bb.tags, ["brolingvo-confirm"]);
   assert.deepEqual(bb.to, [{ email: "a@b.co" }]);
   assert.ok(bb.htmlContent && bb.textContent && bb.subject);
 
-  const r = buildProviderRequest("resend", msg, "KEY", "Navyk <no-reply@navyk.app>");
+  const r = buildProviderRequest("resend", msg, "KEY", "brolingvo <no-reply@brolingvo.com>");
   assert.equal(r.url, "https://api.resend.com/emails");
   assert.equal((r.init.headers as any).authorization, "Bearer KEY");
   const rb = JSON.parse(r.init.body);
-  assert.equal(rb.from, "Navyk <no-reply@navyk.app>");
+  assert.equal(rb.from, "brolingvo <no-reply@brolingvo.com>");
   assert.deepEqual(rb.to, ["a@b.co"]);
   assert.ok(rb.html && rb.text && rb.subject);
 });
@@ -108,7 +125,7 @@ test("email sending: provider failure is logged without address and recorded in 
   const logs = captureLogs();
   try {
     await withEnv({ EMAIL_PROVIDER: "resend", EMAIL_API_KEY: "re_test", EMAIL_FROM: undefined }, async () => {
-      queueEmail(db, { userId: "u1", to: "a@b.co", kind: "confirm", lang: "en", link: "https://navyk.app/#/confirm/SECRET" });
+      queueEmail(db, { userId: "u1", to: "a@b.co", kind: "confirm", lang: "en", link: "https://poland.brolingvo.com/#/confirm/SECRET" });
       await flushEmails();
     });
   } finally {
@@ -153,17 +170,19 @@ test("email provider log: link printed in dev, never in production", async () =>
 
 test("migrations are idempotent and versioned", () => {
   const db = new DatabaseSync(":memory:");
-  assert.deepEqual(migrate(db), [1, 2, 3]);
+  assert.deepEqual(migrate(db), [1, 2, 3, 4]);
   assert.deepEqual(migrate(db), []);
   const tables = (db.prepare("SELECT name FROM sqlite_master WHERE type='table' ORDER BY name").all() as any[]).map((r) => r.name);
-  for (const t of ["users", "sessions", "tokens", "progress", "email_log", "migrations"]) assert.ok(tables.includes(t), t);
+  for (const t of ["users", "sessions", "tokens", "progress", "email_log", "migrations", "visits", "admin_roles", "admin_audit"]) assert.ok(tables.includes(t), t);
+  const userCols = (db.prepare("PRAGMA table_info(users)").all() as any[]).map((r) => r.name);
+  assert.ok(userCols.includes("name") && userCols.includes("google_sub"));
   db.close();
 });
 
 test("WAL mode on file database", () => {
-  const dir = mkdtempSync(join(tmpdir(), "navyk-wal-"));
+  const dir = mkdtempSync(join(tmpdir(), "brolingvo-wal-"));
   try {
-    const db = openDb(join(dir, "navyk.sqlite"));
+    const db = openDb(join(dir, "brolingvo.sqlite"));
     assert.equal((db.prepare("PRAGMA journal_mode").get() as any).journal_mode, "wal");
     db.close();
   } finally {
@@ -172,23 +191,25 @@ test("WAL mode on file database", () => {
 });
 
 test("backup: VACUUM INTO a dated file, keeps 14 days", () => {
-  const dir = mkdtempSync(join(tmpdir(), "navyk-backup-"));
+  const dir = mkdtempSync(join(tmpdir(), "brolingvo-backup-"));
   try {
-    const db = openDb(join(dir, "navyk.sqlite"));
+    assert.throws(() => backup(dir), /database file not found/);
+    const db = openDb(join(dir, "brolingvo.sqlite"));
     db.prepare("INSERT INTO users (id, email, password_hash, lang, created_at) VALUES ('u1', 'a@b.co', 'x', 'en', 0)").run();
     const out = join(dir, "backups");
     backup(dir, new Date("2026-10-13T03:30:00Z")); // creates backups/
-    writeFileSync(join(out, "navyk-2026-09-01.sqlite"), "old");
-    writeFileSync(join(out, "navyk-2026-10-01.sqlite"), "recent");
+    writeFileSync(join(out, "brolingvo-2026-09-01.sqlite"), "old");
+    writeFileSync(join(out, "brolingvo-2026-10-01.sqlite"), "recent");
+    writeFileSync(join(out, "navyk-2026-09-01.sqlite"), "not ours: left alone");
     writeFileSync(join(out, "notes.txt"), "keep");
     const file = backup(dir, new Date("2026-10-13T03:30:00Z")); // same day again: overwrites
-    assert.ok(file.endsWith("navyk-2026-10-13.sqlite"));
+    assert.ok(file.endsWith("brolingvo-2026-10-13.sqlite"));
     const copy = new DatabaseSync(file);
     assert.equal((copy.prepare("SELECT count(*) AS c FROM users").get() as any).c, 1);
     copy.close();
-    assert.deepEqual(readdirSync(out).sort(), ["navyk-2026-10-01.sqlite", "navyk-2026-10-13.sqlite", "notes.txt"]);
-    assert.deepEqual(prune(out, new Date("2026-10-20T00:00:00Z")), ["navyk-2026-10-01.sqlite"]);
-    assert.ok(existsSync(join(out, "navyk-2026-10-13.sqlite")));
+    assert.deepEqual(readdirSync(out).sort(), ["brolingvo-2026-10-01.sqlite", "brolingvo-2026-10-13.sqlite", "navyk-2026-09-01.sqlite", "notes.txt"]);
+    assert.deepEqual(prune(out, new Date("2026-10-20T00:00:00Z")), ["brolingvo-2026-10-01.sqlite"]);
+    assert.ok(existsSync(join(out, "brolingvo-2026-10-13.sqlite")));
     db.close();
   } finally {
     rmSync(dir, { recursive: true, force: true });
@@ -209,10 +230,10 @@ test("same-site check without PUBLIC_ORIGIN compares Origin with Host", async ()
   const saved = process.env.PUBLIC_ORIGIN;
   delete process.env.PUBLIC_ORIGIN;
   try {
-    assert.equal(isSameSite("https://navyk.app", "navyk.app"), true);
-    assert.equal(isSameSite("https://evil.example", "navyk.app"), false);
-    assert.equal(isSameSite("http://navyk.app", "navyk.app"), false);
-    assert.equal(isSameSite(undefined, "navyk.app"), false);
+    assert.equal(isSameSite("https://poland.brolingvo.com", "poland.brolingvo.com"), true);
+    assert.equal(isSameSite("https://evil.example", "poland.brolingvo.com"), false);
+    assert.equal(isSameSite("http://poland.brolingvo.com", "poland.brolingvo.com"), false);
+    assert.equal(isSameSite(undefined, "poland.brolingvo.com"), false);
     assert.equal(isSameSite("http://localhost:8080", "localhost:8080"), true);
   } finally {
     if (saved !== undefined) process.env.PUBLIC_ORIGIN = saved;
@@ -230,8 +251,9 @@ test("email: provider error reason is logged without addresses", async () => {
 
 test("email: sender from EMAIL_FROM always has an address", async () => {
   const { parseFrom, senderHeader } = await import("../src/email/send.ts");
-  assert.deepEqual(parseFrom("Navyk"), { name: "Navyk", email: "no-reply@navyk.app" });
-  assert.deepEqual(parseFrom("hi@navyk.app"), { name: "Navyk", email: "hi@navyk.app" });
-  assert.deepEqual(parseFrom('"Navyk Team" <team@navyk.app>'), { name: "Navyk Team", email: "team@navyk.app" });
-  assert.equal(senderHeader("Navyk"), "Navyk <no-reply@navyk.app>");
+  assert.deepEqual(parseFrom("brolingvo"), { name: "brolingvo", email: "no-reply@brolingvo.com" });
+  assert.deepEqual(parseFrom(""), { name: "brolingvo", email: "no-reply@brolingvo.com" });
+  assert.deepEqual(parseFrom("hi@brolingvo.com"), { name: "brolingvo", email: "hi@brolingvo.com" });
+  assert.deepEqual(parseFrom('"brolingvo Team" <team@brolingvo.com>'), { name: "brolingvo Team", email: "team@brolingvo.com" });
+  assert.equal(senderHeader("brolingvo"), "brolingvo <no-reply@brolingvo.com>");
 });

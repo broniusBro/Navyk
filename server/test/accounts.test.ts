@@ -1,5 +1,5 @@
 // HTTP-тесты аккаунтов: регистрация → подтверждение → вход, блокировка, сброс пароля,
-// CSRF, отсутствие перечисления аккаунтов, синхронизация прогресса, лимит разборов по аккаунту.
+// CSRF, отсутствие перечисления аккаунтов, синхронизация прогресса, лимит ИИ по аккаунту, имя и удаление аккаунта.
 import { test, before, after, beforeEach } from "node:test";
 import assert from "node:assert/strict";
 import type { AddressInfo } from "node:net";
@@ -9,7 +9,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 
 const ORIGIN = "http://localhost:8080";
-const dataDir = mkdtempSync(join(tmpdir(), "navyk-accounts-"));
+const dataDir = mkdtempSync(join(tmpdir(), "brolingvo-accounts-"));
 process.env.DATA_DIR = dataDir;
 process.env.PUBLIC_ORIGIN = ORIGIN;
 process.env.EMAIL_PROVIDER = "log";
@@ -20,31 +20,21 @@ const { createApp } = await import("../src/http.ts");
 const { openDb } = await import("../src/db.ts");
 const { setEmailCapture, flushEmails } = await import("../src/email/send.ts");
 const { sha256 } = await import("../src/auth/sessions.ts");
+const { hashAddress } = await import("../src/email/send.ts");
 type OutgoingEmail = import("../src/email/send.ts").OutgoingEmail;
 
 const sent: OutgoingEmail[] = [];
 setEmailCapture((m) => sent.push(m));
 
 let clock = Date.parse("2026-10-13T10:00:00Z");
-const db = openDb(join(dataDir, "navyk.sqlite"));
-const reviewCalls: number[] = [];
+const db = openDb(join(dataDir, "brolingvo.sqlite"));
+const aiCalls: number[] = [];
+// Ответ помощника (helper — простой текст): реальных запросов к Claude API нет.
 const fakeClaude = (async () => {
-  reviewCalls.push(1);
+  aiCalls.push(1);
   return Response.json({
     stop_reason: "end_turn",
-    content: [
-      {
-        type: "text",
-        text: JSON.stringify({
-          privacy_issue: { found: false, message: "" },
-          off_task: false,
-          criteria: [{ id: "R1", applicable: true, score: 2, comment: "" }],
-          strengths: ["a"],
-          gaps: [],
-          improved_prompt: "x",
-        }),
-      },
-    ],
+    content: [{ type: "text", text: "*Dziękuję* — спасибо." }],
     usage: { input_tokens: 10, output_tokens: 10 },
   });
 }) as typeof fetch;
@@ -52,11 +42,11 @@ const fakeClaude = (async () => {
 const server: Server = createApp({
   db,
   now: () => clock,
-  freeReviewsPerDay: 2,
-  ipReviewsPerDay: 1000,
+  aiPerDay: 2,
+  ipAiPerDay: 1000,
   authPerMinutePerIp: 1000,
   emailsPerHourPerAddress: 1000,
-  reviewOptions: { apiKey: "test", fetchImpl: fakeClaude },
+  aiOptions: { apiKey: "test", fetchImpl: fakeClaude },
 });
 let base = "";
 
@@ -116,7 +106,9 @@ test("register → confirm (auto-login) → me → login", async () => {
   assert.equal(mail.to, email.toLowerCase());
   assert.match(mail.link, /^http:\/\/localhost:8080\/#\/confirm\/[A-Za-z0-9_-]{43}$/);
   assert.match(mail.subject, /Підтверди/);
-  assert.match(mail.text, /не пов'язаний з Anthropic/);
+  assert.match(mail.subject, /brolingvo/);
+  assert.match(mail.text, /brolingvo — безкоштовний курс польської мови\./);
+  assert.doesNotMatch(mail.text, /Navyk|Anthropic/i);
   assert.match(mail.html, /#FFB020/);
 
   // До подтверждения: верный пароль → 403, неверный → 401
@@ -127,8 +119,9 @@ test("register → confirm (auto-login) → me → login", async () => {
   assert.equal(conf.status, 200);
   assert.equal(conf.body.user.email, email.toLowerCase());
   assert.equal(conf.body.user.lang, "uk");
-  assert.deepEqual(Object.keys(conf.body.user).sort(), ["createdAt", "email", "id", "lang"]);
-  assert.match(conf.setCookie!, /^navyk_session=[A-Za-z0-9_-]{43}; Path=\/; HttpOnly; SameSite=Lax; Max-Age=2592000$/);
+  assert.deepEqual(Object.keys(conf.body.user).sort(), ["createdAt", "email", "id", "lang", "name"]);
+  assert.equal(conf.body.user.name, null);
+  assert.match(conf.setCookie!, /^brolingvo_session=[A-Za-z0-9_-]{43}; Path=\/; HttpOnly; SameSite=Lax; Max-Age=2592000$/);
 
   // Токен одноразовый
   assert.deepEqual((await call("POST", "/api/auth/confirm", { token: tokenFrom(mail) })).body, { error: "invalid_token" });
@@ -328,7 +321,7 @@ test("progress: auth required, put/get, size limit", async () => {
   const empty = await call("GET", "/api/progress", undefined, { cookie });
   assert.deepEqual(empty.body, { data: null, updatedAt: null });
 
-  const data = { version: 1, xp: 120, days: ["2026-10-15"], lessons: { "b1.1": { firstCompletedAt: "2026-10-15", lastCompletedAt: "2026-10-15", bestXp: 25, runs: 1 } }, repeat: {} };
+  const data = { version: 1, xp: 120, days: ["2026-10-15"], lessons: { "a1m1.1": { firstCompletedAt: "2026-10-15", lastCompletedAt: "2026-10-15", bestXp: 25, runs: 1 } }, repeat: {} };
   const put = await call("PUT", "/api/progress", { data, baseUpdatedAt: null }, { cookie });
   assert.equal(put.status, 200);
   assert.deepEqual(put.body.data, data);
@@ -345,11 +338,12 @@ test("progress: auth required, put/get, size limit", async () => {
   const junk = await call(
     "PUT",
     "/api/progress",
-    { data: { ...data, xp: 1e12, evil: "<script>", days: ["2026-10-15", "'; DROP TABLE users;--"], lessons: { ...data.lessons, "<img src=x>": { bestXp: 5 }, "b1.2": { bestXp: "9999999", runs: -5, html: "<b>" } }, repeat: { x: { due: "never" } } } },
+    { data: { ...data, xp: 1e12, evil: "<script>", days: ["2026-10-15", "'; DROP TABLE users;--"], lessons: { ...data.lessons, "<img src=x>": { bestXp: 5 }, "b2.1": { bestXp: 5 }, "a1m1.2": { bestXp: "9999999", runs: -5, html: "<b>" } }, repeat: { x: { due: "never" } } } },
     { cookie },
   );
   assert.equal(junk.status, 200);
-  assert.deepEqual(junk.body.data, { ...data, xp: 10_000_000, lessons: { ...data.lessons, "b1.2": { bestXp: 0, runs: 0 } } });
+  // old Navyk ids (b2.1) and junk keys are dropped; new ids (a1m1.2) are kept with sane values
+  assert.deepEqual(junk.body.data, { ...data, xp: 10_000_000, lessons: { ...data.lessons, "a1m1.2": { bestXp: 0, runs: 0 } } });
   const raw = await call("PUT", "/api/progress", JSON.parse('{"data":{"version":1,"__proto__":{"admin":true},"lessons":{"__proto__":{"bestXp":1}}}}'), { cookie });
   assert.equal(raw.status, 200);
   assert.equal(({} as any).admin, undefined);
@@ -359,23 +353,118 @@ test("progress: auth required, put/get, size limit", async () => {
   assert.equal(big.status, 413);
 });
 
-test("review limit is keyed by the account, not by deviceId", async () => {
+test("AI limit is keyed by the account, not by deviceId", async () => {
   const { cookie } = await registerAndConfirm();
-  const review = (deviceId: string, c?: string) =>
-    call("POST", "/api/review", { lessonId: "b2.1", exerciseId: "b2.1.e5", lang: "ru", prompt: "Напиши пост для Instagram про скидки", deviceId }, { cookie: c });
-  assert.equal((await review("device-aaaaaaaa", cookie)).status, 200);
-  const second = await review("device-bbbbbbbb", cookie);
+  const ask = (deviceId: string, c?: string) =>
+    call("POST", "/api/ai/helper", { lessonId: "a1m1.1", question: "Как читается w?", deviceId }, { cookie: c });
+  const before = aiCalls.length;
+  const first = await ask("device-aaaaaaaa", cookie);
+  assert.equal(first.status, 200);
+  assert.equal(first.body.answer, "*Dziękuję* — спасибо.");
+  const second = await ask("device-bbbbbbbb", cookie);
   assert.equal(second.status, 200);
   assert.equal(second.body.remaining, 0);
-  // the account limit holds even with a new deviceId
-  assert.equal((await review("device-cccccccc", cookie)).status, 429);
+  // the account limit holds even with a new deviceId, and the model is not called
+  const third = await ask("device-cccccccc", cookie);
+  assert.equal(third.status, 429);
+  assert.equal(third.body.reason, "limit");
+  assert.equal(aiCalls.length - before, 2);
   // anonymous with the same new deviceId still has its own allowance
-  assert.equal((await review("device-cccccccc")).status, 200);
+  assert.equal((await ask("device-cccccccc")).status, 200);
 });
 
-test("health reports db", async () => {
+test("health reports ai and db", async () => {
   const h = await call("GET", "/api/health");
-  assert.deepEqual(h.body, { ok: true, reviewer: false, db: true });
+  assert.deepEqual(h.body, { ok: true, ai: false, db: true });
+});
+
+// ---------------- личный кабинет: имя и удаление аккаунта ----------------
+
+test("display name: cleaned, max 40 characters, empty string removes it", async () => {
+  const { cookie } = await registerAndConfirm();
+  const patch = (b: object) => call("PATCH", "/api/auth/me", b, { cookie });
+  const ZWSP = "\u200b";
+  const ok = await patch({ name: `  Ania${ZWSP} \n Kowalska\u202e ` });
+  assert.equal(ok.status, 200);
+  assert.equal(ok.body.user.name, "Ania Kowalska", "invisible characters dropped, one line, trimmed");
+  assert.equal((await call("GET", "/api/auth/me", undefined, { cookie })).body.user.name, "Ania Kowalska");
+  // 40 characters (even non-ASCII) fit, 41 do not
+  const forty = "Ż".repeat(40);
+  assert.equal((await patch({ name: forty })).body.user.name, forty);
+  const long = await patch({ name: "x".repeat(41) });
+  assert.deepEqual([long.status, long.body], [400, { error: "name_too_long" }]);
+  assert.equal((await call("GET", "/api/auth/me", undefined, { cookie })).body.user.name, forty, "rejected update changes nothing");
+  // only invisible characters → counts as empty after cleaning
+  assert.equal((await patch({ name: `${ZWSP}${ZWSP}` })).body.user.name, null);
+  await patch({ name: "Ania" });
+  assert.equal((await patch({ name: "" })).body.user.name, null, "empty string removes the name");
+  assert.equal((await patch({ name: 42 })).status, 400);
+  assert.equal((await patch({ name: ["Ania"] })).status, 400);
+  // name and lang together; other fields ignored
+  const both = await patch({ name: "<b>Ola</b>", lang: "pl", email: "evil@x.co" });
+  assert.equal(both.body.user.name, "<b>Ola</b>", "stored as text; the client renders via textContent");
+  assert.equal(both.body.user.lang, "pl");
+  assert.notEqual(both.body.user.email, "evil@x.co");
+  assert.equal((await call("PATCH", "/api/auth/me", { name: "x" })).status, 401);
+});
+
+test("delete account: password required, removes everything, clears the cookie", async () => {
+  const { email, cookie, user } = await registerAndConfirm();
+  const other = await call("POST", "/api/auth/login", { email, password: PASSWORD });
+  await call("PUT", "/api/progress", { data: { version: 1, xp: 5, days: [], lessons: {}, repeat: {} } }, { cookie });
+  db.prepare("INSERT INTO visits (user_id, started_at, last_at) VALUES (?, ?, ?)").run(user.id, clock, clock);
+  db.prepare("INSERT INTO admin_roles (user_id, role, granted_by, granted_at) VALUES (?, 'viewer', NULL, ?)").run(user.id, clock);
+  db.prepare("INSERT INTO admin_audit (at, actor_id, action, target_id, details) VALUES (?, NULL, 'grant', ?, ?)").run(clock, user.id, JSON.stringify({ email: email.toLowerCase(), to: "viewer" }));
+  await call("POST", "/api/auth/forgot", { email }); // a live reset token
+
+  // no session → 401; wrong password → 401 wrong_password, nothing deleted
+  assert.equal((await call("DELETE", "/api/auth/me", { password: PASSWORD })).status, 401);
+  const wrong = await call("DELETE", "/api/auth/me", { password: "not my password" }, { cookie });
+  assert.deepEqual([wrong.status, wrong.body], [401, { error: "wrong_password" }]);
+  assert.deepEqual((await call("DELETE", "/api/auth/me", {}, { cookie })).body, { error: "wrong_password" });
+  assert.deepEqual((await call("DELETE", "/api/auth/me", { confirm: "DELETE" }, { cookie })).body, { error: "wrong_password" }, "confirm:DELETE is only for Google accounts");
+  assert.equal((await call("GET", "/api/auth/me", undefined, { cookie })).status, 200);
+
+  const logs: string[] = [];
+  const orig = console.log;
+  console.log = (...a: unknown[]) => void logs.push(a.join(" "));
+  let del: Res;
+  try {
+    del = await call("DELETE", "/api/auth/me", { password: PASSWORD }, { cookie });
+  } finally {
+    console.log = orig;
+  }
+  assert.deepEqual([del.status, del.body], [200, { ok: true }]);
+  assert.match(del.setCookie!, /^brolingvo_session=; .*Max-Age=0/);
+  const entry = logs.map((l) => JSON.parse(l)).find((e) => e.event === "account_deleted");
+  assert.equal(entry.emailHash, hashAddress(email.toLowerCase()));
+  assert.ok(!logs.join("\n").toLowerCase().includes(email.toLowerCase()), "no plain email in the log");
+
+  // every session is gone, the same credentials no longer sign in
+  assert.equal((await call("GET", "/api/auth/me", undefined, { cookie })).status, 401);
+  assert.equal((await call("GET", "/api/auth/me", undefined, { cookie: other.cookie })).status, 401);
+  assert.equal((await call("POST", "/api/auth/login", { email, password: PASSWORD })).status, 401);
+  for (const t of ["users WHERE id", "sessions WHERE user_id", "tokens WHERE user_id", "progress WHERE user_id", "visits WHERE user_id", "admin_roles WHERE user_id", "email_log WHERE user_id"]) {
+    assert.equal((db.prepare(`SELECT COUNT(*) AS n FROM ${t} = ?`).get(user.id) as any).n, 0, t);
+  }
+  const audit = db.prepare("SELECT details FROM admin_audit WHERE target_id = ?").get(user.id) as any;
+  assert.ok(!audit.details.includes("@"), "audit keeps the action, not the address");
+  // the address is free again
+  assert.equal((await call("POST", "/api/auth/register", { email, password: PASSWORD, lang: "ru" })).status, 202);
+});
+
+test("delete account: only from our Origin, wrong passwords lock like login", async () => {
+  const { email, cookie } = await registerAndConfirm();
+  for (const origin of [null, "https://evil.example"]) {
+    assert.equal((await call("DELETE", "/api/auth/me", { password: PASSWORD }, { origin, cookie })).status, 403);
+  }
+  for (let i = 0; i < 5; i++) assert.equal((await call("DELETE", "/api/auth/me", { password: "wrong password!" }, { cookie })).status, 401);
+  const locked = await call("DELETE", "/api/auth/me", { password: PASSWORD }, { cookie });
+  assert.equal(locked.status, 429);
+  assert.equal(locked.body.error, "locked");
+  assert.equal((await call("POST", "/api/auth/login", { email, password: PASSWORD })).status, 429, "the same lock as login");
+  clock += 15 * 60_000 + 1000;
+  assert.equal((await call("DELETE", "/api/auth/me", { password: PASSWORD }, { cookie })).status, 200);
 });
 
 test("rate limits: per IP on auth, per address on emails", async () => {
@@ -433,7 +522,7 @@ test("google: providers, start redirect, callback creates a confirmed account an
   assert.equal(ok.status, 302);
   assert.equal(ok.headers.get("location"), "/#/");
   assert.ok(tokenBody.includes("code_verifier="), "PKCE verifier sent");
-  const session = ok.headers.getSetCookie().find((c) => c.startsWith("navyk_session="))!.split(";")[0];
+  const session = ok.headers.getSetCookie().find((c) => c.startsWith("brolingvo_session="))!.split(";")[0];
   const me = await call("GET", "/api/auth/me", undefined, { cookie: session });
   assert.equal(me.status, 200);
   assert.equal(me.body.user.email, email.toLowerCase());
@@ -441,7 +530,7 @@ test("google: providers, start redirect, callback creates a confirmed account an
 
   // second sign-in with the same Google account finds the same user
   const again = await fetch(`${base}/api/auth/google/callback?code=c&state=${state}`, { redirect: "manual", headers: { cookie: oauthCookie } });
-  const session2 = again.headers.getSetCookie().find((c) => c.startsWith("navyk_session="))!.split(";")[0];
+  const session2 = again.headers.getSetCookie().find((c) => c.startsWith("brolingvo_session="))!.split(";")[0];
   assert.equal((await call("GET", "/api/auth/me", undefined, { cookie: session2 })).body.user.id, me.body.user.id);
   setGoogleFetch(null);
 });
@@ -469,4 +558,25 @@ test("google: linking an unconfirmed account voids the password someone else may
   assert.equal(r2.headers.get("location"), "/#/login?e=google");
   setGoogleFetch(null);
   delete process.env.GOOGLE_CLIENT_ID;
+});
+
+test("google: an account without a password is deleted with {confirm:'DELETE'}", async () => {
+  const { setGoogleFetch, startGoogle } = await import("../src/auth/google.ts");
+  process.env.GOOGLE_CLIENT_ID = "cid.apps.googleusercontent.com";
+  process.env.GOOGLE_CLIENT_SECRET = "secret";
+  const email = freshEmail();
+  const g = startGoogle("ru");
+  const state = new URL(g.location).searchParams.get("state")!;
+  setGoogleFetch((async () =>
+    Response.json({
+      id_token: `x.${Buffer.from(JSON.stringify({ iss: "accounts.google.com", aud: "cid.apps.googleusercontent.com", exp: Math.floor(clock / 1000) + 60, sub: "g-del", email, email_verified: true })).toString("base64url")}.y`,
+    })) as typeof fetch);
+  const r = await fetch(`${base}/api/auth/google/callback?code=c&state=${state}`, { redirect: "manual", headers: { cookie: g.cookie.split(";")[0] } });
+  const cookie = r.headers.getSetCookie().find((c) => c.startsWith("brolingvo_session="))!.split(";")[0];
+  setGoogleFetch(null);
+  delete process.env.GOOGLE_CLIENT_ID;
+  assert.equal((await call("DELETE", "/api/auth/me", { confirm: "delete" }, { cookie })).status, 401, "exact word only");
+  assert.deepEqual((await call("DELETE", "/api/auth/me", { confirm: "DELETE" }, { cookie })).body, { ok: true });
+  assert.equal((await call("GET", "/api/auth/me", undefined, { cookie })).status, 401);
+  assert.equal(db.prepare("SELECT COUNT(*) AS n FROM users WHERE google_sub = 'g-del'").get()!.n as number, 0);
 });
