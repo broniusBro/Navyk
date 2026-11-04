@@ -3,7 +3,7 @@
 # Run as root from /srv/brolingvo-poland (also called by the autoupdate timer).
 set -euo pipefail
 REPO="$(cd "$(dirname "$0")/.." && pwd)"; cd "$REPO"
-APP_PORT="${APP_PORT:-8120}"
+APP_PORT="${APP_PORT:-$(awk '$1=="brolingvo-poland" {print $2; exit}' /etc/host/projects 2>/dev/null)}"; APP_PORT="${APP_PORT:-8120}"
 prev="$(git rev-parse HEAD)"
 git pull -q --ff-only origin polish
 now="$(git rev-parse HEAD)"

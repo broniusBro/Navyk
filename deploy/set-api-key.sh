@@ -13,4 +13,4 @@ printf 'ANTHROPIC_API_KEY=%s\n' "$key" >> "$ENV_FILE.new"
 mv "$ENV_FILE.new" "$ENV_FILE"; chmod 600 "$ENV_FILE"
 cd /srv/brolingvo-poland && docker compose up -d --force-recreate app >/dev/null
 sleep 3
-curl -fsS "http://127.0.0.1:${APP_PORT:-8120}/api/health"; echo
+curl -fsS "http://127.0.0.1:$(awk '$1=="brolingvo-poland" {print $2; exit}' /etc/host/projects 2>/dev/null || echo 8120)/api/health"; echo

@@ -5,7 +5,7 @@
 # with a confirmed email (or signed in with Google). Safe to run again (e.g. to add another owner).
 set -euo pipefail
 REPO="$(cd "$(dirname "$0")/.." && pwd)"; cd "$REPO"
-APP_PORT="${APP_PORT:-8120}"
+APP_PORT="${APP_PORT:-$(awk '$1=="brolingvo-poland" {print $2; exit}' /etc/host/projects 2>/dev/null)}"; APP_PORT="${APP_PORT:-8120}"
 ENV_FILE=/etc/brolingvo-poland/brolingvo-poland.env
 die() { printf 'ERROR: %s\n' "$*" >&2; exit 1; }
 [ "$(id -u)" = 0 ] || die "run as root"

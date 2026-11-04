@@ -9,7 +9,7 @@
 - Код: ветка `polish` репозитория `broniusBro/Navyk` (не связана с `main` — navyk.app её не видит).
 - Продакшен: https://poland.brolingvo.com на общем сервере Hetzner 65.108.234.212 (там же navyk.app и bronus.app),
   правила — `bronus-core/host/README.md`. Своя «квартира»: `/srv/brolingvo-poland`, Compose-проект `brolingvo-poland`,
-  порт `127.0.0.1:8120` (реестр `/etc/host/projects`), секреты `/etc/brolingvo-poland/brolingvo-poland.env`,
+  порт выбирается автоматически при первой установке (первый свободный от 8130) и записывается в реестр `/etc/host/projects`, секреты `/etc/brolingvo-poland/brolingvo-poland.env`,
   сайт `/etc/caddy/sites/poland.brolingvo.com.caddy`, таймеры `brolingvo-poland-autoupdate` и `brolingvo-poland-backup`.
 - Первый запуск: `deploy/deploy-from-mac.sh` (с Mac владельца, по SSH). Дальше сервер сам подтягивает ветку
   `polish` каждые 5 минут с откатом при сбое. **Не трогать общий Caddyfile и чужие проекты.**

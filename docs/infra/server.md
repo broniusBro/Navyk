@@ -7,7 +7,7 @@
 |---|---|
 | Код | `/srv/brolingvo-poland` — клон ветки `polish` публичного репозитория `broniusBro/Navyk` |
 | Приложение | Docker Compose проект `brolingvo-poland`, контейнер только для чтения, без привилегий |
-| Порт | `127.0.0.1:8120` (регистрируется в `/etc/host/projects` при установке) |
+| Порт | первый свободный от 8130, выбирается при первой установке и записывается в `/etc/host/projects`; дальше скрипты берут его оттуда |
 | Секреты | `/etc/brolingvo-poland/brolingvo-poland.env` (chmod 600) |
 | Сайт в Caddy | `/etc/caddy/sites/poland.brolingvo.com.caddy` → `reverse_proxy 127.0.0.1:8120` |
 | База | SQLite `/data/brolingvo.sqlite` в томе `polish_brolingvo-poland-data` |

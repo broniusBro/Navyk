@@ -12,7 +12,7 @@ set -euo pipefail
 APP_IP="${APP_IP:-65.108.234.212}"
 SERVER="root@$APP_IP"
 SITE="${SITE:-poland.brolingvo.com}"
-APP_PORT="${APP_PORT:-8120}"
+APP_PORT="${APP_PORT:-}"   # empty = the registered port, or the first free one from 8130 up
 BRANCH="${BRANCH:-polish}"
 REPO_URL="${REPO_URL:-https://github.com/broniusBro/Navyk.git}"   # public repository: no deploy key needed
 DIR=/srv/brolingvo-poland
@@ -28,10 +28,16 @@ step "1/5 Проверки: доступ к серверу, свободный �
 ssh -o ConnectTimeout=10 -o StrictHostKeyChecking=accept-new "$SERVER" 'echo "сервер: $(hostname), $(nproc) CPU, $(free -g | awk "/Mem:/{print \$2}") GB RAM, свободно $(df -h / | awk "NR==2{print \$4}")"'
 ssh "$SERVER" 'command -v docker >/dev/null && test -d /etc/caddy/sites' || { echo "На сервере нет базовой настройки (bronus-core/host/bootstrap.sh)."; exit 1; }
 echo "Проекты на сервере (их не трогаем):"; ssh "$SERVER" 'cat /etc/host/projects 2>/dev/null || true'
-busy="$(ssh "$SERVER" "ss -ltnH 'sport = :$APP_PORT' | head -1; awk -v p=$APP_PORT '\$2==p && \$1!=\"brolingvo-poland\" {print \"registered for \"\$1}' /etc/host/projects 2>/dev/null" || true)"
-if [ -n "$busy" ] && ! ssh "$SERVER" "test -d $DIR/.git"; then
-  echo "Порт $APP_PORT занят ($busy). Запустите с другим портом: APP_PORT=8120 bash deploy-from-mac.sh"; exit 1
-fi
+# Port: the one already registered for us; else APP_PORT if given and free; else the first free port 8130..8990
+# (not listening and not in /etc/host/projects — other services on this server are never touched).
+APP_PORT="$(ssh "$SERVER" "set -e
+  reg=\$(awk '\$1==\"brolingvo-poland\" {print \$2; exit}' /etc/host/projects 2>/dev/null || true)
+  if [ -n \"\$reg\" ]; then echo \$reg; exit 0; fi
+  free() { ! ss -ltnH \"sport = :\$1\" | grep -q . && ! awk -v p=\$1 '\$2==p {f=1} END {exit !f}' /etc/host/projects 2>/dev/null; }
+  if [ -n '$APP_PORT' ] && free '$APP_PORT'; then echo '$APP_PORT'; exit 0; fi
+  for p in \$(seq 8130 10 8990); do if free \$p; then echo \$p; exit 0; fi; done
+  exit 1")" || { echo "Не нашёл свободный порт на сервере (8130–8990)."; exit 1; }
+echo "Порт приложения: 127.0.0.1:$APP_PORT"
 got="$(dig +short A "$SITE" | tr '\n' ' ' | sed 's/ $//')"
 if [ "$got" = "$APP_IP" ]; then echo "DNS ok: $SITE -> $got"
 else
