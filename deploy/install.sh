@@ -8,7 +8,7 @@ REPO="$(cd "$(dirname "$0")/.." && pwd)"; cd "$REPO"
 APP_PORT="${APP_PORT:-$(awk '$1=="brolingvo-poland" {print $2; exit}' /etc/host/projects 2>/dev/null)}"; APP_PORT="${APP_PORT:-8120}"
 IP="$(curl -fsS -m 5 http://169.254.169.254/hetzner/v1/metadata/public-ipv4 2>/dev/null || hostname -I | awk '{print $1}')"
 # without SITE keep the domain this app already serves (so a re-run never falls back to sslip.io)
-CURRENT="$(grep -l "reverse_proxy 127.0.0.1:$APP_PORT" /etc/caddy/sites/*.caddy 2>/dev/null | head -1 | xargs -r basename | sed 's/\.caddy$//')"
+CURRENT="$(grep -l "reverse_proxy 127.0.0.1:$APP_PORT" /etc/caddy/sites/*.caddy 2>/dev/null | head -1 | xargs -r basename | sed 's/\.caddy$//' || true)"
 SITE="${SITE:-${CURRENT:-$(echo "$IP" | tr . -).sslip.io}}"
 ENV_FILE=/etc/brolingvo-poland/brolingvo-poland.env
 CADDY_SITE="/etc/caddy/sites/$SITE.caddy"
@@ -19,7 +19,7 @@ command -v docker >/dev/null || die "Docker missing — run bronus-core/host/boo
 [ -d /etc/caddy/sites ] || die "/etc/caddy/sites missing — run bronus-core/host/bootstrap.sh first"
 # shared port registry (bronus-core/host/README.md): register "brolingvo-poland <port> /srv/brolingvo-poland" once; refuse a port owned by another project
 if [ -f /etc/host/projects ]; then
-  owner="$(awk -v p="$APP_PORT" '$2==p {print $1}' /etc/host/projects | head -1)"
+  owner="$(awk -v p="$APP_PORT" '$2==p {print $1}' /etc/host/projects | head -1 || true)"
   if [ -n "$owner" ] && [ "$owner" != "brolingvo-poland" ]; then die "port $APP_PORT is registered for $owner in /etc/host/projects"; fi
   if ! grep -qE '^brolingvo-poland[[:space:]]' /etc/host/projects; then
     printf 'brolingvo-poland %s         /srv/brolingvo-poland /etc/brolingvo-poland brolingvo-poland\n' "$APP_PORT" >> /etc/host/projects
@@ -67,7 +67,7 @@ done
 curl -fsS "http://127.0.0.1:$APP_PORT/api/health"; echo
 
 # the admin panel (ADMIN_ORIGIN in the env file, see deploy/enable-admin.sh) shares this site file and port
-ADMIN_HOST="$(grep -E '^ADMIN_ORIGIN=https://' "$ENV_FILE" 2>/dev/null | tail -1 | sed -E 's#^ADMIN_ORIGIN=https://##; s#/.*$##')"
+ADMIN_HOST="$(grep -E '^ADMIN_ORIGIN=https://' "$ENV_FILE" 2>/dev/null | tail -1 | sed -E 's#^ADMIN_ORIGIN=https://##; s#/.*$##' || true)"
 ADDRS="$SITE"; [ -n "$ADMIN_HOST" ] && ADDRS="$SITE, $ADMIN_HOST"
 say "3/6 Caddy site $ADDRS"
 NEW="$(printf '%s {\n\tencode zstd gzip\n\treverse_proxy 127.0.0.1:%s\n}\n' "$ADDRS" "$APP_PORT")"

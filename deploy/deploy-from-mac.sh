@@ -22,7 +22,7 @@ mkdir -p "$HOME/.ssh/cm"; chmod 700 "$HOME/.ssh/cm"
 # Non-interactive calls must not read stdin: with `curl … | bash` stdin is the rest of this script.
 ssh() { command ssh -o ControlMaster=auto -o ControlPath="$HOME/.ssh/cm/%r@%h-%p" -o ControlPersist=15m -o ServerAliveInterval=30 "$@" </dev/null; }
 # Interactive call (questions on the server): terminal from /dev/tty even when the script itself comes from a pipe.
-ssh_tty() { command ssh -t -o ControlMaster=auto -o ControlPath="$HOME/.ssh/cm/%r@%h-%p" -o ControlPersist=15m -o ServerAliveInterval=30 "$@" </dev/tty; }
+ssh_tty() { command ssh -t -o ControlPath=none -o ServerAliveInterval=30 "$@" </dev/tty; }
 
 step "1/5 Проверки: доступ к серверу, свободный порт, DNS"
 ssh -o ConnectTimeout=10 -o StrictHostKeyChecking=accept-new "$SERVER" 'echo "сервер: $(hostname), $(nproc) CPU, $(free -g | awk "/Mem:/{print \$2}") GB RAM, свободно $(df -h / | awk "NR==2{print \$4}")"'

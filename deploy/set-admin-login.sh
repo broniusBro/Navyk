@@ -15,4 +15,4 @@ read -r -s -p "Repeat the password: " p2; echo
 [ "$p1" = "$p2" ] || { echo "Passwords differ. Nothing changed."; exit 1; }
 printf '%s\n' "$p1" | docker compose exec -T app node --disable-warning=ExperimentalWarning server/src/admin/set-login.ts "$email" "$role"
 unset p1 p2
-echo "Sign in: $(grep -E '^ADMIN_ORIGIN=' /etc/brolingvo-poland/brolingvo-poland.env | tail -1 | cut -d= -f2-)"
+echo "Sign in: $(grep -E '^ADMIN_ORIGIN=' /etc/brolingvo-poland/brolingvo-poland.env | tail -1 | cut -d= -f2- || true)"

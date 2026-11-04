@@ -17,7 +17,7 @@ healthy() {
 # servers installed before accounts existed: derive PUBLIC_ORIGIN (CSRF check, email links) from the Caddy site
 ENV_FILE=/etc/brolingvo-poland/brolingvo-poland.env
 if [ -f "$ENV_FILE" ] && ! grep -q '^PUBLIC_ORIGIN=' "$ENV_FILE"; then
-  site="$(grep -l "reverse_proxy 127.0.0.1:$APP_PORT" /etc/caddy/sites/*.caddy 2>/dev/null | head -1 | xargs -r basename | sed 's/\.caddy$//')"
+  site="$(grep -l "reverse_proxy 127.0.0.1:$APP_PORT" /etc/caddy/sites/*.caddy 2>/dev/null | head -1 | xargs -r basename | sed 's/\.caddy$//' || true)"
   [ -n "$site" ] && { printf 'PUBLIC_ORIGIN=https://%s\n' "$site" >> "$ENV_FILE"; echo "brolingvo-poland: PUBLIC_ORIGIN=https://$site added"; }
 fi
 APP_PORT="$APP_PORT" docker compose build app

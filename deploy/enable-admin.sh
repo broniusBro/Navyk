@@ -11,13 +11,13 @@ die() { printf 'ERROR: %s\n' "$*" >&2; exit 1; }
 [ "$(id -u)" = 0 ] || die "run as root"
 [ -f "$ENV_FILE" ] || die "$ENV_FILE missing — run deploy/install.sh first"
 
-SITE="$(grep -E '^PUBLIC_ORIGIN=https://' "$ENV_FILE" | tail -1 | sed -E 's#^PUBLIC_ORIGIN=https://##; s#/.*$##')"
+SITE="$(grep -E '^PUBLIC_ORIGIN=https://' "$ENV_FILE" | tail -1 | sed -E 's#^PUBLIC_ORIGIN=https://##; s#/.*$##' || true)"
 [ -n "$SITE" ] || die "PUBLIC_ORIGIN is not set in $ENV_FILE — run deploy/install.sh first"
 ADMIN_HOST="${ADMIN_HOST:-admin.$SITE}"
 
 echo "== 1/4 DNS for $ADMIN_HOST"
 IP="$(curl -fsS -m 5 http://169.254.169.254/hetzner/v1/metadata/public-ipv4 2>/dev/null || hostname -I | awk '{print $1}')"
-GOT="$(getent ahostsv4 "$ADMIN_HOST" 2>/dev/null | awk 'NR==1{print $1}')"
+GOT="$(getent ahostsv4 "$ADMIN_HOST" 2>/dev/null | awk 'NR==1{print $1}' || true)"
 if [ "$GOT" != "$IP" ]; then
   die "$ADMIN_HOST resolves to '${GOT:-nothing}', expected $IP. Add the DNS record: type A, name admin, value $IP — then run again (DNS may take a few minutes)."
 fi
