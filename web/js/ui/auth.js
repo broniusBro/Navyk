@@ -338,7 +338,12 @@ export function renderConfirm({ token, go }) {
 
 /** Password recovery needs email; without it the screen explains that instead of showing a form. */
 function forgotUnavailable() {
-  const box = alertBox("info", t("auth.forgot_unavailable_title"), h("p", t("auth.forgot_unavailable_text")));
+  // the Google hint only when Google sign-in is actually configured
+  const text = h("p", t("auth.forgot_unavailable_text"));
+  const box = alertBox("info", t("auth.forgot_unavailable_title"), text);
+  loadProviders().then((p) => {
+    if (p?.body?.google) text.textContent = t("auth.forgot_unavailable_text_google");
+  });
   box.setAttribute("tabindex", "-1");
   return box;
 }

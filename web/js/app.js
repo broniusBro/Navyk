@@ -11,8 +11,9 @@ import { mountLesson } from "./ui/lesson.js";
 import { renderComplete } from "./ui/complete.js";
 import { getProgress, saveProgress, shuffleSeed } from "./ui/store.js";
 import { fetchCourse, fetchLesson, probeAvailable } from "./platform/api.js";
-import { deviceId, now, onConnectivityChange } from "./platform/device.js";
+import { deviceId, now, onConnectivityChange, isOnline } from "./platform/device.js";
 import { registerServiceWorker } from "./platform/sw.js";
+import { initKeyboardWatch } from "./platform/keyboard.js";
 import { loadAnalytics, trackPage } from "./platform/analytics.js";
 import { showConsent } from "./ui/consent.js";
 import { dayKey } from "./engine/dates.js";
@@ -130,7 +131,7 @@ async function showLesson(lessonId, token) {
   const lang = getLang();
   const lesson = await fetchLesson(lang, lessonId);
   if (token !== screenToken) return;
-  if (!lesson) return showError("lesson.not_found");
+  if (!lesson) return showError(isOnline() ? "lesson.not_found" : "lesson.offline");
   // a session cookie without a cached user (after Google sign-in, cleared storage): wait for /api/auth/me
   // before treating the learner as a guest, or a signed-in deep link bounces to the sign-up sheet
   if (!canOpenLesson(lesson.meta, isSignedIn()) && !accountChecked()) {
@@ -423,6 +424,7 @@ async function main() {
     else if (location.hash === "#/me") route();
   });
   globalThis.addEventListener("hashchange", route);
+  document.documentElement.classList.toggle("is-offline", !isOnline());
   onConnectivityChange((online) => {
     document.documentElement.classList.toggle("is-offline", !online);
     if (online && !state.course) loadCourse();
@@ -431,6 +433,7 @@ async function main() {
   route();
   loadCourse();
   registerServiceWorker();
+  initKeyboardWatch();
   loadAnalytics();
   showConsent();
 }

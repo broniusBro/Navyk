@@ -46,20 +46,25 @@ export function stopAudio() {
 
 /**
  * Play text with an audio button's visual state. Used by audioButton and by autoplay.
- * Resolves when speech ends.
+ * Resolves when speech ends (true when it played to the end). reportFail: on a failure that was not a stop,
+ * fire a bubbling "audiofail" event on btn (only for taps: autoplay may be blocked before any gesture).
  */
-export async function playWith(btn, text, { slow = false } = {}) {
+export async function playWith(btn, text, { slow = false, reportFail = false } = {}) {
   if (playing && playing !== btn) setPlaying(playing, false);
   playing = btn;
   if (btn) setPlaying(btn, true);
+  let ok = false;
   try {
-    await speak(text, { slow });
+    ok = await speak(text, { slow });
   } finally {
+    // still ours and not ok: the device failed to speak (not a stop by the learner or another button)
     if (playing === btn) {
       if (btn) setPlaying(btn, false);
       playing = null;
+      if (!ok && btn && reportFail) btn.dispatchEvent(new CustomEvent("audiofail", { bubbles: true }));
     }
   }
+  return ok;
 }
 
 /**
@@ -78,7 +83,7 @@ export function audioButton(text, { big = false, slow = false, label } = {}) {
   btn.addEventListener("click", (e) => {
     e.stopPropagation(); // inside a tappable bubble the click must not toggle the translation
     if (playing === btn) return stopAudio();
-    playWith(btn, text, { slow });
+    playWith(btn, text, { slow, reportFail: true });
   });
   return btn;
 }
@@ -93,6 +98,25 @@ export function exAudio(ex, { autoplay = true } = {}) {
   const main = audioButton(text, { big: true, label: t("speak.listen_task") });
   const slow = audioButton(text, { slow: true, label: t("speak.listen_slow_task") });
   const row = h("div.ex__audio", main, slow, ex.audio_only ? null : h("p.ex__audio-text", { lang: "pl" }, text));
+  if (ex.audio_only) {
+    // Listening task: the text stays hidden, but there is always a way forward (no sound, no Polish voice,
+    // a failed synthesis, headphones forgotten). Without TTS the text is shown right away.
+    const textEl = h("p.ex__audio-text", { lang: "pl", hidden: true }, text);
+    const note = h("p.ex__audio-note", { hidden: true });
+    const reveal = h("button.btn.btn--link.ex__audio-reveal", { type: "button" }, t("speak.show_text"));
+    const show = (msgKey) => {
+      textEl.hidden = false;
+      reveal.hidden = true;
+      if (msgKey) {
+        note.hidden = false;
+        note.textContent = t(msgKey);
+      }
+    };
+    reveal.addEventListener("click", () => show(null));
+    row.addEventListener("audiofail", () => show("speak.tts_failed"));
+    row.append(textEl, reveal, note);
+    if (!isTtsAvailable()) show("speak.tts_unavailable_text");
+  }
   if (autoplay && autoplayEnabled() && isTtsAvailable()) {
     // after the screen transition; skipped if the learner already left the screen
     setTimeout(() => row.isConnected && playWith(main, text), 450);

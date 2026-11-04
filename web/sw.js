@@ -35,6 +35,7 @@ const SHELL_FILES = [
   "./js/platform/clipboard.js",
   "./js/platform/device.js",
   "./js/platform/http.js",
+  "./js/platform/keyboard.js",
   "./js/platform/speech.js",
   "./js/platform/storage.js",
   "./js/platform/sw.js",
@@ -93,12 +94,36 @@ self.addEventListener("activate", (event) => {
   );
 });
 
+// A weak signal (train, metro) can keep a request hanging for a minute. For /api data (course, lessons) with a
+// cached copy, wait for the network only this long, then answer from the cache (the fresh copy still lands in
+// the cache later). Not for the JS/CSS shell: mixing old and new modules right after a deploy could break imports.
+const SLOW_MS = 4000;
+
+/** fetch(req), but resolve with the cached copy if the network is slower than SLOW_MS. */
+async function raceCache(req, cacheName) {
+  const cache = await caches.open(cacheName);
+  const hit = await cache.match(req);
+  const net = fetch(req).then((res) => {
+    if (res.ok) cache.put(req, res.clone());
+    return res;
+  });
+  if (!hit) return net;
+  let timer;
+  const slow = new Promise((resolve) => (timer = setTimeout(() => resolve(hit), SLOW_MS)));
+  net.catch(() => {}); // a late failure after the cache answered is not an error
+  try {
+    return await Promise.race([net, slow]);
+  } catch {
+    return hit;
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
 async function networkFirst(req) {
   const cache = await caches.open(DATA);
   try {
-    const res = await fetch(req);
-    if (res.ok) cache.put(req, res.clone());
-    return res;
+    return await raceCache(req, DATA);
   } catch {
     const hit = await cache.match(req);
     return hit ?? new Response(JSON.stringify({ error: "offline" }), { status: 503, headers: { "Content-Type": "application/json" } });

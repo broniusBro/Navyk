@@ -2096,3 +2096,15 @@ p.alert > .icon { margin-top: 2px; }
 }
 /* the on-screen keyboard owns the bottom of the screen: the floating «Помощь» button steps aside */
 .pl-board-open .helper-fab { opacity: 0; pointer-events: none; transform: translateY(12px); }
+.speak__cant { margin-top: var(--s-1); min-height: 44px; font-size: var(--fs-small); text-decoration: underline; text-underline-offset: 3px; }
+.speak__mic-on { display: inline-flex; align-items: center; gap: 8px; margin-top: var(--s-2); }
+.speak__mic-on .icon { width: 20px; height: 20px; }
+.ex__audio { flex-wrap: wrap; }
+.ex__audio-reveal { min-height: 44px; font-size: var(--fs-small); text-decoration: underline; text-underline-offset: 3px; }
+.ex__audio-note { flex-basis: 100%; font-size: var(--fs-small); color: var(--ink-2); }
+.ex__audio-text[hidden], .ex__audio-note[hidden], .ex__audio-reveal[hidden] { display: none; }
+/* phone keyboard open (platform/keyboard.js): «Помощь» would cover the field — step aside;
+   iOS keeps the layout viewport under the keyboard — lift the sticky bars above it */
+.kb-open .helper-fab { opacity: 0; pointer-events: none; transform: translateY(12px); }
+.kb-open .lesson__bar { bottom: var(--kb-inset, 0px); padding-bottom: var(--s-3); }
+.kb-open .chat__input { bottom: var(--kb-inset, 0px); padding-bottom: 10px; }

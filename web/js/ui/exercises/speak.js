@@ -1,12 +1,44 @@
 // speak: say the phrase aloud. With speech recognition: mic -> recognized text -> similarity score
 // (good / ok / bad, retry once). Without it (or when the microphone is denied): "listen and repeat" and
 // an "I said it" button that counts the exercise.
+// "I can't talk now" (bus, office): the exercise counts without the first-try bonus and the choice is kept
+// for QUIET_MS, so the next speak exercises open straight in this quiet mode with "Turn the mic on".
 
 import { h, icon } from "../dom.js";
 import { t } from "../i18n.js";
 import { audioButton, uiIcon, stopAudio } from "../audio.js";
 import { isSttAvailable, listen, abortListening, stopListening } from "../../platform/speech.js";
+import { getItem, setItem, removeItem } from "../../platform/storage.js";
 import { mountAutoExercise, whyNote, questionHeading, hintBox } from "./frame.js";
+
+const QUIET_KEY = "speak.quietUntil";
+export const QUIET_MS = 15 * 60 * 1000;
+
+/** True while the learner's "I can't talk now" choice is still fresh. */
+export function isQuiet(now = Date.now()) {
+  const until = Number(getItem(QUIET_KEY, 0));
+  return Number.isFinite(until) && until > now;
+}
+const setQuiet = (on) => (on ? setItem(QUIET_KEY, Date.now() + QUIET_MS) : removeItem(QUIET_KEY));
+
+const cantTalkButton = (onClick) => h("button.btn.btn--link.speak__cant", { type: "button", onclick: onClick }, t("speak.cant_talk"));
+
+/**
+ * Quiet mode: the phrase with audio (headphones), the exercise counts without the first-try bonus.
+ * onMic: switch back to the microphone (null when there is no speech recognition).
+ */
+function renderQuiet(ex, ctx, { onMic } = {}) {
+  const result = h("div.speak__result", { aria: { live: "polite" } });
+  const note = h("p.speak__heard", t("speak.quiet_note"));
+  const micBtn = onMic ? h("button.btn.btn--ghost.speak__mic-on", { type: "button", onclick: onMic }, uiIcon("mic"), h("span", t("speak.mic_on"))) : null;
+  const root = h("section.ex", { data: { type: ex.type } }, questionHeading(ex), h("div.speak.speak--self.speak--quiet", phraseBlock(ex), note, micBtn, result), hintBox(ex));
+  ctx.setPrimary(t("common.next"), () => {
+    ctx.recordSkip?.(ex.id);
+    ctx.next();
+  });
+  ctx.setSecondary(null);
+  return root;
+}
 
 function phraseBlock(ex) {
   return [
@@ -23,8 +55,14 @@ const errorKey = (code) => `speak.error_${{ "not-allowed": "not_allowed", "no-sp
 function renderSelfReport(ex, ctx, { reason } = {}) {
   const note = h("p.speak__heard", t(reason === "denied" ? "speak.mic_denied" : "speak.no_stt"));
   const result = h("div.speak__result", { aria: { live: "polite" } });
-  const root = h("section.ex", { data: { type: ex.type } }, questionHeading(ex), h("div.speak.speak--self", phraseBlock(ex), note, result), hintBox(ex));
+  let root;
+  const cant = cantTalkButton(() => {
+    setQuiet(true);
+    root.replaceWith(renderQuiet(ex, ctx));
+  });
+  root = h("section.ex", { data: { type: ex.type } }, questionHeading(ex), h("div.speak.speak--self", phraseBlock(ex), note, cant, result), hintBox(ex));
   const done = () => {
+    cant.hidden = true;
     ctx.recordAttempt(ex.id, true);
     result.replaceChildren(h("div.speak__score.is-good", icon("check"), h("span", t("speak.self_done"))), whyNote(ex.why, "ok"));
     ctx.setPrimary(t("common.next"), ctx.next);
@@ -36,7 +74,20 @@ function renderSelfReport(ex, ctx, { reason } = {}) {
 }
 
 export function renderSpeak(ex, ctx) {
-  if (!isSttAvailable()) return renderSelfReport(ex, ctx);
+  if (!isSttAvailable()) return isQuiet() ? renderQuiet(ex, ctx) : renderSelfReport(ex, ctx);
+  if (isQuiet()) {
+    const quiet = renderQuiet(ex, ctx, {
+      onMic: () => {
+        setQuiet(false);
+        quiet.replaceWith(renderMic(ex, ctx));
+      },
+    });
+    return quiet;
+  }
+  return renderMic(ex, ctx);
+}
+
+function renderMic(ex, ctx) {
 
   let heard = null; // { text, alternatives }
   let onChange = () => {};
@@ -50,7 +101,19 @@ export function renderSpeak(ex, ctx) {
   const score = h("div.speak__score", { hidden: true });
   const fallbackBtn = h("button.btn.btn--ghost.speak__self", { type: "button", hidden: true }, t("speak.i_said"));
   const notes = h("div.speak__notes");
-  const el = h("div.speak", phraseBlock(ex), h("div.speak__mic", mic, micLabel), heardEl, score, fallbackBtn, notes);
+  const cant = cantTalkButton(() => {
+    abortListening();
+    locked = true;
+    setQuiet(true);
+    const quiet = renderQuiet(ex, ctx, {
+      onMic: () => {
+        setQuiet(false);
+        quiet.replaceWith(renderMic(ex, ctx));
+      },
+    });
+    root.replaceWith(quiet);
+  });
+  const el = h("div.speak", phraseBlock(ex), h("div.speak__mic", mic, micLabel), heardEl, score, fallbackBtn, cant, notes);
 
   function setListening(on) {
     listening = on;
@@ -109,6 +172,7 @@ export function renderSpeak(ex, ctx) {
       locked = false;
       heard = null;
       mic.disabled = false;
+      cant.hidden = false;
       score.hidden = true;
       score.className = "speak__score";
       heardEl.hidden = true;
@@ -119,6 +183,7 @@ export function renderSpeak(ex, ctx) {
       locked = true;
       mic.disabled = true;
       fallbackBtn.hidden = true;
+      cant.hidden = true;
       abortListening();
       const level = heard?.self ? "good" : r.level;
       score.hidden = false;

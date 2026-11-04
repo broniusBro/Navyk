@@ -6,7 +6,7 @@ import {
   applyReviews, nextDue, pickReviewExercise, XP,
 } from "../js/engine/progress.js";
 import { dayKey, daysBetween, addDays } from "../js/engine/dates.js";
-import { startSession, recordAttempt, recordPractice, next, isFinished, sessionResults } from "../js/engine/session.js";
+import { startSession, recordAttempt, recordPractice, recordSkip, next, isFinished, sessionResults } from "../js/engine/session.js";
 
 const meta = JSON.parse(readFileSync(new URL("../../content/dist/ru/a1m1.1.json", import.meta.url), "utf8")).meta;
 
@@ -140,4 +140,20 @@ test("session: attempts, practice and results", () => {
   assert.equal(lessonXp(res).total, 10 + 5 + XP.aiPassed);
   while (!isFinished(s)) s = next(s);
   assert.equal(s.index, s.blocks.length);
+});
+
+test("recordSkip (speak: «Не могу сейчас говорить»): counts as done, no first-try XP, no error", () => {
+  const lessonJson = JSON.parse(readFileSync(new URL("../../content/dist/ru/a1m1.1.json", import.meta.url), "utf8"));
+  let s = startSession(lessonJson);
+  const speakId = s.blocks.find((b) => b.type === "speak").id;
+  s = recordSkip(s, speakId);
+  const r = sessionResults(s).find((x) => x.exerciseId === speakId);
+  assert.equal(r.skipped, true);
+  assert.equal(r.firstTry, false);
+  assert.equal(r.correct, true);
+  // a real answer recorded before is not overwritten
+  let s2 = startSession(lessonJson);
+  s2 = recordAttempt(s2, speakId, true).session;
+  s2 = recordSkip(s2, speakId);
+  assert.equal(sessionResults(s2).find((x) => x.exerciseId === speakId).firstTry, true);
 });

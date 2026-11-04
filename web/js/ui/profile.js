@@ -9,6 +9,7 @@ import { getPrefs, setPrefs, MINUTES, THEMES } from "./prefs.js";
 import { currentUser, signOut, signedIn } from "./account.js";
 import { openSheet, closeSheet } from "./sheet.js";
 import { request } from "../platform/http.js";
+import { authProviders } from "../platform/api.js";
 import { initial } from "./auth.js";
 
 const WEEKDAYS = 7;
@@ -192,12 +193,19 @@ function editName(user, go) {
 function confirmDelete(user, go) {
   const pass = h("input.field__input", { type: "password", autocomplete: "current-password", aria: { label: t("auth.password") } });
   const err = h("p.field__error", { role: "alert", hidden: true });
+  // «no password? leave it empty» only makes sense when Google sign-in exists
+  const googleHint = h("p.field__hint", { hidden: true }, t("profile.delete_google_hint"));
+  authProviders()
+    .then((r) => {
+      if (r?.body?.google) googleHint.hidden = false;
+    })
+    .catch(() => {});
   const btn = h("button.btn.btn--danger.btn--wide", { type: "submit" }, icon("trash"), h("span", t("profile.delete_confirm")));
   const form = h(
     "form.sheet__form",
     h("p.sheet__note", t("profile.delete_text")),
     h("label.field", h("span.field__label", t("profile.delete_password")), pass),
-    h("p.field__hint", t("profile.delete_google_hint")),
+    googleHint,
     err,
     h("div.sheet__actions", btn),
   );
