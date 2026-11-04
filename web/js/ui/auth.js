@@ -153,12 +153,14 @@ function googleLogo() {
 }
 
 let providers = null;
+/** GET /api/auth/providers once per page load: { google, email } (null when offline). */
+const loadProviders = () => (providers ??= api.authProviders().catch(() => null));
+
 /** "Continue with Google" + "or" divider; appears only when the server has Google sign-in configured. */
 function googleBlock() {
   const btn = h("a.btn.google-btn", { href: `/api/auth/google/start?lang=${encodeURIComponent(getLang())}` }, h("span.google-btn__icon", googleLogo()), h("span", t("auth.google")));
   const box = h("div.google-auth", { hidden: true }, btn, h("p.auth__or", h("span", t("auth.or"))));
-  providers ??= api.authProviders().catch(() => null);
-  providers.then((p) => {
+  loadProviders().then((p) => {
     if (p?.body?.google) box.hidden = false;
   });
   return box;
@@ -230,7 +232,21 @@ export function renderRegister({ go }) {
       password.error(errs.password);
       if (errs.email || errs.password) return focusInvalid([email, password]);
       setPendingEmail(email.value);
-      const r = interpretAuth(await api.authRegister({ email: email.value.trim(), password: password.value, lang: getLang() }), 202);
+      const res = await api.authRegister({ email: email.value.trim(), password: password.value, lang: getLang() });
+      // Server without email: the account is confirmed at once and the session cookie is already set.
+      if (res?.status === 201 && res.body?.user) {
+        const done = interpretAuth(res, 201);
+        if (done.ok && done.user) {
+          await signedIn(done.user);
+          return go(takeAfterAuth() ?? "#/");
+        }
+      }
+      if (res?.status === 409 && res.body?.error === "email_taken") {
+        email.error("email_taken");
+        email.el.querySelector(".field__error")?.append(" ", link("auth.email_taken_login", "#/login"));
+        return email.input.focus();
+      }
+      const r = interpretAuth(res, 202);
       if (r.ok) return go("#/check-email");
       if (r.field === "email") return email.error(r.code), email.input.focus();
       if (r.field === "password") return password.error(r.code), password.input.focus();
@@ -320,6 +336,13 @@ export function renderConfirm({ token, go }) {
   return el;
 }
 
+/** Password recovery needs email; without it the screen explains that instead of showing a form. */
+function forgotUnavailable() {
+  const box = alertBox("info", t("auth.forgot_unavailable_title"), h("p", t("auth.forgot_unavailable_text")));
+  box.setAttribute("tabindex", "-1");
+  return box;
+}
+
 export function renderForgot({ go }) {
   const email = field({ label: t("auth.email"), type: "email", autocomplete: "username", inputmode: "email", value: pendingEmail() });
   let f;
@@ -338,11 +361,23 @@ export function renderForgot({ go }) {
         done.focus();
         return;
       }
+      if (r.code === "generic" && (await loadProviders())?.body?.email === false) {
+        const off = forgotUnavailable();
+        f.el.replaceWith(off);
+        return off.focus();
+      }
       status(alertBox("danger", null, h("p", t(r.code === "network" ? "auth.error.network" : "auth.error.generic"))));
     },
     t("auth.forgot_submit"),
   );
-  return authScreen({ title: t("auth.forgot_title"), lead: t("auth.forgot_lead"), art: "key", body: f.el, onBack: () => go("#/login"), below: link("auth.login_link_short", "#/login") });
+  const body = h("div", f.el);
+  const el = authScreen({ title: t("auth.forgot_title"), lead: t("auth.forgot_lead"), art: "key", body, onBack: () => go("#/login"), below: link("auth.login_link_short", "#/login") });
+  loadProviders().then((p) => {
+    if (p?.body?.email !== false || !f.el.isConnected) return;
+    body.replaceChildren(forgotUnavailable());
+    el.querySelector(".auth__lead")?.remove();
+  });
+  return el;
 }
 
 export function renderReset({ token, go }) {

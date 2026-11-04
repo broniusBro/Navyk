@@ -1,4 +1,5 @@
-// HTTP-тесты аккаунтов: регистрация → подтверждение → вход, блокировка, сброс пароля,
+// HTTP-тесты аккаунтов при настроенной почте (EMAIL_PROVIDER=brevo, запросы к провайдеру подменены):
+// регистрация → письмо → подтверждение → вход, блокировка, сброс пароля,
 // CSRF, отсутствие перечисления аккаунтов, синхронизация прогресса, лимит ИИ по аккаунту, имя и удаление аккаунта.
 import { test, before, after, beforeEach } from "node:test";
 import assert from "node:assert/strict";
@@ -12,19 +13,25 @@ const ORIGIN = "http://localhost:8080";
 const dataDir = mkdtempSync(join(tmpdir(), "brolingvo-accounts-"));
 process.env.DATA_DIR = dataDir;
 process.env.PUBLIC_ORIGIN = ORIGIN;
-process.env.EMAIL_PROVIDER = "log";
+process.env.EMAIL_PROVIDER = "brevo";
+process.env.EMAIL_API_KEY = "test-brevo-key";
 process.env.COOKIE_SECURE = "false";
 delete process.env.ANTHROPIC_API_KEY;
 
 const { createApp } = await import("../src/http.ts");
 const { openDb } = await import("../src/db.ts");
-const { setEmailCapture, flushEmails } = await import("../src/email/send.ts");
+const { setEmailCapture, setEmailFetch, flushEmails } = await import("../src/email/send.ts");
 const { sha256 } = await import("../src/auth/sessions.ts");
 const { hashAddress } = await import("../src/email/send.ts");
 type OutgoingEmail = import("../src/email/send.ts").OutgoingEmail;
 
 const sent: OutgoingEmail[] = [];
 setEmailCapture((m) => sent.push(m));
+const brevoCalls: string[] = [];
+setEmailFetch((async (url: string) => {
+  brevoCalls.push(String(url));
+  return Response.json({ messageId: "x" }, { status: 201 });
+}) as typeof fetch);
 
 let clock = Date.parse("2026-10-13T10:00:00Z");
 const db = openDb(join(dataDir, "brolingvo.sqlite"));
@@ -56,6 +63,7 @@ before(async () => {
 });
 after(() => {
   server.close();
+  setEmailFetch(null);
   db.close();
   rmSync(dataDir, { recursive: true, force: true });
 });
@@ -107,6 +115,7 @@ test("register → confirm (auto-login) → me → login", async () => {
   assert.match(mail.link, /^http:\/\/localhost:8080\/#\/confirm\/[A-Za-z0-9_-]{43}$/);
   assert.match(mail.subject, /Підтверди/);
   assert.match(mail.subject, /brolingvo/);
+  assert.equal(brevoCalls.at(-1), "https://api.brevo.com/v3/smtp/email", "sent through the provider");
   assert.match(mail.text, /brolingvo — безкоштовний курс польської мови\./);
   assert.doesNotMatch(mail.text, /Navyk|Anthropic/i);
   assert.match(mail.html, /#FFB020/);
@@ -154,7 +163,7 @@ test("nothing secret is stored in plain text", async () => {
   assert.equal((db.prepare("SELECT count(*) AS c FROM tokens WHERE hash = ?").get(sha256(raw)) as any).c, 1);
   assert.equal((db.prepare("SELECT count(*) AS c FROM tokens WHERE hash = ?").get(raw) as any).c, 0);
   const logRow = db.prepare("SELECT * FROM email_log WHERE user_id = ? ORDER BY id DESC").get(u.id) as any;
-  assert.equal(logRow.status, "logged");
+  assert.equal(logRow.status, "sent");
   assert.match(logRow.to_hash, /^[0-9a-f]{64}$/);
   assert.ok(!JSON.stringify(logRow).includes("@"));
 });
@@ -490,10 +499,10 @@ test("rate limits: per IP on auth, per address on emails", async () => {
 test("google: providers, start redirect, callback creates a confirmed account and a session", async () => {
   const { setGoogleFetch } = await import("../src/auth/google.ts");
   delete process.env.GOOGLE_CLIENT_ID;
-  assert.deepEqual((await call("GET", "/api/auth/providers")).body, { google: false });
+  assert.deepEqual((await call("GET", "/api/auth/providers")).body, { google: false, email: true });
   process.env.GOOGLE_CLIENT_ID = "cid.apps.googleusercontent.com";
   process.env.GOOGLE_CLIENT_SECRET = "secret";
-  assert.deepEqual((await call("GET", "/api/auth/providers")).body, { google: true });
+  assert.deepEqual((await call("GET", "/api/auth/providers")).body, { google: true, email: true });
 
   const start = await fetch(`${base}/api/auth/google/start?lang=uk`, { redirect: "manual" });
   assert.equal(start.status, 302);

@@ -5,7 +5,7 @@ import type { IncomingMessage, ServerResponse } from "node:http";
 import type { Db } from "../db.ts";
 import { send, readJsonBody, BodyError, clientIp, log, publicOrigin } from "../httputil.ts";
 import { WindowLimiter } from "../limits.ts";
-import { queueEmail, hashAddress } from "../email/send.ts";
+import { queueEmail, hashAddress, emailConfigured } from "../email/send.ts";
 import type { EmailLang } from "../email/templates.ts";
 import { hashPassword, verifyPassword, dummyVerify, isWeakPassword } from "./password.ts";
 import { touchVisit } from "../activity.ts";
@@ -125,6 +125,7 @@ export function createAuth(opts: AuthOptions) {
     if (!email) return send(res, 400, { error: "invalid_email" });
     if (isWeakPassword(body.password, email)) return send(res, 400, { error: "weak_password" });
     if (emailLimited(res, email)) return;
+    if (!emailConfigured()) return registerWithoutEmail(email, body, res);
     const lang = pickLang(body.lang);
     // Хешируем всегда: время ответа не должно зависеть от того, есть ли аккаунт.
     const hash = await hashPassword(body.password);
@@ -162,6 +163,48 @@ export function createAuth(opts: AuthOptions) {
     return send(res, 202, { ok: true });
   }
 
+  /**
+   * Почта не настроена (письма не уходят): аккаунт создаётся сразу подтверждённым и с сессией — 201.
+   * Адрес занят → 409 email_taken (письмо «аккаунт уже есть» в этом режиме не дошло бы).
+   * Исключение: неподтверждённый аккаунт (создан, пока почта работала) и тот же пароль — подтверждаем и входим;
+   * неверный пароль к нему считается ошибкой входа (общая блокировка), чтобы регистрацией нельзя было подбирать пароль.
+   */
+  async function registerWithoutEmail(email: string, body: any, res: ServerResponse) {
+    const lang = pickLang(body.lang);
+    const ts = now();
+    const existing = userByEmail(email);
+    if (!existing) {
+      const hash = await hashPassword(body.password);
+      const id = randomUUID();
+      try {
+        db!.prepare("INSERT INTO users (id, email, password_hash, lang, email_confirmed_at, created_at) VALUES (?, ?, ?, ?, ?, ?)").run(id, email, hash, lang, ts, ts);
+      } catch {
+        return send(res, 409, { error: "email_taken" }); // гонка двух одинаковых регистраций
+      }
+      log({ event: "auth_registered", autoConfirmed: true });
+      return autoConfirmed(res, userById(id)!);
+    }
+    if (existing.email_confirmed_at) {
+      await dummyVerify(body.password);
+      return send(res, 409, { error: "email_taken" });
+    }
+    if (existing.locked_until && existing.locked_until > ts) {
+      const retryAfter = Math.ceil((existing.locked_until - ts) / 1000);
+      return send(res, 429, { error: "locked", retryAfter }, { "retry-after": String(retryAfter) });
+    }
+    if (!(await verifyPassword(body.password, existing.password_hash))) {
+      countFailure(existing, ts);
+      return send(res, 409, { error: "email_taken" });
+    }
+    db!.prepare("UPDATE users SET email_confirmed_at = ?, failed_logins = 0, locked_until = NULL WHERE id = ?").run(ts, existing.id);
+    log({ event: "auth_confirmed", autoConfirmed: true });
+    return autoConfirmed(res, userById(existing.id)!);
+  }
+
+  function autoConfirmed(res: ServerResponse, u: UserRow) {
+    send(res, 201, { ok: true, user: publicUser(u), autoConfirmed: true }, { "set-cookie": createSession(db!, u.id, now()) });
+  }
+
   function confirm(body: any, res: ServerResponse) {
     const t = findToken(body.token, "confirm");
     if (!t) return send(res, 400, { error: "invalid_token" });
@@ -183,6 +226,7 @@ export function createAuth(opts: AuthOptions) {
   }
 
   function resendConfirmation(body: any, res: ServerResponse) {
+    if (!emailConfigured()) return send(res, 503, { error: "email_unavailable" });
     const email = normalizeEmail(body.email);
     if (!email) return send(res, 202, { ok: true });
     if (emailLimited(res, email)) return;
@@ -231,12 +275,14 @@ export function createAuth(opts: AuthOptions) {
       countFailure(u, ts);
       return send(res, 401, { error: "invalid_credentials" });
     }
-    if (!u.email_confirmed_at) return send(res, 403, { error: "email_not_confirmed" });
-    db!.prepare("UPDATE users SET failed_logins = 0, locked_until = NULL WHERE id = ?").run(u.id);
+    // Без почты письмо с подтверждением не придёт: верный пароль сам подтверждает аккаунт (как регистрация в этом режиме).
+    if (!u.email_confirmed_at && emailConfigured()) return send(res, 403, { error: "email_not_confirmed" });
+    db!.prepare("UPDATE users SET failed_logins = 0, locked_until = NULL, email_confirmed_at = COALESCE(email_confirmed_at, ?) WHERE id = ?").run(ts, u.id);
     return loggedIn(res, 200, u);
   }
 
   function forgot(body: any, res: ServerResponse) {
+    if (!emailConfigured()) return send(res, 503, { error: "email_unavailable" });
     const email = normalizeEmail(body.email);
     if (!email) return send(res, 202, { ok: true });
     if (emailLimited(res, email)) return;
@@ -483,7 +529,7 @@ export function createAuth(opts: AuthOptions) {
       else send(res, 401, { error: "unauthorized" });
       return true;
     }
-    if (method === "GET" && path === "/api/auth/providers") send(res, 200, { google: googleConfigured() }, { "cache-control": "no-cache" });
+    if (method === "GET" && path === "/api/auth/providers") send(res, 200, { google: googleConfigured(), email: emailConfigured() }, { "cache-control": "no-cache" });
     else if (method === "GET" && path === "/api/auth/google/start") {
       if (!googleConfigured()) redirect(res, "/#/login?e=google", []);
       else {

@@ -37,9 +37,17 @@ function provider(): Provider {
   return p === "brevo" || p === "resend" ? p : "log";
 }
 
+/**
+ * Почта настроена: провайдер brevo/resend и ключ к нему. Иначе письма не уходят (provider log или нет ключа),
+ * и аккаунты работают без писем: регистрация подтверждается сразу, «забыли пароль» недоступно (auth/routes.ts).
+ */
+export function emailConfigured(): boolean {
+  return provider() !== "log" && Boolean(process.env.EMAIL_API_KEY);
+}
+
 const isProduction = () => process.env.NODE_ENV === "production";
 
-/** Хук для тестов: получает каждое письмо, «отправленное» провайдером log. */
+/** Хук для тестов: получает каждое письмо до отправки (любым провайдером). */
 let captureHook: ((m: OutgoingEmail) => void) | null = null;
 export function setEmailCapture(hook: ((m: OutgoingEmail) => void) | null) {
   captureHook = hook;
@@ -119,8 +127,8 @@ export async function sendTest(to: string, lang: EmailLang = "ru") {
 
 async function deliver(m: OutgoingEmail): Promise<"sent" | "logged" | "failed"> {
   const p = provider();
+  captureHook?.(m);
   if (p === "log") {
-    captureHook?.(m);
     if (isProduction()) log({ event: "email_due", kind: m.kind, provider: "log", note: "EMAIL_PROVIDER not configured; email not sent" });
     else log({ event: "email_dev", kind: m.kind, link: m.link });
     return "logged";
