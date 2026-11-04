@@ -206,7 +206,7 @@ async function showReview(token) {
     data: null,
     onClose: () => go("#/"),
     onFinish: (session) => {
-      const outcomes = sessionResults(session).map((r) => ({ key: keyByExercise[r.exerciseId], correct: r.ai ? true : Boolean(r.correct && r.firstTry) }));
+      const outcomes = sessionResults(session).filter((r) => !r.skipped).map((r) => ({ key: keyByExercise[r.exerciseId], correct: r.ai ? true : Boolean(r.correct && r.firstTry) }));
       const before = getProgress();
       const correctCount = outcomes.filter((o) => o.correct).length;
       const xp = correctCount * 2;

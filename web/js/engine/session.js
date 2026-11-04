@@ -25,6 +25,15 @@ export function recordAttempt(s, exerciseId, correct) {
 }
 
 /**
+ * The learner could not do the exercise right now (speak: "I can't talk now"). It counts as done,
+ * without the first-try bonus and without an error: the lesson goes on, the review item is not advanced.
+ */
+export function recordSkip(s, exerciseId) {
+  if (s.results[exerciseId]) return s;
+  return { ...s, results: { ...s.results, [exerciseId]: { exerciseId, firstTry: false, correct: true, skipped: true } } };
+}
+
+/**
  * Record an AI practice result. mode: "review" (got AI feedback) | "selfcheck" (fallback).
  * The exercise counts as done either way; only a passed AI review earns the bonus.
  * A later passed attempt upgrades an earlier non-passed one.

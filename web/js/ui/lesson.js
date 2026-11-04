@@ -7,7 +7,7 @@ import { renderExercise } from "./exercises/index.js";
 import { hydratePhrases, stopAudio } from "./audio.js";
 import { helperFab, resetHelper } from "./helper.js";
 import { closeSheet } from "./sheet.js";
-import { startSession, currentBlock, recordAttempt, recordPractice, next, isFinished, progressRatio } from "../engine/session.js";
+import { startSession, currentBlock, recordAttempt, recordPractice, recordSkip, next, isFinished, progressRatio } from "../engine/session.js";
 import { resolveDataRefs } from "../engine/course.js";
 import { lessonOfExercise } from "../engine/exercises.js";
 
@@ -72,6 +72,9 @@ export function mountLesson(container, opts) {
     },
     recordPractice(exerciseId, result) {
       session = recordPractice(session, exerciseId, result);
+    },
+    recordSkip(exerciseId) {
+      session = recordSkip(session, exerciseId);
     },
     next: () => advance(),
     primaryButton: () => primary,
