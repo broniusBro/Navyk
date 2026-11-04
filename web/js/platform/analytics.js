@@ -3,9 +3,12 @@
 // with the same API (analyticsChoice / setAnalyticsChoice / trackPage).
 import { getItem, setItem } from "./storage.js";
 
-export const GA_ID = "G-F974J4HTSF";
+// GA4 measurement id for poland.brolingvo.com. Empty = analytics off and no consent banner.
+export const GA_ID = "";
 const KEY = "analytics";
-const PROD_HOSTS = new Set(["navyk.app"]);
+const PROD_HOSTS = new Set(["poland.brolingvo.com"]);
+/** Analytics can run at all (an id is configured). */
+export const analyticsEnabled = () => Boolean(GA_ID);
 let loaded = false;
 
 /** "granted" | "denied" | null (not asked yet). */
@@ -22,7 +25,7 @@ export function setAnalyticsChoice(value) {
 /** Production only; true when the tag is (being) loaded. */
 export function loadAnalytics() {
   if (loaded) return true;
-  if (analyticsChoice() !== "granted" || !PROD_HOSTS.has(globalThis.location?.hostname)) return false;
+  if (!GA_ID || analyticsChoice() !== "granted" || !PROD_HOSTS.has(globalThis.location?.hostname)) return false;
   loaded = true;
   const w = globalThis;
   w.dataLayer = w.dataLayer || [];

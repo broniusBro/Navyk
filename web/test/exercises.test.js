@@ -1,9 +1,9 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { readFileSync, readdirSync } from "node:fs";
 import {
-  prepare, check, canCheck, checkSingle, checkMulti, checkFindError, checkMatch, checkOrder, checkBuild, checkFillGap,
-  splitGaps, attemptOutcome, insertIdea, initialPromptText, isAiExercise,
+  prepare, check, canCheck, checkSingle, checkMulti, checkMatch, checkOrder, checkFillGap,
+  splitGaps, attemptOutcome, isAiExercise, AI_TYPES, bankWords, lessonOfExercise,
 } from "../js/engine/exercises.js";
 import { shuffle, shuffleChanged } from "../js/engine/rng.js";
 
@@ -29,8 +29,10 @@ test("shuffleChanged never returns the original order", () => {
   }
 });
 
+const real = lesson("ru", "a1m1.1");
+
 test("single_choice on real content: correct and wrong with whys", () => {
-  const e = ex(lesson("ru", "b1.1"), "b1.1.e1");
+  const e = ex(real, "a1m1.1.e2");
   const right = e.options.findIndex((o) => o.correct);
   const wrong = e.options.findIndex((o) => !o.correct);
   assert.equal(checkSingle(e, right).correct, true);
@@ -41,40 +43,30 @@ test("single_choice on real content: correct and wrong with whys", () => {
   assert.ok(r.items.every((i) => i.why));
 });
 
+const multiEx = {
+  id: "t.e3",
+  type: "multi_choice",
+  options: [
+    { text: "a", correct: true, why: "1" },
+    { text: "b", correct: true, why: "2" },
+    { text: "c", correct: false, why: "3" },
+  ],
+};
+
 test("multi_choice requires exact set", () => {
-  const e = ex(lesson("ru", "b1.1"), "b1.1.e2");
-  const target = e.options.flatMap((o, i) => (o.correct ? [i] : []));
+  const e = multiEx;
+  const target = [0, 1];
   assert.equal(checkMulti(e, target).correct, true);
   assert.equal(checkMulti(e, target.slice(1)).correct, false);
-  const r = checkMulti(e, [...target, e.options.findIndex((o) => !o.correct)]);
+  const r = checkMulti(e, [...target, 2]);
   assert.equal(r.correct, false);
   assert.ok(r.items.some((i) => i.status === "wrong"));
   const partial = checkMulti(e, target.slice(0, 1));
   assert.ok(partial.items.some((i) => i.status === "missed" && i.show));
 });
 
-test("compare_answers dispatches as single choice", () => {
-  const e = ex(lesson("uk", "b2.1"), "b2.1.e1");
-  assert.equal(e.type, "compare_answers");
-  const right = e.options.findIndex((o) => o.correct);
-  assert.equal(check(e, right).correct, true);
-  assert.equal(check(e, (right + 1) % e.options.length).correct, false);
-});
-
-test("find_error: all weak segments must be found", () => {
-  const e = ex(lesson("ru", "b2.1"), "b2.1.e3");
-  const weak = e.segments.flatMap((s, i) => (s.weak ? [i] : []));
-  assert.equal(e.segments.map((s) => s.text).join(""), e.prompt);
-  assert.equal(checkFindError(e, weak).correct, true);
-  const r = checkFindError(e, weak.slice(0, 2));
-  assert.equal(r.correct, false);
-  assert.equal(r.found, 2);
-  assert.equal(r.total, weak.length);
-  assert.equal(checkFindError(e, [...weak, 0]).correct, false);
-});
-
 test("match_pairs: right column shuffled, checking by index", () => {
-  const e = ex(lesson("en", "b2.1"), "b2.1.e2");
+  const e = ex(real, "a1m1.1.e1");
   const p = prepare(e, 42);
   assert.notDeepEqual(p.rightOrder, p.leftOrder);
   const perfect = Object.fromEntries(e.pairs.map((_, i) => [i, i]));
@@ -88,7 +80,7 @@ test("match_pairs: right column shuffled, checking by index", () => {
 });
 
 test("order_steps: shuffled initially and checked by position", () => {
-  const e = ex(lesson("ru", "b2.1"), "b2.1.e4");
+  const e = { id: "t.e4", type: "order_steps", items: [{ text: "Dzień dobry!", why: "1" }, { text: "Poproszę kawę.", why: "2" }, { text: "Dziękuję!", why: "3" }] };
   const { order } = prepare(e, "seed");
   assert.notDeepEqual(order, e.items.map((_, i) => i));
   assert.equal(checkOrder(e, e.items.map((_, i) => i)).correct, true);
@@ -105,28 +97,42 @@ test("order_steps accepts plain-string items", () => {
   assert.equal(r.items[0].text, "a");
 });
 
-const buildEx = {
-  id: "t.e1",
-  type: "build_prompt",
-  blocks: [
-    { id: "b1", text: "Write a post", role: "goal", why: "g" },
-    { id: "b2", text: "for our bakery", role: "context", why: "c" },
-    { id: "b3", text: "in 3 lines", role: "format", why: "f" },
-    { id: "b4", text: "please be smart", role: "noise", why: "n" },
-  ],
-  target_order: ["b1", "b2", "b3"],
-};
+test("build_sentence on real content: bank = words + extra, shuffled; dispatch and canCheck", () => {
+  const e = ex(real, "a1m1.1.e6");
+  const bank = bankWords(e);
+  assert.deepEqual(bank, [...e.words, ...e.extra]);
+  const { order } = prepare(e, 7);
+  assert.deepEqual([...order].sort(), bank.map((_, i) => i));
+  assert.notDeepEqual(order, bank.map((_, i) => i));
+  assert.deepEqual(prepare(e, 7).order, order, "seeded");
+  assert.equal(check(e, e.words).correct, true);
+  assert.equal(check(e, ["Tak,", "dziękuję.", "Cześć!"]).correct, false);
+  assert.equal(canCheck(e, []), false);
+  assert.equal(canCheck(e, ["Nie,"]), true);
+});
 
-test("build_prompt: exact order, noise excluded", () => {
-  assert.equal(checkBuild(buildEx, ["b1", "b2", "b3"]).correct, true);
-  const withNoise = checkBuild(buildEx, ["b1", "b2", "b3", "b4"]);
-  assert.equal(withNoise.correct, false);
-  assert.equal(withNoise.items.find((i) => i.id === "b4").status, "noise_used");
-  const misplaced = checkBuild(buildEx, ["b2", "b1", "b3"]);
-  assert.equal(misplaced.items.find((i) => i.id === "b1").status, "misplaced");
-  const missing = checkBuild(buildEx, ["b1", "b2"]);
-  assert.equal(missing.items.find((i) => i.id === "b3").status, "missing");
-  assert.equal(checkBuild(buildEx, ["b1", "b2", "b3"]).text, "Write a post for our bakery in 3 lines");
+test("type_answer and speak dispatch through check/canCheck", () => {
+  const ta = ex(real, "a1m1.1.e5");
+  assert.equal(check(ta, "tak dziekuje").correct, true);
+  assert.equal(check(ta, "tak dziekuje").diacriticsOnly, true);
+  assert.equal(check(ta, "Nie").correct, false);
+  assert.equal(canCheck(ta, "  ,. "), false);
+  assert.equal(canCheck(ta, "tak"), true);
+  const sp = ex(real, "a1m1.1.e4");
+  assert.equal(check(sp, ["dziękuję"]).correct, true);
+  assert.equal(check(sp, ["dzień dobry"]).correct, false);
+  assert.equal(canCheck(sp, null), false);
+  assert.equal(canCheck(sp, ["dziękuję"]), true);
+});
+
+test("AI types and lessonOfExercise", () => {
+  assert.ok(isAiExercise({ type: "translate" }));
+  assert.ok(isAiExercise({ type: "dialog" }));
+  assert.ok(!isAiExercise({ type: "type_answer" }));
+  assert.deepEqual([...AI_TYPES].sort(), ["dialog", "translate"]);
+  assert.equal(lessonOfExercise("a1m1.1.e7"), "a1m1.1");
+  assert.equal(lessonOfExercise("b1m10.4.e12"), "b1m10.4");
+  assert.equal(lessonOfExercise("nope"), null);
 });
 
 const gapEx = {
@@ -157,25 +163,17 @@ test("attempt policy: one retry, then reveal; first-try flag", () => {
   assert.deepEqual(attemptOutcome(false, 2), { done: true, firstTry: false, canRetry: false, reveal: true });
 });
 
-test("practice helpers", () => {
-  const imp = ex(lesson("ru", "b2.1"), "b2.1.e5");
-  assert.equal(initialPromptText(imp), imp.weak_prompt);
-  assert.equal(initialPromptText(ex(lesson("ru", "b1.1"), "b1.1.e5")), "");
-  assert.ok(isAiExercise(imp));
-  assert.deepEqual(insertIdea("Hello", "world"), { text: "Hello world", caret: 11 });
-  assert.deepEqual(insertIdea("", "x"), { text: "x", caret: 1 });
-  assert.deepEqual(insertIdea("ab cd", "X", 2), { text: "ab X cd", caret: 4 });
-});
-
 test("every exercise in built content is renderable and checkable", () => {
-  const known = new Set(["single_choice", "multi_choice", "compare_answers", "find_error", "match_pairs", "order_steps", "build_prompt", "fill_gap", "write_prompt", "improve_prompt"]);
-  for (const lang of ["ru", "uk", "en", "pl"]) {
-    for (const id of ["b1.1", "b2.1", "b2.8", "b4.3", "b6.2", "b7.6"]) {
-      for (const e of lesson(lang, id).blocks.filter((b) => b.kind === "exercise")) {
-        assert.ok(known.has(e.type), `${lang}/${e.id}: ${e.type}`);
-        assert.ok(e.hint, `${e.id} has hint`);
-        if (!isAiExercise(e)) prepare(e, 1);
-      }
+  const RENDERERS_TYPES = ["single_choice", "multi_choice", "match_pairs", "order_steps", "fill_gap", "build_sentence", "type_answer", "speak", "translate", "dialog"];
+  const course = JSON.parse(readFileSync(new URL("../../content/course.json", import.meta.url), "utf8"));
+  assert.deepEqual(Object.keys(course.exercise_types).sort(), [...RENDERERS_TYPES].sort(), "client knows every course type");
+  for (const [type, meta] of Object.entries(course.exercise_types)) assert.equal(Boolean(meta.ai), isAiExercise({ type }), type);
+  const dir = new URL("../../content/dist/ru/", import.meta.url);
+  for (const f of readdirSync(dir).filter((n) => n.endsWith(".json"))) {
+    for (const e of JSON.parse(readFileSync(new URL(f, dir), "utf8")).blocks.filter((b) => b.kind === "exercise")) {
+      assert.ok(RENDERERS_TYPES.includes(e.type), `${e.id}: ${e.type}`);
+      assert.ok(e.hint, `${e.id} has hint`);
+      if (!isAiExercise(e)) prepare(e, 1);
     }
   }
 });

@@ -9,6 +9,12 @@ import { checkBuildSentence, checkTypeAnswer, checkSpeak, normalizePl } from "./
 export const AI_TYPES = new Set(["translate", "dialog"]);
 export const isAiExercise = (ex) => AI_TYPES.has(ex?.type);
 
+/** "a1m1.1.e7" -> "a1m1.1" (in a review session the screen's lesson id is "review"). */
+export const lessonOfExercise = (exerciseId) => {
+  const m = /^(.+)\.e\d+$/.exec(String(exerciseId ?? ""));
+  return m ? m[1] : null;
+};
+
 const sameSet = (a, b) => a.size === b.size && [...a].every((x) => b.has(x));
 const asText = (item) => (typeof item === "string" ? item : item?.text ?? "");
 const asWhy = (item) => (typeof item === "string" ? "" : item?.why ?? "");

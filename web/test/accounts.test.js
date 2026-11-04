@@ -50,36 +50,36 @@ test("mergeProgress: union of lessons with max XP, days, earliest repetition", (
     ...emptyProgress(),
     xp: 25 + 4, // 4 XP from repetitions
     days: ["2026-10-12", "2026-10-13"],
-    lessons: { "b1.1": { firstCompletedAt: "2026-10-12", lastCompletedAt: "2026-10-13", bestXp: 25, runs: 2 } },
-    repeat: { "b1.1:P1": item("b1.1:P1", "2026-10-16", { step: 1 }), "b1.1:X": item("b1.1:X", "2026-10-14") },
+    lessons: { "a1m1.1": { firstCompletedAt: "2026-10-12", lastCompletedAt: "2026-10-13", bestXp: 25, runs: 2 } },
+    repeat: { "a1m1.1:P1": item("a1m1.1:P1", "2026-10-16", { step: 1 }), "a1m1.1:X": item("a1m1.1:X", "2026-10-14") },
   };
   const account = {
     ...emptyProgress(),
     xp: 15 + 30,
     days: ["2026-10-01", "2026-10-02", "2026-10-03", "2026-10-12"],
     lessons: {
-      "b1.1": { firstCompletedAt: "2026-10-01", lastCompletedAt: "2026-10-01", bestXp: 15, runs: 1 },
-      "b2.1": { firstCompletedAt: "2026-10-02", lastCompletedAt: "2026-10-02", bestXp: 30, runs: 1 },
+      "a1m1.1": { firstCompletedAt: "2026-10-01", lastCompletedAt: "2026-10-01", bestXp: 15, runs: 1 },
+      "a1m1.2": { firstCompletedAt: "2026-10-02", lastCompletedAt: "2026-10-02", bestXp: 30, runs: 1 },
     },
-    repeat: { "b1.1:P1": item("b1.1:P1", "2026-10-11") },
+    repeat: { "a1m1.1:P1": item("a1m1.1:P1", "2026-10-11") },
   };
   const m = mergeProgress(device, account);
-  assert.deepEqual(Object.keys(m.lessons).sort(), ["b1.1", "b2.1"]);
-  assert.deepEqual(m.lessons["b1.1"], { firstCompletedAt: "2026-10-01", lastCompletedAt: "2026-10-13", bestXp: 25, runs: 2 });
+  assert.deepEqual(Object.keys(m.lessons).sort(), ["a1m1.1", "a1m1.2"]);
+  assert.deepEqual(m.lessons["a1m1.1"], { firstCompletedAt: "2026-10-01", lastCompletedAt: "2026-10-13", bestXp: 25, runs: 2 });
   assert.equal(m.xp, 25 + 30 + 4, "max XP per lesson plus repetition XP, never double-counted");
   assert.deepEqual(m.days, ["2026-10-01", "2026-10-02", "2026-10-03", "2026-10-12", "2026-10-13"], "longest series and latest day both kept");
-  assert.equal(m.repeat["b1.1:P1"].due, "2026-10-11", "earliest due wins");
-  assert.ok(m.repeat["b1.1:X"]);
+  assert.equal(m.repeat["a1m1.1:P1"].due, "2026-10-11", "earliest due wins");
+  assert.ok(m.repeat["a1m1.1:X"]);
   assert.equal(lessonsXp(m.lessons), 55);
 });
 
 test("mergeProgress is commutative, idempotent and tolerant", () => {
-  const a = { ...emptyProgress(), xp: 10, days: ["2026-10-13"], lessons: { "b1.1": { bestXp: 10, runs: 1, firstCompletedAt: "2026-10-13", lastCompletedAt: "2026-10-13" } }, repeat: { "b1.1:a": item("b1.1:a", "2026-10-15", { done: true }) } };
-  const b = { ...emptyProgress(), xp: 0, repeat: { "b1.1:a": item("b1.1:a", "2026-10-20") } };
+  const a = { ...emptyProgress(), xp: 10, days: ["2026-10-13"], lessons: { "a1m1.1": { bestXp: 10, runs: 1, firstCompletedAt: "2026-10-13", lastCompletedAt: "2026-10-13" } }, repeat: { "a1m1.1:a": item("a1m1.1:a", "2026-10-15", { done: true }) } };
+  const b = { ...emptyProgress(), xp: 0, repeat: { "a1m1.1:a": item("a1m1.1:a", "2026-10-20") } };
   const ab = mergeProgress(a, b);
   assert.ok(sameProgress(ab, mergeProgress(b, a)));
   assert.ok(sameProgress(ab, mergeProgress(ab, ab)));
-  assert.equal(ab.repeat["b1.1:a"].done, false, "an open item beats a finished copy");
+  assert.equal(ab.repeat["a1m1.1:a"].done, false, "an open item beats a finished copy");
   assert.ok(sameProgress(mergeProgress(null, "junk"), emptyProgress()));
   assert.ok(sameProgress(mergeProgress(a, null), normalizeProgress(a)));
   assert.equal(retryDelay(0), 5000);

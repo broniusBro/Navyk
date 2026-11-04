@@ -42,6 +42,7 @@ export function mountChat(opts = {}) {
 
   // ---- header with goals
   let goalItems = [];
+  const goalTexts = (opts.scenario?.goals ?? []).map(String);
   let header = null;
   if (opts.scenario && (opts.scenario.title || opts.scenario.setting || opts.scenario.goals?.length)) {
     const sc = opts.scenario;
@@ -227,7 +228,7 @@ export function mountChat(opts = {}) {
       goalItems.length
         ? h(
             "ul.chat__goals.chat__summary-goals",
-            goalItems.map((li, i) => h(`li${goalsDone.has(i) ? ".is-done" : ""}`, h("span.chat__goal-mark", { aria: { hidden: "true" } }, icon(goalsDone.has(i) ? "check" : "cross")), h("span", li.textContent.replace(li.querySelector(".chat__goal-state").textContent, "")))),
+            goalItems.map((_, i) => h(`li${goalsDone.has(i) ? ".is-done" : ""}`, h("span.chat__goal-mark", { aria: { hidden: "true" } }, icon(goalsDone.has(i) ? "check" : "cross")), h("span", goalTexts[i]))),
           )
         : null,
       summary.tips?.length ? h("div.chat__summary-tips", h("p.chat__summary-sub", t("chat.tips")), h("ul", summary.tips.map((x) => h("li", x)))) : null,

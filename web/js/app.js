@@ -30,7 +30,7 @@ import { renderTalk, loadScenarios, learnerLevel } from "./ui/talk.js";
 import { renderWords, renderCards, collectWords } from "./ui/words.js";
 import { renderProfile } from "./ui/profile.js";
 import { getPrefs, applyTheme } from "./ui/prefs.js";
-import { mountTalkChat } from "./ui/talk-chat.js";
+import { mountTalkChat, destroyTalkChat } from "./ui/talk-chat.js";
 
 const app = document.getElementById("app");
 // animated: screens ("levels", "level:<id>") whose entrance has already played this session
@@ -138,7 +138,7 @@ async function showLesson(lessonId, token) {
     return;
   }
   setTitle("lesson.doc_title", { title: lesson.meta.title });
-  mountLesson(app, {
+  activeLesson = mountLesson(app, {
     lesson,
     lang,
     deviceId: state.devId,
@@ -189,8 +189,9 @@ async function showReview(token) {
   if (!blocks.length) return showError("review.unavailable");
   const reviewLesson = { meta: { id: "review", title: t("review.title") }, blocks };
   setTitle("review.title");
-  mountLesson(app, {
+  activeLesson = mountLesson(app, {
     lesson: reviewLesson,
+    helper: false,
     lang,
     deviceId: state.devId,
     seed: `${state.seed}:${d}`,
@@ -323,9 +324,15 @@ function showProfile(token) {
     });
 }
 
+let activeLesson = null;
+
 function route() {
   const token = ++screenToken;
   closeSheet();
+  // leaving a lesson or a conversation: stop speech, microphone and the helper sheet
+  activeLesson?.destroy?.();
+  activeLesson = null;
+  destroyTalkChat();
   const hash = location.hash || "#/";
   trackPage(hash, document.title);
   // first run: onboarding before anything else (deep links to lessons/auth still work)

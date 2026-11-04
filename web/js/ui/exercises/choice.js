@@ -1,4 +1,4 @@
-// single_choice, multi_choice and compare_answers (cards + single-choice options).
+// single_choice and multi_choice.
 
 import { h, icon } from "../dom.js";
 import { t } from "../i18n.js";
@@ -83,22 +83,4 @@ export function renderSingle(ex, ctx) {
 
 export function renderMulti(ex, ctx) {
   return mountAutoExercise(ex, ctx, optionList(ex, ctx, true));
-}
-
-function card(c, variant) {
-  const parts = [];
-  if (c.prompt && variant !== "which_prompt") {
-    parts.push(h("div.bubble.bubble--user", h("p.bubble__text", c.prompt)));
-  }
-  if (c.answer) {
-    parts.push(h("div.bubble.bubble--assistant", h("span.bubble__label", t("chat.claude")), h("p.bubble__text", c.answer.trim())));
-  }
-  return h("article.card", h("h3.card__label", h("span.card__id", c.id), c.label ? ` ${c.label}` : ""), ...parts);
-}
-
-export function renderCompare(ex, ctx) {
-  const impl = optionList(ex, ctx, false);
-  const cards = h("div.cards", { data: { count: ex.cards?.length ?? 0 } }, (ex.cards ?? []).map((c) => card(c, ex.variant)));
-  impl.el.prepend(cards);
-  return mountAutoExercise(ex, ctx, impl);
 }

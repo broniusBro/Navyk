@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { parseMarkdown, renderMarkdownToHtml, safeHref, escapeHtml } from "../js/engine/markdown.js";
+import { parseMarkdown, renderMarkdownToHtml, safeHref, escapeHtml, parsePhrases } from "../js/engine/markdown.js";
 
 test("escapes raw HTML everywhere", () => {
   const html = renderMarkdownToHtml('<script>alert(1)</script> **<b>x</b>** `<i>` *"q"*');
@@ -75,12 +75,36 @@ test("attribute injection via label is escaped", () => {
   assert.equal(escapeHtml(`'"<>&`), "&#39;&quot;&lt;&gt;&amp;");
 });
 
+test("pl fence becomes phrase cards; text escaped, translation optional", () => {
+  const md = "Intro\n\n```pl\nDzień dobry! | Добрый день!\n<b>x</b> | \"y\" & z\nCześć\n\n```";
+  const blocks = parseMarkdown(md);
+  assert.deepEqual(blocks.map((b) => b.type), ["paragraph", "phrases"]);
+  assert.deepEqual(blocks[1].items, [
+    { pl: "Dzień dobry!", ru: "Добрый день!" },
+    { pl: "<b>x</b>", ru: '"y" & z' },
+    { pl: "Cześć", ru: "" },
+  ]);
+  const html = renderMarkdownToHtml(md);
+  assert.ok(html.includes('<ul class="phrases"><li class="phrase" data-pl="Dzień dobry!"><div class="phrase__text"><span class="phrase__pl" lang="pl">Dzień dobry!</span><span class="phrase__ru">Добрый день!</span></div></li>'));
+  assert.ok(!html.includes("<b>"));
+  assert.ok(html.includes('data-pl="&lt;b&gt;x&lt;/b&gt;"'));
+  assert.ok(html.includes("&quot;y&quot; &amp; z"));
+  assert.ok(html.includes('<li class="phrase" data-pl="Cześć"><div class="phrase__text"><span class="phrase__pl" lang="pl">Cześć</span></div></li>'));
+  assert.deepEqual(parsePhrases(["  a|b  ", "", "c | d | e"]), [{ pl: "a", ru: "b" }, { pl: "c", ru: "d | e" }]);
+});
+
 test("real lesson markdown renders without leftovers", async () => {
-  const { readFile } = await import("node:fs/promises");
-  const lesson = JSON.parse(await readFile(new URL("../../content/dist/ru/b1.1.json", import.meta.url), "utf8"));
-  for (const b of lesson.blocks.filter((x) => x.markdown)) {
-    const html = renderMarkdownToHtml(b.markdown);
-    assert.ok(!html.includes("```"), "fence leaked");
-    assert.ok(!/<(?!\/?(p|br|strong|em|code|a|ul|ol|li|div|span|pre|h\d)\b)/.test(html), "unexpected tag");
+  const { readFile, readdir } = await import("node:fs/promises");
+  const dir = new URL("../../content/dist/ru/", import.meta.url);
+  let phrases = 0;
+  for (const f of (await readdir(dir)).filter((n) => n.endsWith(".json"))) {
+    const lesson = JSON.parse(await readFile(new URL(f, dir), "utf8"));
+    for (const b of lesson.blocks.filter((x) => x.markdown)) {
+      const html = renderMarkdownToHtml(b.markdown);
+      assert.ok(!html.includes("```"), `${f}: fence leaked`);
+      assert.ok(!/<(?!\/?(p|br|strong|em|code|a|ul|ol|li|div|span|pre|h\d)\b)/.test(html), `${f}: unexpected tag`);
+      phrases += parseMarkdown(b.markdown).filter((x) => x.type === "phrases").length;
+    }
   }
+  assert.ok(phrases > 0, "lessons use ```pl blocks");
 });

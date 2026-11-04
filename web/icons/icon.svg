@@ -1,5 +1,22 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <rect x="16" y="16" width="480" height="480" rx="112" fill="#FFB020" stroke="#22223B" stroke-width="24"/>
-  <path d="M176 360V232a80 80 0 0 1 160 0v128" fill="none" stroke="#22223B" stroke-width="52" stroke-linecap="round" stroke-linejoin="round"/>
-  <circle cx="388" cy="352" r="30" fill="#FF5FA2" stroke="#22223B" stroke-width="12"/>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#2E2639"/>
+      <stop offset="1" stop-color="#15111C"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.82" cy="0.12" r="0.75">
+      <stop offset="0" stop-color="#D21A3A" stop-opacity=".55"/>
+      <stop offset="1" stop-color="#D21A3A" stop-opacity="0"/>
+    </radialGradient>
+    <clipPath id="bubble">
+      <path d="M152 132h208a56 56 0 0 1 56 56v104a56 56 0 0 1-56 56H232l-62 50c-7 5.6-17 .6-17-8.4V348h-1a56 56 0 0 1-56-56V188a56 56 0 0 1 56-56z"/>
+    </clipPath>
+  </defs>
+  <rect width="512" height="512" fill="url(#bg)"/>
+  <rect width="512" height="512" fill="url(#glow)"/>
+  <g clip-path="url(#bubble)">
+    <rect x="80" y="120" width="352" height="120" fill="#FFFFFF"/>
+    <rect x="80" y="240" width="352" height="200" fill="#D21A3A"/>
+  </g>
+  <path d="M392 82c3.5 26 14 36.5 40 40-26 3.5-36.5 14-40 40-3.5-26-14-36.5-40-40 26-3.5 36.5-14 40-40z" fill="#F2A93B"/>
 </svg>

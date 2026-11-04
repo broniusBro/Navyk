@@ -2,12 +2,13 @@
 // the footer link reopens it.
 import { h } from "./dom.js";
 import { t } from "./i18n.js";
-import { analyticsChoice, setAnalyticsChoice } from "../platform/analytics.js";
+import { analyticsChoice, setAnalyticsChoice, analyticsEnabled } from "../platform/analytics.js";
 
 let card = null;
 
 export function showConsent({ force = false } = {}) {
   if (card?.isConnected) return;
+  if (!analyticsEnabled()) return;
   if (!force && analyticsChoice() !== null) return;
   const choose = (v) => {
     setAnalyticsChoice(v);

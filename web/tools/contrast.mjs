@@ -1,5 +1,5 @@
 // WCAG 2.x contrast check for the colour pairs the web client actually uses.
-// Reads design/tokens.json (single source of truth) (light theme only).
+// Reads design/tokens.json (single source of truth), light and dark themes.
 //   node web/tools/contrast.mjs        -> table; exit code 1 if any pair fails
 // Text pairs need 4.5:1 (AA, normal text). Non-text pairs (borders, focus ring, icons) need 3:1.
 
@@ -23,60 +23,50 @@ export const ratio = (a, b) => {
   return (x + 0.05) / (y + 0.05);
 };
 
-// Colours the CSS derives from tokens (keep in sync with css/app.css, section "derived").
-// mix(a, b, p) = color-mix(in srgb, a p%, b).
+// mix(a, b, p) = color-mix(in srgb, a p%, b) — kept for derived colours.
 const mix = (a, b, p) => {
   const [x, y] = [hex(a), hex(b)];
   return "#" + x.map((v, i) => Math.round((v * p + y[i] * (1 - p)) * 255).toString(16).padStart(2, "0")).join("");
 };
-const derive = (c, theme) => ({
-  ...c,
-  // the ring has outline-offset: 3px, so it always sits on paper/surface, never directly on the orange button
-  focus_ring: c.focus,
-  locked_border: c.border_soft,
-});
+const WHITE = "#FFFFFF";
+const derive = (c) => ({ ...c, white: WHITE, on_hero_2: "#BDBBC0" });
 
-// [foreground, background, kind, where]
+// [foreground, background, kind, where] — style «Bursztyn & Karmin» (docs/design/direction.md §3)
 const TEXT = 4.5;
 const UI = 3;
 const PAIRS = [
-  ["ink", "paper", TEXT, "body text"],
+  ["ink", "bg", TEXT, "body text"],
   ["ink", "surface", TEXT, "cards, options"],
-  ["ink_muted", "paper", TEXT, "secondary text, footer"],
+  ["ink", "surface_2", TEXT, "chips, segments"],
+  ["ink_muted", "bg", TEXT, "secondary text"],
   ["ink_muted", "surface", TEXT, "secondary text on cards"],
-  ["ink_soft", "paper", TEXT, "node meta, counters"],
-  ["ink_soft", "surface", TEXT, "locked node icon / meta"],
-  ["ink_muted", "frame", TEXT, "disabled primary button, readonly textarea"],
-  ["ink", "frame", TEXT, "weak prompt bubble, gap slot"],
-  ["on_action", "action", TEXT, "primary button"],
-  ["ink", "success", TEXT, "correct option, ok feedback"],
-  ["ink", "wrong", TEXT, "wrong option, bad feedback"],
-  ["ink", "highlight", TEXT, "XP chip, highlighter, review hero"],
-  ["ink_muted", "highlight", TEXT, "review hero subline"],
-  ["ink", "streak", TEXT, "streak chip"],
-  ["ink", "improve", TEXT, "'what to add' highlighter, partial criterion"],
-  ["ink", "info", TEXT, "daily goal card, info alert"],
-  ["ink_muted", "info", TEXT, "daily goal card text"],
-  ["ink", "repeat", TEXT, "exercise tag, repeat card"],
-  ["ink_muted", "repeat", TEXT, "repeat card text"],
-  ["ink_muted", "success", TEXT, "criterion comment on good chip"],
-  ["ink_muted", "improve", TEXT, "criterion comment on partial chip"],
-  ["paper", "ink", TEXT, "user chat bubble, improved prompt"],
-  ["on_action", "success_strong", TEXT, "done node check (also icon)"],
-  ["success", "ink", UI, "check icon in ink badge"],
-  ["border", "paper", UI, "2px borders on paper"],
-  ["border", "surface", UI, "2px borders on cards"],
-  ["locked_border", "surface", UI, "locked node dashed border"],
-  ["focus_ring", "paper", UI, "focus ring on paper"],
-  ["focus_ring", "surface", UI, "focus ring on cards"],
-  ["ink_soft", "paper", UI, "upcoming (dashed) road on paper"],
-  ["border", "success_strong", UI, "ink edge of the travelled road"],
-  ["ink", "wrong", TEXT, "invalid form field"],
+  ["ink_soft", "bg", TEXT, "meta, placeholders"],
+  ["ink_soft", "surface", TEXT, "meta on cards"],
+  ["on_accent", "accent", TEXT, "primary button"],
+  ["accent_text", "bg", TEXT, "links, today label"],
+  ["accent_text", "surface", TEXT, "links on cards"],
+  ["accent_ink", "accent_soft", TEXT, "wrong answer, selected onboarding option"],
+  ["ink", "accent_soft", TEXT, "danger alert"],
+  ["amber_ink", "amber_soft", TEXT, "XP, hint, speak tip"],
+  ["ink", "amber_soft", TEXT, "hint text"],
+  ["ok_ink", "ok_soft", TEXT, "correct answer, done goal"],
+  ["on_ok", "ok", TEXT, "«Дальше» after correct, done node"],
+  ["sky_ink", "sky_soft", TEXT, "audio button, goal card"],
+  ["violet_ink", "violet_soft", TEXT, "AI fix, repeat card"],
+  ["on_hero", "hero", TEXT, "hero cards"],
+  ["on_hero_2", "hero", TEXT, "hero card secondary text"],
+  ["line_strong", "bg", UI, "input borders, unchecked radio"],
+  ["line_strong", "surface", UI, "input borders on cards"],
+  ["focus", "bg", UI, "focus ring"],
+  ["focus", "surface", UI, "focus ring on cards"],
+  ["accent", "bg", UI, "current node, mic, road"],
+  ["ok", "surface", UI, "correct option border"],
+  ["sky", "surface", UI, "selected option border"],
 ];
 
 let failed = 0;
-for (const theme of ["light"]) {
-  const c = derive(tokens.color[theme], theme);
+for (const theme of ["light", "dark"]) {
+  const c = derive(tokens.color[theme]);
   console.log(`\n${theme}`);
   for (const [fg, bg, need, where] of PAIRS) {
     const r = ratio(c[fg], c[bg]);

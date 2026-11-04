@@ -1,13 +1,15 @@
 {
-  "name": "Navyk",
-  "short_name": "Navyk",
-  "description": "Navyk: short lessons and prompt practice. Independent course, not affiliated with Anthropic.",
+  "name": "brolingvo · polski",
+  "short_name": "polski",
+  "description": "Бесплатный курс польского для русскоязычных: короткие уроки, озвучка, разговор с ИИ.",
+  "lang": "ru",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#FFFDF8",
-  "theme_color": "#FFFDF8",
+  "background_color": "#FAF7F2",
+  "theme_color": "#FAF7F2",
+  "categories": ["education"],
   "icons": [
     { "src": "icons/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
     { "src": "icons/icon-maskable.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "maskable" }

@@ -4,6 +4,7 @@ import { h, icon } from "./dom.js";
 import { t, getLang, setLang, formatNumber } from "./i18n.js";
 import { LANGS } from "../engine/course.js";
 import { showConsent } from "./consent.js";
+import { analyticsEnabled } from "../platform/analytics.js";
 
 /**
  * Language picker in the app's notebook style: a chip with the short code opens a small card with
@@ -116,8 +117,8 @@ export function footer() {
     h(
       "nav.legal-links",
       ...["privacy", "cookies", "terms"].flatMap((doc, i) => [i ? h("span", { aria: { hidden: "true" } }, " · ") : null, h("a", { href: `/${doc}?lang=${getLang()}` }, t(`footer.${doc}`))]).filter(Boolean),
-      h("span", { aria: { hidden: "true" } }, " · "),
-      h("button.footer-link", { type: "button", onclick: () => showConsent({ force: true }) }, t("footer.analytics")),
+      analyticsEnabled() ? h("span", { aria: { hidden: "true" } }, " · ") : null,
+      analyticsEnabled() ? h("button.footer-link", { type: "button", onclick: () => showConsent({ force: true }) }, t("footer.analytics")) : null,
     ),
     h("p.legal-company", t("footer.company", { year: new Date().getFullYear() })),
   );

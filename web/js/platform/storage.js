@@ -1,7 +1,7 @@
 // Key-value storage wrapper. Web: localStorage. Expo: swap for AsyncStorage with the same API
 // (make the functions async there; callers already treat them as fire-and-forget).
 
-const PREFIX = "navyk:";
+const PREFIX = "brolingvo:";
 const memory = new Map(); // fallback when localStorage is blocked (private mode, quota)
 
 function ls() {

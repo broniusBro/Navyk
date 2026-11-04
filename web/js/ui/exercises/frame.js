@@ -1,14 +1,19 @@
 // Shared frame for auto-checked exercises: question, hint, check, feedback with every relevant `why`,
 // one retry, "show answer". Each exercise type supplies an `impl`:
-//   { el, answer(), reset(), showResult(result, { reveal }), onChange(cb) }
+//   { el, answer(), reset(), showResult(result, { reveal }), onChange(cb), submit? }
+// impl.submit(fn): optional; the renderer may call fn() to check without the bottom button (Enter in a field).
+// impl.idle(): optional { label, fn } shown on the bottom button instead of a disabled "Check" while there
+// is nothing to check yet (speak: "Say it" starts the microphone).
 
 import { h, icon } from "../dom.js";
 import { t } from "../i18n.js";
 import { check, canCheck } from "../../engine/exercises.js";
 import { burst, shake, reduced } from "../motion.js";
+import { exAudio } from "../audio.js";
 
+/** Tag, question and the optional audio row (`audio` / `audio_only`). */
 export function questionHeading(ex) {
-  return [h("p.ex__tag", t(`exercise.type.${ex.type}`)), h("h2.ex__question", { tabindex: "-1", data: { autofocus: "1" } }, ex.question)];
+  return [h("p.ex__tag", t(`exercise.type.${ex.type}`)), h("h2.ex__question", { tabindex: "-1", data: { autofocus: "1" } }, ex.question), exAudio(ex)];
 }
 
 export function hintBox(ex) {
@@ -48,7 +53,10 @@ export function mountAutoExercise(ex, ctx, impl) {
 
   const updateCheck = () => {
     if (state !== "answering") return;
-    ctx.setPrimary(t("exercise.check"), doCheck, { disabled: !canCheck(ex, impl.answer()) });
+    const ready = canCheck(ex, impl.answer());
+    const idle = ready ? null : impl.idle?.();
+    if (idle) ctx.setPrimary(idle.label, idle.fn, { disabled: Boolean(idle.disabled) });
+    else ctx.setPrimary(t("exercise.check"), doCheck, { disabled: !ready });
     ctx.setSecondary(null);
   };
 
@@ -102,6 +110,7 @@ export function mountAutoExercise(ex, ctx, impl) {
   }
 
   impl.onChange(updateCheck);
+  impl.submit?.(() => state === "answering" && doCheck());
   updateCheck();
   return root;
 }

@@ -1,9 +1,9 @@
-// Navyk service worker: network-first for the app shell and /api, so a deploy is visible on the next
+// brolingvo service worker: network-first for the app shell and /api, so a deploy is visible on the next
 // load without bumping VERSION; the cache is only the offline fallback. Stale-while-revalidate for
 // Google Fonts. /api/review, /api/auth/* and /api/progress
 // are never cached (private, per account).
 
-const VERSION = "navyk-v5";
+const VERSION = "brolingvo-v1";
 const SHELL = `${VERSION}-shell`;
 const DATA = `${VERSION}-data`;
 const FONTS = `${VERSION}-fonts`;
@@ -13,12 +13,9 @@ const SHELL_FILES = [
   "./index.html",
   "./manifest.webmanifest",
   "./css/app.css",
-  "./icons/icon.svg",
   "./icons/icon-maskable.svg",
+  "./icons/icon.svg",
   "./i18n/ru.json",
-  "./i18n/uk.json",
-  "./i18n/en.json",
-  "./i18n/pl.json",
   "./js/app.js",
   "./js/engine/auth.js",
   "./js/engine/course.js",
@@ -26,6 +23,7 @@ const SHELL_FILES = [
   "./js/engine/exercises.js",
   "./js/engine/i18n.js",
   "./js/engine/markdown.js",
+  "./js/engine/polish.js",
   "./js/engine/progress.js",
   "./js/engine/review.js",
   "./js/engine/rng.js",
@@ -37,29 +35,44 @@ const SHELL_FILES = [
   "./js/platform/clipboard.js",
   "./js/platform/device.js",
   "./js/platform/http.js",
+  "./js/platform/speech.js",
   "./js/platform/storage.js",
   "./js/platform/sw.js",
   "./js/ui/account.js",
+  "./js/ui/audio.js",
   "./js/ui/auth.js",
+  "./js/ui/chat.js",
   "./js/ui/chrome.js",
   "./js/ui/complete.js",
   "./js/ui/consent.js",
   "./js/ui/dom.js",
-  "./js/ui/i18n.js",
-  "./js/ui/levels.js",
-  "./js/ui/lesson.js",
-  "./js/ui/motion.js",
-  "./js/ui/path.js",
-  "./js/ui/sheet.js",
-  "./js/ui/store.js",
+  "./js/ui/exercises/build_sentence.js",
   "./js/ui/exercises/choice.js",
+  "./js/ui/exercises/dialog.js",
   "./js/ui/exercises/fill_gap.js",
-  "./js/ui/exercises/find_error.js",
   "./js/ui/exercises/frame.js",
   "./js/ui/exercises/index.js",
   "./js/ui/exercises/match_pairs.js",
   "./js/ui/exercises/order.js",
-  "./js/ui/exercises/practice.js",
+  "./js/ui/exercises/pl_keys.js",
+  "./js/ui/exercises/speak.js",
+  "./js/ui/exercises/translate.js",
+  "./js/ui/exercises/type_answer.js",
+  "./js/ui/helper.js",
+  "./js/ui/i18n.js",
+  "./js/ui/lesson.js",
+  "./js/ui/levels.js",
+  "./js/ui/motion.js",
+  "./js/ui/onboard.js",
+  "./js/ui/path.js",
+  "./js/ui/prefs.js",
+  "./js/ui/profile.js",
+  "./js/ui/sheet.js",
+  "./js/ui/shell.js",
+  "./js/ui/store.js",
+  "./js/ui/talk-chat.js",
+  "./js/ui/talk.js",
+  "./js/ui/words.js",
 ];
 
 self.addEventListener("install", (event) => {
@@ -117,7 +130,7 @@ async function staleWhileRevalidate(req) {
 
 self.addEventListener("fetch", (event) => {
   const req = event.request;
-  if (req.method !== "GET") return; // POST /api/review goes straight to the network
+  if (req.method !== "GET") return; // POST /api/review and /api/ai/* go straight to the network
   const url = new URL(req.url);
   if (url.hostname === "fonts.googleapis.com" || url.hostname === "fonts.gstatic.com") {
     event.respondWith(staleWhileRevalidate(req));

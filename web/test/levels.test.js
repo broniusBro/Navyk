@@ -92,12 +92,13 @@ test("findLevel and levelOfLesson", () => {
 
 test("real course: three levels, each with its own current lesson", () => {
   const real = JSON.parse(readFileSync(new URL("../../content/course.json", import.meta.url), "utf8"));
-  assert.deepEqual(real.levels.map((l) => l.id), ["beginner", "advanced", "pro"]);
+  assert.deepEqual(real.levels.map((l) => l.id), ["a1", "a2", "b1"]);
   const firstOf = (l) => l.modules[0].lessons[0].id;
   const avail = new Set(real.levels.map(firstOf));
   const st = pathStatus(real, avail, new Set());
   for (const l of real.levels) assert.equal(st[firstOf(l)], "current", l.id);
   const sums = real.levels.map((l) => levelSummary(l, avail, new Set()));
-  assert.deepEqual(sums.map((s) => s.total), [34, 42, 45]);
-  assert.equal(recommendedLevel(sums), "beginner");
+  assert.deepEqual(sums.map((s) => s.total), real.levels.map((l) => l.modules.reduce((n, m) => n + m.lessons.length, 0)));
+  assert.equal(sums.reduce((n, s) => n + s.total, 0), 80);
+  assert.equal(recommendedLevel(sums), "a1");
 });
