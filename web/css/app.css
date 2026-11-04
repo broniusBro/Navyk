@@ -2045,3 +2045,6 @@ p.alert > .icon { margin-top: 2px; }
 .alert--info { color: var(--ink); }
 .profile__edit { color: var(--ink-2); }
 .words__train .icon { width: 20px; height: 20px; }
+.profile__avatar:has(> .icon) { background: var(--surface); color: var(--ink-3); box-shadow: inset 0 0 0 1.5px var(--line-2), var(--sh-1); }
+.save-banner__actions .btn { min-height: 48px; padding-inline: 0.75rem; font-size: var(--fs-body); white-space: nowrap; }
+.save-banner__actions .btn--primary { font-size: var(--fs-body); }
