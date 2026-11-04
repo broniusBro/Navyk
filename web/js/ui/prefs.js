@@ -60,5 +60,5 @@ export function applyTheme(theme = getPrefs().theme) {
   if (theme === "system") root.removeAttribute("data-theme");
   else root.setAttribute("data-theme", theme);
   const dark = theme === "dark" || (theme === "system" && globalThis.matchMedia?.("(prefers-color-scheme: dark)").matches);
-  document.querySelector('meta[name="theme-color"]')?.setAttribute("content", dark ? "#121019" : "#FBF8F3");
+  document.querySelector('meta[name="theme-color"]')?.setAttribute("content", dark ? "#0F0D14" : "#FAF7F2");
 }
