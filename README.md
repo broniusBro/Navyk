@@ -23,4 +23,4 @@ DATA_DIR=/tmp/brolingvo COOKIE_SECURE=false PUBLIC_ORIGIN=http://localhost:8080 
 Сервер 65.108.234.212, папка `/srv/brolingvo-poland`, порт 8120 — см. `CLAUDE.md` и `docs/infra/server.md`.
 Первый раз: `bash deploy/deploy-from-mac.sh`.
 
-Это ветка `polish` репозитория Navyk; с веткой `main` (navyk.app) она не связана.
+Форк приложения Navyk (отдельный репозиторий, общий только сервер).

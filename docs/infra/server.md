@@ -5,21 +5,21 @@
 
 | | brolingvo · polski |
 |---|---|
-| Код | `/srv/brolingvo-poland` — клон ветки `polish` публичного репозитория `broniusBro/Navyk` |
+| Код | `/srv/brolingvo-poland` — клон ветки `main` публичного репозитория `broniusBro/brolingvo-poland` |
 | Приложение | Docker Compose проект `brolingvo-poland`, контейнер только для чтения, без привилегий |
 | Порт | первый свободный от 8130, выбирается при первой установке и записывается в `/etc/host/projects`; дальше скрипты берут его оттуда |
 | Секреты | `/etc/brolingvo-poland/brolingvo-poland.env` (chmod 600) |
 | Сайт в Caddy | `/etc/caddy/sites/poland.brolingvo.com.caddy` → `reverse_proxy 127.0.0.1:8120` |
 | База | SQLite `/data/brolingvo.sqlite` в томе `polish_brolingvo-poland-data` |
 | Резервные копии | таймер `brolingvo-poland-backup` 03:30 UTC → `/var/backups/brolingvo-poland`, 14 дней |
-| Обновления | таймер `brolingvo-poland-autoupdate` каждые 5 минут: новый коммит в ветке `polish` → сборка, проверка, откат при сбое |
+| Обновления | таймер `brolingvo-poland-autoupdate` каждые 5 минут: новый коммит в ветке `main` → сборка, проверка, откат при сбое |
 
 ## Первый запуск
 
 1. DNS у регистратора brolingvo.com: запись **A**, имя `poland`, значение `65.108.234.212` (без AAAA).
 2. С Mac (нужен SSH-доступ root к серверу, как для navyk):
    ```
-   curl -fsSL https://raw.githubusercontent.com/broniusBro/Navyk/polish/deploy/deploy-from-mac.sh -o /tmp/polish-deploy.sh && bash /tmp/polish-deploy.sh
+   curl -fsSL https://raw.githubusercontent.com/broniusBro/brolingvo-poland/main/deploy/deploy-from-mac.sh -o /tmp/polish-deploy.sh && bash /tmp/polish-deploy.sh
    ```
    Скрипт проверит сервер, свободный порт и DNS, склонирует код в `/srv/brolingvo-poland`, спросит ключ Claude API
    (можно взять тот же, что у navyk; ввод скрыт), соберёт контейнер, добавит сайт в Caddy, включит автообновление

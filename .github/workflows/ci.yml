@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [polish]
+    branches: [main]
   pull_request:
-    branches: [polish]
+    branches: [main]
 
 jobs:
   content-and-server:

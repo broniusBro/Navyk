@@ -91,10 +91,10 @@ else
   echo "unchanged"
 fi
 
-say "4/6 automatic updates from GitHub (every 5 minutes, only when branch polish changed)"
+say "4/6 automatic updates from GitHub (every 5 minutes, only when the branch changed)"
 cat > /etc/systemd/system/brolingvo-poland-autoupdate.service <<EOF
 [Unit]
-Description=brolingvo: update from GitHub if branch polish changed
+Description=brolingvo: update from GitHub if the branch changed
 After=network-online.target docker.service
 
 [Service]

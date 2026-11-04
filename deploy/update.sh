@@ -1,11 +1,13 @@
 #!/usr/bin/env bash
-# Update to the latest polish branch: pull, rebuild, restart, check; roll back automatically if unhealthy.
+# Update to the latest commit of the checked-out branch: pull, rebuild, restart, check; roll back automatically if unhealthy.
 # Run as root from /srv/brolingvo-poland (also called by the autoupdate timer).
 set -euo pipefail
 REPO="$(cd "$(dirname "$0")/.." && pwd)"; cd "$REPO"
 APP_PORT="${APP_PORT:-$(awk '$1=="brolingvo-poland" {print $2; exit}' /etc/host/projects 2>/dev/null)}"; APP_PORT="${APP_PORT:-8120}"
 prev="$(git rev-parse HEAD)"
-git pull -q --ff-only origin polish
+# the branch this checkout follows (polish on the old Navyk repo, main on brolingvo-poland) — never a hardcoded name
+BRANCH="$(git symbolic-ref -q --short HEAD || echo main)"
+git pull -q --ff-only origin "$BRANCH"
 now="$(git rev-parse HEAD)"
 healthy() {
   for i in $(seq 1 45); do
@@ -32,6 +34,6 @@ echo "brolingvo-poland ${now:0:7} unhealthy — rolling back to ${prev:0:7}" >&2
 git checkout -q "$prev"
 APP_PORT="$APP_PORT" docker compose build app && APP_PORT="$APP_PORT" docker compose up -d app
 healthy && echo "rolled back to ${prev:0:7} (the branch stays ahead; fix it in GitHub and the next run retries)" >&2
-git checkout -q polish 2>/dev/null || true
+git checkout -q "$BRANCH" 2>/dev/null || true
 git reset -q --hard "$prev"
 exit 1
