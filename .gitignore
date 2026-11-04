@@ -14,3 +14,6 @@ server/eval/results/*.json
 # SQLite data (accounts) — local dev
 server/data/
 /data/
+
+# test fixture lessons are source files, not build output
+!server/test/fixtures/dist/

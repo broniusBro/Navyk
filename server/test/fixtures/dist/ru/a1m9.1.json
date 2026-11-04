@@ -1,0 +1,51 @@
+{
+  "meta": {
+    "id": "a1m9.1",
+    "lang": "ru",
+    "level": "a1",
+    "module": "a1m9",
+    "title": "Тестовый урок: перевод и разговор",
+    "goal": "Фикстура серверных тестов ИИ (не настоящий урок).",
+    "duration_min": 5,
+    "prerequisites": [],
+    "free_preview": true,
+    "volatile": false,
+    "verified_at": "2026-11-04",
+    "vocab": [{ "pl": "kawa", "ru": "кофе" }]
+  },
+  "blocks": [
+    { "kind": "theory", "id": "a1m9.1.t1", "text": "Kawa — кофе." },
+    {
+      "kind": "exercise",
+      "id": "a1m9.1.e1",
+      "type": "translate",
+      "question": "Переведи на польский.",
+      "source": "Я хочу кофе, пожалуйста.",
+      "accept": ["Chcę kawę, proszę.", "Poproszę kawę."],
+      "review": { "task": "Перевод просьбы в кафе", "focus": ["винительный падеж: kawę"] }
+    },
+    {
+      "kind": "exercise",
+      "id": "a1m9.1.e2",
+      "type": "dialog",
+      "question": "Закажи кофе.",
+      "scenario": {
+        "title": "Kawiarnia",
+        "setting": "Ты в кафе в Кракове.",
+        "partner": "Barista Tomek, mówi prosto.",
+        "opener": "Dzień dobry! Co podać?",
+        "goals": ["Поздороваться", "Заказать кофе"],
+        "vocab": ["kawa", "poproszę"],
+        "max_turns": 4
+      }
+    },
+    {
+      "kind": "exercise",
+      "id": "a1m9.1.e3",
+      "type": "type_answer",
+      "question": "Напиши «кофе».",
+      "prompt": "кофе",
+      "accept": ["kawa"]
+    }
+  ]
+}
