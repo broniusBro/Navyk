@@ -343,3 +343,11 @@ test("limits: per IP caps all devices together", async () => {
     lim.server.close();
   }
 });
+
+test("learner gender reaches every AI prompt and resolves lesson forms", async () => {
+  const { buildDialogMessage, buildTranslateMessage, buildHelperMessage, learnerInfo } = await import("../src/ai/tutor.ts");
+  assert.match(buildDialogMessage({ title: "t", goals: [] }, "a1", [], 4, false, "f"), /female/);
+  assert.match(buildTranslateMessage({ level: "a1" }, { source: "s", accept: [] }, "x", "m"), /male/);
+  assert.match(buildHelperMessage(null, "", "q", [], "x"), /not specified/);
+  assert.match(learnerInfo("garbage"), /not specified/);
+});

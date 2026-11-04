@@ -31,6 +31,34 @@ for extra in sorted((CONTENT / "data" / "modules").glob("*.json")):
         if clash:
             raise SystemExit(f"{extra.name}: keys already defined elsewhere: {', '.join(sorted(clash))}")
         UI_DATA.setdefault(section, {}).update(values)
+# {{g:MASC|FEM}} — learner's grammatical gender (web/js/engine/gender.js resolves it in the app and on the server)
+GENDER_RE = re.compile(r"\{\{g:([^|{}]*)\|([^|{}]*)\}\}")
+
+
+def gender_errors(node, where: str, path: str = "") -> None:
+    """Every {{g:…}} mark is well-formed; titles carry no marks."""
+    if isinstance(node, str):
+        if "{{g" in GENDER_RE.sub("", node):
+            err(where, f"битая разметка рода {{{{g:…|…}}}} в {path or 'тексте'}: {node[:60]}")
+    elif isinstance(node, list):
+        for i, x in enumerate(node):
+            gender_errors(x, where, f"{path}[{i}]")
+    elif isinstance(node, dict):
+        for k, v in node.items():
+            gender_errors(v, where, f"{path}.{k}" if path else k)
+
+
+def masculine(node):
+    """The lesson as shown to a learner who did not choose a gender (structure checks use it)."""
+    if isinstance(node, str):
+        return GENDER_RE.sub(lambda m: m.group(1), node)
+    if isinstance(node, list):
+        return [masculine(x) for x in node]
+    if isinstance(node, dict):
+        return {k: masculine(v) for k, v in node.items()}
+    return node
+
+
 DATA_RE = re.compile(r"\{\{\s*data\.([a-z_]+)\.([a-z0-9_]+)\s*\}\}")
 
 
@@ -186,7 +214,11 @@ def main() -> int:
         if not lesson:
             continue
         lesson = resolve_data(lesson, lang, where)
-        meta = lesson["meta"]
+        gender_errors(lesson, where)
+        if "{{g:" in str(lesson["meta"].get("title", "")):
+            err(where, "в title нельзя разметку рода")
+        checked = masculine(lesson)
+        meta = checked["meta"]
         if meta.get("id") != lesson_id or meta.get("lang") != lang:
             err(where, "id/lang в шапке не совпадают с именем файла")
         if lesson_id not in COURSE_LESSONS:
@@ -203,7 +235,7 @@ def main() -> int:
             for eid in r.get("exercises") or []:
                 if eid not in ids:
                     err(where, f"repeat ссылается на несуществующее упражнение {eid}")
-        exercises = [b for b in lesson["blocks"] if b["kind"] == "exercise"]
+        exercises = [b for b in checked["blocks"] if b["kind"] == "exercise"]
         if len(exercises) < 5:
             err(where, f"упражнений {len(exercises)}, нужно не меньше 5")
         if len({e.get("type") for e in exercises}) < 4:

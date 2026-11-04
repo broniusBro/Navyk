@@ -8,11 +8,13 @@ const KEY = "brolingvo.prefs";
 export const GOALS = ["travel", "work", "life", "exam", "fun"];
 export const MINUTES = [5, 10, 15, 20];
 export const THEMES = ["system", "light", "dark"];
+export const GENDER_CHOICES = ["f", "m", "x"];
 
 const DEFAULTS = Object.freeze({
   onboarded: false,
   goal: null, // why the learner studies Polish (GOALS)
   start: "a1", // level chosen in onboarding
+  gender: "x", // how to address the learner in Polish: m | f | x (not chosen: both forms accepted)
   minutes: 10, // daily goal in minutes
   theme: "system",
   ttsRate: "normal", // normal | slow
@@ -33,6 +35,7 @@ export function getPrefs() {
   const v = { ...DEFAULTS, ...read() };
   if (!GOALS.includes(v.goal)) v.goal = null;
   if (!["a1", "a2", "b1"].includes(v.start)) v.start = "a1";
+  if (!["m", "f", "x"].includes(v.gender)) v.gender = "x";
   if (!MINUTES.includes(Number(v.minutes))) v.minutes = 10;
   if (!THEMES.includes(v.theme)) v.theme = "system";
   if (v.ttsRate !== "slow") v.ttsRate = "normal";

@@ -5,7 +5,7 @@ import { h, icon } from "./dom.js";
 import { t, formatNumber } from "./i18n.js";
 import { countUp } from "./motion.js";
 import { tabTop } from "./shell.js";
-import { getPrefs, setPrefs, MINUTES, THEMES } from "./prefs.js";
+import { getPrefs, setPrefs, MINUTES, THEMES, GENDER_CHOICES } from "./prefs.js";
 import { currentUser, signOut, signedIn } from "./account.js";
 import { openSheet, closeSheet } from "./sheet.js";
 import { request } from "../platform/http.js";
@@ -124,6 +124,11 @@ export function renderProfile({ progress, streak, wordsCount, go }) {
     h("h2.card__title", icon("settings"), h("span", t("profile.settings"))),
     h(
       "div.settings-list",
+      settingsRow(
+        t("profile.gender"),
+        segmented(GENDER_CHOICES, prefs.gender, (v) => t(`profile.gender_${v}`), (v) => setPrefs({ gender: v }), t("profile.gender")),
+        t("profile.gender_hint"),
+      ),
       settingsRow(
         t("profile.tts_rate"),
         segmented(["normal", "slow"], prefs.ttsRate, (v) => t(`profile.rate.${v}`), (v) => setPrefs({ ttsRate: v }), t("profile.tts_rate")),

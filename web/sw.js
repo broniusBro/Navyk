@@ -21,6 +21,7 @@ const SHELL_FILES = [
   "./js/engine/course.js",
   "./js/engine/dates.js",
   "./js/engine/exercises.js",
+  "./js/engine/gender.js",
   "./js/engine/i18n.js",
   "./js/engine/markdown.js",
   "./js/engine/polish.js",

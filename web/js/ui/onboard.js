@@ -4,16 +4,16 @@
 import { h, icon } from "./dom.js";
 import { t } from "./i18n.js";
 import { enter, burst } from "./motion.js";
-import { getPrefs, setPrefs, GOALS, MINUTES } from "./prefs.js";
+import { getPrefs, setPrefs, GOALS, MINUTES, GENDER_CHOICES } from "./prefs.js";
 import { isSignedIn } from "./account.js";
 
-const STEPS = ["hello", "goal", "level", "minutes", "account"];
+const STEPS = ["hello", "goal", "gender", "level", "minutes", "account"];
 const LEVELS = ["a1", "a2", "b1"];
 
 /** renderOnboarding({ go }) — returns the screen; steps switch in place with a slide. */
 export function renderOnboarding({ go }) {
   const prefs = getPrefs();
-  const answers = { goal: prefs.goal, start: prefs.start, minutes: prefs.minutes };
+  const answers = { goal: prefs.goal, gender: prefs.gender, start: prefs.start, minutes: prefs.minutes };
   let step = 0;
   const screen = h("div.screen.screen--onboard");
   const finish = (target) => {
@@ -83,6 +83,8 @@ export function renderOnboarding({ go }) {
     } else if (id === "goal") {
       body = [h("h1", { tabindex: "-1" }, t("onboard.goal_title")), h("p.onboard__lead", t("onboard.goal_text")), options("goal", GOALS, "onboard.goals")];
       next.disabled = !answers.goal;
+    } else if (id === "gender") {
+      body = [h("h1", { tabindex: "-1" }, t("onboard.gender_title")), h("p.onboard__lead", t("onboard.gender_text")), options("gender", GENDER_CHOICES, "onboard.genders", { withHint: true })];
     } else if (id === "level") {
       body = [h("h1", { tabindex: "-1" }, t("onboard.level_title")), h("p.onboard__lead", t("onboard.level_text")), options("start", LEVELS, "onboard.levels", { withHint: true })];
     } else if (id === "minutes") {

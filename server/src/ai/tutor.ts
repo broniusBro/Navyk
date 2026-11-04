@@ -5,6 +5,7 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { cleanText } from "../input.ts";
+import { resolveGender, normalizeGender } from "../../../web/js/engine/gender.js";
 import { callClaude, type AiOptions, type Usage } from "./claude.ts";
 
 const ROOT = fileURLToPath(new URL("../../../", import.meta.url));
@@ -37,8 +38,16 @@ const oneLine = (s: unknown, max: number) => sanitize(s, max).replace(/\s*\n\s*/
 
 // ---------------------------------------------------------------- контент
 
-export function loadExercise(lessonId: string, exerciseId: string) {
-  const lesson = loadLesson(lessonId);
+/** How to address the learner in Polish; "x" = not chosen. Shared rules with the client (web/js/engine/gender.js). */
+export const learnerInfo = (gender?: string) => {
+  const g = normalizeGender(gender);
+  return g === "f" ? "female: address her with feminine forms (byłaś, zrobiłaś), she speaks of herself in feminine (byłam)"
+    : g === "m" ? "male: address him with masculine forms (byłeś, zrobiłeś), he speaks of himself in masculine (byłem)"
+    : "not specified: accept both masculine and feminine forms; when addressing, prefer forms that avoid gender (present tense, Pan/Pani only if the scene needs it)";
+};
+
+export function loadExercise(lessonId: string, exerciseId: string, gender?: string) {
+  const lesson = resolveGender(loadLesson(lessonId), normalizeGender(gender));
   const ex = (Array.isArray(lesson.blocks) ? lesson.blocks : []).find((b: any) => b.kind === "exercise" && b.id === exerciseId);
   if (!ex) throw new Error("not_found");
   return { lesson: lesson.meta, ex };
@@ -97,9 +106,10 @@ export interface TranslateResult {
   notes: string[];
 }
 
-export function buildTranslateMessage(lesson: any, ex: any, answer: string): string {
+export function buildTranslateMessage(lesson: any, ex: any, answer: string, gender?: string): string {
   const ctx = {
     level: lesson.level,
+    learner_gender: learnerInfo(gender),
     lesson_goal: lesson.goal,
     source_ru: ex.source,
     reference_translations: ex.accept,
@@ -109,10 +119,10 @@ export function buildTranslateMessage(lesson: any, ex: any, answer: string): str
   return `<lesson>\n${JSON.stringify(ctx, null, 2)}\n</lesson>\n\n<student>\n${sanitize(answer, MAX_ANSWER)}\n</student>\n\nCheck the student's translation.`;
 }
 
-export async function checkTranslation(lessonId: string, exerciseId: string, answer: string, opts?: AiOptions) {
-  const { lesson, ex } = loadExercise(lessonId, exerciseId);
+export async function checkTranslation(lessonId: string, exerciseId: string, answer: string, opts?: AiOptions, gender?: string) {
+  const { lesson, ex } = loadExercise(lessonId, exerciseId, gender);
   if (ex.type !== "translate") throw new Error("not_found");
-  const r = await callClaude<TranslateResult>("translate", { system: TRANSLATE_SYSTEM, user: buildTranslateMessage(lesson, ex, answer), schema: TRANSLATE_SCHEMA }, opts);
+  const r = await callClaude<TranslateResult>("translate", { system: TRANSLATE_SYSTEM, user: buildTranslateMessage(lesson, ex, answer, gender), schema: TRANSLATE_SCHEMA }, opts);
   const d = r.data;
   return {
     result: { verdict: d.verdict, corrected: String(d.corrected ?? "").slice(0, 400), notes: (d.notes ?? []).slice(0, 3).map((n) => String(n).slice(0, 300)) },
@@ -184,10 +194,11 @@ export function cleanHistory(history: unknown): Turn[] {
     .filter((t) => t.text.length > 0);
 }
 
-export function buildDialogMessage(scenario: any, level: string, history: Turn[], maxTurns: number, finish: boolean): string {
+export function buildDialogMessage(scenario: any, level: string, history: Turn[], maxTurns: number, finish: boolean, gender?: string): string {
   const yourTurns = history.filter((t) => t.who === "you").length;
   const ctx = {
     level,
+    learner_gender: learnerInfo(gender),
     title: scenario.title,
     setting_ru: scenario.setting,
     character: scenario.partner,
@@ -228,14 +239,14 @@ export function shapeDialog(d: any, goalsCount: number, forceFinish: boolean): D
 }
 
 export async function dialogTurn(
-  args: { lessonId?: string; exerciseId?: string; scenarioId?: string; level?: string; history: unknown; finish?: boolean },
+  args: { lessonId?: string; exerciseId?: string; scenarioId?: string; level?: string; history: unknown; finish?: boolean; gender?: string },
   opts?: AiOptions,
 ) {
   let scenario: any;
   let level = "a1";
   let maxTurns = 10;
   if (args.lessonId && args.exerciseId) {
-    const { lesson, ex } = loadExercise(args.lessonId, args.exerciseId);
+    const { lesson, ex } = loadExercise(args.lessonId, args.exerciseId, args.gender);
     if (ex.type !== "dialog") throw new Error("not_found");
     scenario = ex.scenario;
     level = lesson.level;
@@ -248,7 +259,7 @@ export async function dialogTurn(
   const history = cleanHistory(args.history);
   const yourTurns = history.filter((t) => t.who === "you").length;
   const forceFinish = Boolean(args.finish) || yourTurns >= maxTurns;
-  const r = await callClaude("dialog", { system: DIALOG_SYSTEM, user: buildDialogMessage(scenario, level, history, maxTurns, forceFinish), schema: DIALOG_SCHEMA }, opts);
+  const r = await callClaude("dialog", { system: DIALOG_SYSTEM, user: buildDialogMessage(scenario, level, history, maxTurns, forceFinish, args.gender), schema: DIALOG_SCHEMA }, opts);
   return { result: shapeDialog(r.data, scenario.goals?.length ?? 0, forceFinish), usage: r.usage, costUsd: r.costUsd };
 }
 
@@ -264,8 +275,8 @@ If the question is about the current exercise, help the learner understand and g
 the answer on the first ask — explain the rule so they can find it; if they ask again explicitly for the answer, give it with the reason.
 If the question is unrelated to learning Polish, say kindly in one sentence that you help with Polish and suggest a related question.`;
 
-export function buildHelperMessage(lessonMeta: any, context: string, question: string, history: { who: string; text: string }[]): string {
-  const ctx = { level: lessonMeta?.level ?? "a1", lesson_title: lessonMeta?.title ?? "", lesson_goal: lessonMeta?.goal ?? "", current_screen: sanitize(context, 1500) };
+export function buildHelperMessage(lessonMeta: any, context: string, question: string, history: { who: string; text: string }[], gender?: string): string {
+  const ctx = { learner_gender: learnerInfo(gender), level: lessonMeta?.level ?? "a1", lesson_title: lessonMeta?.title ?? "", lesson_goal: lessonMeta?.goal ?? "", current_screen: sanitize(context, 1500) };
   const hist = history
     .slice(-10)
     .map((t) => `${t.who === "you" ? "LEARNER" : "TUTOR"}: ${oneLine(t.text, MAX_QUESTION)}`)
@@ -273,7 +284,7 @@ export function buildHelperMessage(lessonMeta: any, context: string, question: s
   return `<context>\n${JSON.stringify(ctx, null, 2)}\n</context>\n\n<history>\n${hist}\n</history>\n\n<student>\n${sanitize(question, MAX_QUESTION)}\n</student>\n\nAnswer the learner.`;
 }
 
-export async function helperAnswer(args: { lessonId?: string; context?: string; question: string; history?: unknown }, opts?: AiOptions) {
+export async function helperAnswer(args: { lessonId?: string; context?: string; question: string; history?: unknown; gender?: string }, opts?: AiOptions) {
   let meta: any = null;
   if (args.lessonId) {
     try {
@@ -285,6 +296,6 @@ export async function helperAnswer(args: { lessonId?: string; context?: string; 
   const history = Array.isArray(args.history)
     ? (args.history as any[]).filter((t) => t && typeof t.text === "string" && (t.who === "you" || t.who === "tutor"))
     : [];
-  const r = await callClaude<string>("helper", { system: HELPER_SYSTEM, user: buildHelperMessage(meta, String(args.context ?? ""), args.question, history) }, opts);
+  const r = await callClaude<string>("helper", { system: HELPER_SYSTEM, user: buildHelperMessage(meta, String(args.context ?? ""), args.question, history, args.gender) }, opts);
   return { answer: String(r.data ?? "").trim().slice(0, 2500), usage: r.usage, costUsd: r.costUsd };
 }

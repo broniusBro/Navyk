@@ -7,6 +7,8 @@ import { t, formatNumber } from "./i18n.js";
 import { fetchLesson } from "../platform/api.js";
 import { rise, burst } from "./motion.js";
 import { tabTop } from "./shell.js";
+import { resolveGender } from "../engine/gender.js";
+import { getPrefs } from "./prefs.js";
 
 const cache = new Map(); // lessonId -> vocab[]
 
@@ -17,7 +19,7 @@ export async function collectWords(lang, lessonIds) {
       .filter((id) => !cache.has(id))
       .map(async (id) => {
         const lesson = await fetchLesson(lang, id);
-        if (lesson) cache.set(id, (lesson.meta?.vocab ?? []).filter((v) => v?.pl && v?.ru));
+        if (lesson) cache.set(id, resolveGender(lesson.meta?.vocab ?? [], getPrefs().gender).filter((v) => v?.pl && v?.ru));
       }),
   );
   const seen = new Set();

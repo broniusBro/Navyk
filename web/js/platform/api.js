@@ -1,4 +1,4 @@
-// Client for the Navyk backend (same origin). The only network surface of the app.
+// Client for the brolingvo backend (same origin). The only network surface of the app.
 
 import { getJson, postJson, request } from "./http.js";
 import { getItem, setItem } from "./storage.js";
@@ -86,8 +86,19 @@ function unavailable(res) {
   return { available: false, reason, resetAt: res.body?.resetAt ?? null };
 }
 
+/** How the learner wants to be addressed (prefs, set in onboarding/profile): "m" | "f" | "x". */
+function learnerGender() {
+  try {
+    const raw = getItem("brolingvo.prefs");
+    const g = (typeof raw === "string" ? JSON.parse(raw) : raw)?.gender;
+    return g === "m" || g === "f" ? g : "x";
+  } catch {
+    return "x";
+  }
+}
+
 async function aiPost(path, body) {
-  const res = await postJson(path, { ...body, deviceId: deviceId() }, { timeout: AI_TIMEOUT });
+  const res = await postJson(path, { ...body, gender: learnerGender(), deviceId: deviceId() }, { timeout: AI_TIMEOUT });
   if (res.status !== 200 || !res.body || res.body.available === false) return { ok: false, out: unavailable(res) };
   return { ok: true, body: res.body };
 }

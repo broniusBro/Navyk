@@ -133,18 +133,18 @@ async function handleAi(kind: AiKind, req: IncomingMessage, res: ServerResponse,
     let payload: any;
     let cost = 0;
     if (kind === "translate") {
-      const r = await checkTranslation(lessonId, exerciseId, body.answer, deps.aiOptions);
+      const r = await checkTranslation(lessonId, exerciseId, body.answer, deps.aiOptions, body.gender);
       payload = r.result;
       cost = r.costUsd;
     } else if (kind === "dialog") {
       const r = await dialogTurn(
-        { lessonId, exerciseId, scenarioId: lessonId ? undefined : body.scenarioId, level: body.level, history: body.history, finish: body.finish === true },
+        { lessonId, exerciseId, scenarioId: lessonId ? undefined : body.scenarioId, level: body.level, history: body.history, finish: body.finish === true, gender: body.gender },
         deps.aiOptions,
       );
       payload = r.result;
       cost = r.costUsd;
     } else {
-      const r = await helperAnswer({ lessonId, context: body.context, question: body.question, history: body.history }, deps.aiOptions);
+      const r = await helperAnswer({ lessonId, context: body.context, question: body.question, history: body.history, gender: body.gender }, deps.aiOptions);
       payload = { answer: r.answer };
       cost = r.costUsd;
     }

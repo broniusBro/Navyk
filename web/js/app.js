@@ -32,6 +32,10 @@ import { renderWords, renderCards, collectWords } from "./ui/words.js";
 import { renderProfile } from "./ui/profile.js";
 import { getPrefs, applyTheme } from "./ui/prefs.js";
 import { mountTalkChat, destroyTalkChat } from "./ui/talk-chat.js";
+import { resolveGender } from "./engine/gender.js";
+
+/** Lesson texts with the learner's grammatical gender ({{g:m|f}} marks); answers accept both forms. */
+const withGender = (lesson) => (lesson ? resolveGender(lesson, getPrefs().gender) : lesson);
 
 const app = document.getElementById("app");
 // animated: screens ("levels", "level:<id>") whose entrance has already played this session
@@ -129,7 +133,7 @@ let accountReady = Promise.resolve(null); // initAccount(): resolves once the se
 async function showLesson(lessonId, token) {
   app.replaceChildren(h("div.screen", h("main.loading-screen", { id: "main", role: "status" }, h("p", t("lesson.loading")))));
   const lang = getLang();
-  const lesson = await fetchLesson(lang, lessonId);
+  const lesson = withGender(await fetchLesson(lang, lessonId));
   if (token !== screenToken) return;
   if (!lesson) return showError(isOnline() ? "lesson.not_found" : "lesson.offline");
   // a session cookie without a cached user (after Google sign-in, cleared storage): wait for /api/auth/me
@@ -186,7 +190,7 @@ async function showReview(token) {
   const blocks = [];
   const keyByExercise = {};
   for (const it of items) {
-    const lesson = await fetchLesson(lang, it.lessonId);
+    const lesson = withGender(await fetchLesson(lang, it.lessonId));
     if (!lesson) continue;
     const exs = lesson.blocks.filter((b) => b.kind === "exercise").map(normalizeExercise);
     const ex = pickReviewExercise(it, exs);
