@@ -1,4 +1,8 @@
-"""Сборка юридических страниц Navyk: content/legal/<doc>.<lang>.md → content/dist/legal/<doc>.<lang>.html.
+"""Сборка юридических страниц brolingvo · polski: content/legal/<doc>.<lang>.md → content/dist/legal/<doc>.<lang>.html.
+
+Интерфейс пока только на русском: документы пишутся на языках LANGS, а для остальных языков сервера
+(ALIAS_LANGS — их принимает legalLang в server/src/http.ts) кладётся копия русской страницы, чтобы
+/privacy?lang=pl и запрос без ?lang (по умолчанию en) не отдавали 404.
 
 Данные компании — content/legal/company.json (пустые поля не выводятся), подписи — labels.json.
 Проверяет, что у каждого документа есть все языки и одинаковая структура разделов.
@@ -15,7 +19,9 @@ import yaml
 ROOT = Path(__file__).resolve().parent.parent
 LEGAL = ROOT / "content" / "legal"
 OUT = ROOT / "content" / "dist" / "legal"
-LANGS = ("ru", "uk", "en", "pl")
+LANGS = ("ru",)
+# языки, которые сервер может запросить (legalLang); без своего документа отдаётся русская версия
+ALIAS_LANGS = ("uk", "en", "pl")
 DOCS = ("privacy", "cookies", "terms")
 PLACEHOLDER = re.compile(r"\{\{\s*([a-z_]+(?:\.[a-z_]+)?)\s*\}\}")
 
@@ -90,6 +96,7 @@ def page(doc: str, lang: str, meta: dict, body: str, labels: dict, c: dict) -> s
         f'<a href="/{doc}?lang={l}" hreflang="{l}" lang="{l}"{" aria-current=\"page\"" if l == lang else ""}>{l.upper()}</a>' for l in LANGS
     )
     docs = " · ".join(f'<a href="/{d}?lang={lang}"{" aria-current=\"page\"" if d == doc else ""}>{html.escape(L[d])}</a>' for d in DOCS)
+    nav_langs = f'\n  <nav class="legal-langs" aria-label="{html.escape(L["language"])}">{langs}</nav>' if len(LANGS) > 1 else ""
     v = company_values(c, lang)
     addr = html.escape(" · ".join(x for x in (v["company.name"], v["company.address"], v["company.registry"]) if x))
     return f"""<!doctype html>
@@ -98,7 +105,7 @@ def page(doc: str, lang: str, meta: dict, body: str, labels: dict, c: dict) -> s
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light">
-<title>{html.escape(meta["title"])} · Navyk</title>
+<title>{html.escape(meta["title"])} · brolingvo · polski</title>
 <meta name="description" content="{html.escape(meta["description"], quote=True)}">
 <link rel="canonical" href="{c["site"]}/{doc}?lang={lang}">
 {alt}
@@ -109,8 +116,7 @@ def page(doc: str, lang: str, meta: dict, body: str, labels: dict, c: dict) -> s
 </head>
 <body>
 <header class="legal-top">
-  <a class="legal-brand" href="/">navyk<span>.</span></a>
-  <nav class="legal-langs" aria-label="{html.escape(L["language"])}">{langs}</nav>
+  <a class="legal-brand" href="/">brolingvo<span>·</span>polski</a>{nav_langs}
 </header>
 <main class="legal">
   <p><a class="legal-back" href="/">{html.escape(L["back"])}</a></p>
@@ -176,14 +182,18 @@ def main() -> int:
                 errors.append(f"{where}: разделы не совпадают с другими языками")
             out = OUT / f"{doc}.{lang}.html"
             out.parent.mkdir(parents=True, exist_ok=True)
-            out.write_text(page(doc, lang, meta, body, labels, c), encoding="utf-8")
+            html_page = page(doc, lang, meta, body, labels, c)
+            out.write_text(html_page, encoding="utf-8")
             built += 1
+            if lang == LANGS[0]:
+                for alias in ALIAS_LANGS:
+                    (OUT / f"{doc}.{alias}.html").write_text(html_page, encoding="utf-8")
     if errors:
         print("Ошибки юридических страниц:")
         for e in errors:
             print("  -", e)
         return 1
-    print(f"OK: {built} юридических страниц в content/dist/legal/")
+    print(f"OK: {built} юридических страниц в content/dist/legal/ (языки: {', '.join(LANGS)}; копии ru для {', '.join(ALIAS_LANGS)})")
     return 0
 
 

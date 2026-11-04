@@ -2,6 +2,7 @@
 
 import { getJson, postJson, request } from "./http.js";
 import { getItem, setItem } from "./storage.js";
+import { deviceId } from "./device.js";
 
 const lessonCache = new Map();
 
@@ -71,6 +72,69 @@ export async function probeAvailable(lang, ids, onUpdate, concurrency = 4) {
 /** POST /api/review. Returns { status, body }; status 0 means network error. */
 export function requestReview({ lessonId, exerciseId, lang, prompt, deviceId }) {
   return postJson("/api/review", { lessonId, exerciseId, lang, prompt, deviceId }, { timeout: 45000 });
+}
+
+// ---- AI helper (translate check, dialog partner, tutor) ------------------------------------
+// Every call resolves (never throws) to the documented shape with `available`. When the AI cannot answer
+// (no key on the server, daily limit, network or server error) available=false and `reason` says why,
+// so the UI shows its offline fallback. deviceId is sent like /api/review does (limits without an account).
+
+const AI_TIMEOUT = 45000;
+
+function unavailable(res) {
+  const reason = res.status === 429 || res.body?.reason === "limit" ? "limit" : res.body?.reason === "no_key" ? "no_key" : "error";
+  return { available: false, reason, resetAt: res.body?.resetAt ?? null };
+}
+
+async function aiPost(path, body) {
+  const res = await postJson(path, { ...body, deviceId: deviceId() }, { timeout: AI_TIMEOUT });
+  if (res.status !== 200 || !res.body || res.body.available === false) return { ok: false, out: unavailable(res) };
+  return { ok: true, body: res.body };
+}
+
+const strs = (a, n = 5) => (Array.isArray(a) ? a.filter((x) => typeof x === "string" && x.trim()).slice(0, n) : []);
+
+/** POST /api/ai/translate -> { available, reason?, verdict: ok|close|bad, corrected, notes[] } */
+export async function aiTranslate({ lessonId, exerciseId, answer }) {
+  const r = await aiPost("/api/ai/translate", { lessonId, exerciseId, answer });
+  if (!r.ok) return r.out;
+  const b = r.body;
+  return {
+    available: true,
+    verdict: ["ok", "close", "bad"].includes(b.verdict) ? b.verdict : "close",
+    corrected: typeof b.corrected === "string" ? b.corrected : "",
+    notes: strs(b.notes, 3),
+    remaining: Number.isFinite(b.remaining) ? b.remaining : null,
+  };
+}
+
+/**
+ * POST /api/ai/dialog -> { available, reason?, reply: {pl, ru}, correction: {fixed, explain} | null,
+ *   goalsDone: number[], chips: string[], finished, summary?: { stars 1..3, praise, tips[] } }
+ */
+export async function aiDialog({ lessonId, exerciseId, scenarioId, level, history = [], finish = false }) {
+  const r = await aiPost("/api/ai/dialog", { lessonId, exerciseId, scenarioId, level, history, finish: finish || undefined });
+  if (!r.ok) return r.out;
+  const b = r.body;
+  const out = {
+    available: true,
+    reply: { pl: String(b.reply?.pl ?? ""), ru: String(b.reply?.ru ?? "") },
+    correction: b.correction && typeof b.correction.fixed === "string" && b.correction.fixed ? { fixed: b.correction.fixed, explain: String(b.correction.explain ?? "") } : null,
+    goalsDone: Array.isArray(b.goalsDone) ? b.goalsDone.filter((i) => Number.isInteger(i) && i >= 0) : [],
+    chips: strs(b.chips, 3),
+    finished: Boolean(b.finished),
+  };
+  if (b.summary) {
+    out.summary = { stars: Math.max(1, Math.min(3, Number(b.summary.stars) || 1)), praise: String(b.summary.praise ?? ""), tips: strs(b.summary.tips, 3) };
+  }
+  return out;
+}
+
+/** POST /api/ai/helper -> { available, reason?, answer: markdown (ru) } */
+export async function aiHelper({ lessonId, context, question, history = [] }) {
+  const r = await aiPost("/api/ai/helper", { lessonId, context, question, history });
+  if (!r.ok) return r.out;
+  return { available: true, answer: String(r.body.answer ?? "") };
 }
 
 // ---- accounts and progress sync -----------------------------------------------------------
