@@ -1,0 +1,959 @@
+{
+  "version": "1.0.0",
+  "verified_at": "2026-10-13",
+  "exercise_types": {
+    "single_choice": {
+      "ai": false,
+      "ru": "Выбери ответ"
+    },
+    "multi_choice": {
+      "ai": false,
+      "ru": "Отметь все верные"
+    },
+    "match_pairs": {
+      "ai": false,
+      "ru": "Соедини пары"
+    },
+    "fill_gap": {
+      "ai": false,
+      "ru": "Заполни пропуск"
+    },
+    "order_steps": {
+      "ai": false,
+      "ru": "Расставь по порядку"
+    },
+    "build_sentence": {
+      "ai": false,
+      "ru": "Собери фразу"
+    },
+    "type_answer": {
+      "ai": false,
+      "ru": "Напиши по-польски"
+    },
+    "speak": {
+      "ai": false,
+      "ru": "Скажи вслух"
+    },
+    "translate": {
+      "ai": true,
+      "ru": "Переведи (проверяет ИИ-помощник)"
+    },
+    "dialog": {
+      "ai": true,
+      "ru": "Разговор с ИИ-собеседником"
+    }
+  },
+  "levels": [
+    {
+      "id": "a1",
+      "title": {
+        "ru": "Старт · A1"
+      },
+      "goal": "Читать по-польски, представиться, заказать еду, спросить дорогу и рассказать о своём дне простыми фразами.",
+      "modules": [
+        {
+          "id": "a1m1",
+          "title": {
+            "ru": "Звуки и буквы"
+          },
+          "lessons": [
+            {
+              "id": "a1m1.1",
+              "title": {
+                "ru": "Привет, польский! Алфавит и первые слова"
+              },
+              "goal": "читать польские буквы и сказать первые 5 слов",
+              "free_preview": true,
+              "volatile": false
+            },
+            {
+              "id": "a1m1.2",
+              "title": {
+                "ru": "Шипящие: sz, cz, rz, ż"
+              },
+              "goal": "различать и произносить sz/cz/rz/ż и читать слова с ними",
+              "free_preview": true,
+              "volatile": false
+            },
+            {
+              "id": "a1m1.3",
+              "title": {
+                "ru": "Мягкие: ś, ć, ź, ń и si, ci, zi"
+              },
+              "goal": "читать мягкие согласные в двух написаниях",
+              "free_preview": true,
+              "volatile": false
+            },
+            {
+              "id": "a1m1.4",
+              "title": {
+                "ru": "Носовые ą, ę и ударение"
+              },
+              "goal": "произносить ą/ę и ставить ударение на предпоследний слог",
+              "free_preview": true,
+              "volatile": false
+            }
+          ]
+        },
+        {
+          "id": "a1m2",
+          "title": {
+            "ru": "Знакомство"
+          },
+          "lessons": [
+            {
+              "id": "a1m2.1",
+              "title": {
+                "ru": "Cześć или Dzień dobry?"
+              },
+              "goal": "здороваться и прощаться в неформальной и вежливой ситуации",
+              "free_preview": false,
+              "volatile": false
+            },
+            {
+              "id": "a1m2.2",
+              "title": {
+                "ru": "Jak masz na imię?"
+              },
+              "goal": "представиться и спросить имя",
+              "free_preview": false,
+              "volatile": false
+            },
+            {
+              "id": "a1m2.3",
+              "title": {
+                "ru": "Skąd jesteś?"
+              },
+              "goal": "сказать, откуда ты, и спросить собеседника",
+              "free_preview": false,
+              "volatile": false
+            },
+            {
+              "id": "a1m2.4",
+              "title": {
+                "ru": "Ty, Pan, Pani"
+              },
+              "goal": "выбрать между «ты» и вежливым Pan/Pani",
+              "free_preview": false,
+              "volatile": false
+            }
+          ]
+        },
+        {
+          "id": "a1m3",
+          "title": {
+            "ru": "Я и мои близкие"
+          },
+          "lessons": [
+            {
+              "id": "a1m3.1",
+              "title": {
+                "ru": "Глагол być: я есть, ты есть"
+              },
+              "goal": "спрягать być в настоящем времени",
+              "free_preview": false,
+              "volatile": false
+            },
+            {
+              "id": "a1m3.2",
+              "title": {
+                "ru": "Числа 0–20 и возраст"
+              },
+              "goal": "назвать числа до 20 и сказать свой возраст",
+              "free_preview": false,
+              "volatile": false
+            },
+            {
+              "id": "a1m3.3",
+              "title": {
+                "ru": "Кем ты работаешь?"
+              },
+              "goal": "назвать профессию и род занятий",
+              "free_preview": false,
+              "volatile": false
+            },
+            {
+              "id": "a1m3.4",
+              "title": {
+                "ru": "Моя семья"
+              },
+              "goal": "рассказать о семье: mama, tata, brat, siostra",
+              "free_preview": false,
+              "volatile": false
+            }
+          ]
+        },
+        {
+          "id": "a1m4",
+          "title": {
+            "ru": "Кафе и еда"
+          },
+          "lessons": [
+            {
+              "id": "a1m4.1",
+              "title": {
+                "ru": "Poproszę kawę!"
+              },
+              "goal": "заказать напиток вежливой формулой poproszę",
+              "free_preview": false,
+              "volatile": false
+            },
+            {
+              "id": "a1m4.2",
+              "title": {
+                "ru": "Что ты любишь есть?"
+              },
+              "goal": "назвать еду и сказать lubię / nie lubię",
+              "free_preview": false,
+              "volatile": false
+            },
+            {
+              "id": "a1m4.3",
+              "title": {
+                "ru": "Ile płacę? Цены и числа до 100"
+              },
+              "goal": "понимать цену и попросить счёт",
+              "free_preview": false,
+              "volatile": false
+            },
+            {
+              "id": "a1m4.4",
+              "title": {
+                "ru": "Разговор в кафе"
+              },
+              "goal": "провести короткий диалог официант–гость",
+              "free_preview": false,
+              "volatile": false
+            }
+          ]
+        },
+        {
+          "id": "a1m5",
+          "title": {
+            "ru": "В городе"
+          },
+          "lessons": [
+            {
+              "id": "a1m5.1",
+              "title": {
+                "ru": "Gdzie jest…? Где находится…"
+              },
+              "goal": "спросить, где находится место в городе",
+              "free_preview": false,
+              "volatile": false
+            },
+            {
+              "id": "a1m5.2",
+              "title": {
+                "ru": "Направо, налево, прямо"
+              },
+              "goal": "понять и дать простое направление",
+              "free_preview": false,
+              "volatile": false
+            },
+            {
+              "id": "a1m5.3",
+              "title": {
+                "ru": "Транспорт: автобус, трамвай, метро"
+              },
+              "goal": "спросить про транспорт и купить билет",
+              "free_preview": false,
+              "volatile": false
+            },
+            {
+              "id": "a1m5.4",
+              "title": {
+                "ru": "Глагол mieć: у меня есть"
+              },
+              "goal": "спрягать mieć и сказать, что у тебя есть",
+              "free_preview": false,
+              "volatile": false
+            }
+          ]
+        },
+        {
+          "id": "a1m6",
+          "title": {
+            "ru": "Магазин"
+          },
+          "lessons": [
+            {
+              "id": "a1m6.1",
+              "title": {
+                "ru": "Ile to kosztuje?"
+              },
+              "goal": "спросить цену и количество",
+              "free_preview": false,
+              "volatile": false
+            },
+            {
+              "id": "a1m6.2",
+              "title": {
+                "ru": "Цвета и размеры"
+              },
+              "goal": "назвать цвет и размер одежды",
+              "free_preview": false,
+              "volatile": false
+            },
+            {
+              "id": "a1m6.3",
+              "title": {
+                "ru": "Ten, ta, to: род существительных"
+              },
+              "goal": "определять род и выбирать ten/ta/to",
+              "free_preview": false,
+              "volatile": false
+            },
+            {
+              "id": "a1m6.4",
+              "title": {
+                "ru": "Покупки в магазине"
+              },
+              "goal": "купить товар от приветствия до оплаты",
+              "free_preview": false,
+              "volatile": false
+            }
+          ]
+        },
+        {
+          "id": "a1m7",
+          "title": {
+            "ru": "Мой день"
+          },
+          "lessons": [
+            {
+              "id": "a1m7.1",
+              "title": {
+                "ru": "Która godzina? Время"
+              },
+              "goal": "сказать и спросить время",
+              "free_preview": false,
+              "volatile": false
+            },
+            {
+              "id": "a1m7.2",
+              "title": {
+                "ru": "Дни недели и планы"
+              },
+              "goal": "назвать дни недели и договориться о дне",
+              "free_preview": false,
+              "volatile": false
+            },
+            {
+              "id": "a1m7.3",
+              "title": {
+                "ru": "Глаголы на -ę, -isz: robię, mówię"
+              },
+              "goal": "спрягать глаголы группы -ę/-isz",
+              "free_preview": false,
+              "volatile": false
+            },
+            {
+              "id": "a1m7.4",
+              "title": {
+                "ru": "Глаголы на -m, -sz: mam, czytam"
+              },
+              "goal": "спрягать глаголы группы -m/-sz и рассказать о дне",
+              "free_preview": false,
+              "volatile": false
+            }
+          ]
+        },
+        {
+          "id": "a1m8",
+          "title": {
+            "ru": "Первые разговоры"
+          },
+          "lessons": [
+            {
+              "id": "a1m8.1",
+              "title": {
+                "ru": "Вопросы: co, kto, gdzie, kiedy"
+              },
+              "goal": "задавать базовые вопросы",
+              "free_preview": false,
+              "volatile": false
+            },
+            {
+              "id": "a1m8.2",
+              "title": {
+                "ru": "Small talk: погода и настроение"
+              },
+              "goal": "поддержать короткий разговор о погоде и делах",
+              "free_preview": false,
+              "volatile": false
+            },
+            {
+              "id": "a1m8.3",
+              "title": {
+                "ru": "Хобби и свободное время"
+              },
+              "goal": "рассказать о хобби и спросить собеседника",
+              "free_preview": false,
+              "volatile": false
+            },
+            {
+              "id": "a1m8.4",
+              "title": {
+                "ru": "Итоговый разговор A1"
+              },
+              "goal": "провести знакомство-разговор на 2–3 минуты",
+              "free_preview": false,
+              "volatile": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "a2",
+      "title": {
+        "ru": "Повседневность · A2"
+      },
+      "goal": "Рассказывать о прошлом и планах, решать бытовые задачи: врач, жильё, работа, учреждения, звонки.",
+      "modules": [
+        {
+          "id": "a2m1",
+          "title": {
+            "ru": "Что было вчера"
+          },
+          "lessons": [
+            {
+              "id": "a2m1.1",
+              "title": {
+                "ru": "Прошедшее время: byłem, byłam"
+              },
+              "goal": "сказать, где ты был(а)",
+              "free_preview": false,
+              "volatile": false
+            },
+            {
+              "id": "a2m1.2",
+              "title": {
+                "ru": "Прошедшее время правильных глаголов"
+              },
+              "goal": "рассказать, что ты делал(а) вчера",
+              "free_preview": false,
+              "volatile": false
+            },
+            {
+              "id": "a2m1.3",
+              "title": {
+                "ru": "Выходные: рассказ о прошлом"
+              },
+              "goal": "рассказать о выходных 4–5 фразами",
+              "free_preview": false,
+              "volatile": false
+            },
+            {
+              "id": "a2m1.4",
+              "title": {
+                "ru": "Разговор: как прошли выходные?"
+              },
+              "goal": "поддержать разговор о прошлом",
+              "free_preview": false,
+              "volatile": false
+            }
+          ]
+        },
+        {
+          "id": "a2m2",
+          "title": {
+            "ru": "Планы и будущее"
+          },
+          "lessons": [
+            {
+              "id": "a2m2.1",
+              "title": {
+                "ru": "Będę + инфинитив"
+              },
+              "goal": "говорить о планах через będę",
+              "free_preview": false,
+              "volatile": false
+            },
+            {
+              "id": "a2m2.2",
+              "title": {
+                "ru": "Chcę, muszę, mogę"
+              },
+              "goal": "выражать желание, необходимость и возможность",
+              "free_preview": false,
+              "volatile": false
+            },
+            {
+              "id": "a2m2.3",
+              "title": {
+                "ru": "Договориться о встрече"
+              },
+              "goal": "предложить время и место, согласиться или отказаться",
+              "free_preview": false,
+              "volatile": false
+            },
+            {
+              "id": "a2m2.4",
+              "title": {
+                "ru": "Разговор: планы на отпуск"
+              },
+              "goal": "рассказать о планах на отпуск",
+              "free_preview": false,
+              "volatile": false
+            }
+          ]
+        },
+        {
+          "id": "a2m3",
+          "title": {
+            "ru": "Падежи без страха"
+          },
+          "lessons": [
+            {
+              "id": "a2m3.1",
+              "title": {
+                "ru": "Винительный: widzę kota"
+              },
+              "goal": "ставить существительные в винительный падеж",
+              "free_preview": false,
+              "volatile": false
+            },
+            {
+              "id": "a2m3.2",
+              "title": {
+                "ru": "Родительный: nie ma, dużo, bez"
+              },
+              "goal": "использовать родительный после отрицания и количества",
+              "free_preview": false,
+              "volatile": false
+            },
+            {
+              "id": "a2m3.3",
+              "title": {
+                "ru": "Творительный: jestem studentem"
+              },
+              "goal": "использовать творительный после być и z",
+              "free_preview": false,
+              "volatile": false
+            },
+            {
+              "id": "a2m3.4",
+              "title": {
+                "ru": "Местный: w Warszawie, o pracy"
+              },
+              "goal": "использовать местный после w, na, o",
+              "free_preview": false,
+              "volatile": false
+            }
+          ]
+        },
+        {
+          "id": "a2m4",
+          "title": {
+            "ru": "Здоровье и врач"
+          },
+          "lessons": [
+            {
+              "id": "a2m4.1",
+              "title": {
+                "ru": "Тело и самочувствие"
+              },
+              "goal": "назвать части тела и сказать, что болит",
+              "free_preview": false,
+              "volatile": false
+            },
+            {
+              "id": "a2m4.2",
+              "title": {
+                "ru": "У врача: boli mnie…"
+              },
+              "goal": "описать симптомы врачу",
+              "free_preview": false,
+              "volatile": false
+            },
+            {
+              "id": "a2m4.3",
+              "title": {
+                "ru": "Аптека"
+              },
+              "goal": "купить лекарство и спросить, как принимать",
+              "free_preview": false,
+              "volatile": false
+            },
+            {
+              "id": "a2m4.4",
+              "title": {
+                "ru": "Разговор: запись к врачу"
+              },
+              "goal": "записаться к врачу по телефону",
+              "free_preview": false,
+              "volatile": false
+            }
+          ]
+        },
+        {
+          "id": "a2m5",
+          "title": {
+            "ru": "Жильё и быт"
+          },
+          "lessons": [
+            {
+              "id": "a2m5.1",
+              "title": {
+                "ru": "Квартира: pokój, kuchnia, łazienka"
+              },
+              "goal": "описать квартиру",
+              "free_preview": false,
+              "volatile": false
+            },
+            {
+              "id": "a2m5.2",
+              "title": {
+                "ru": "Аренда: wynajem mieszkania"
+              },
+              "goal": "спросить об условиях аренды",
+              "free_preview": false,
+              "volatile": false
+            },
+            {
+              "id": "a2m5.3",
+              "title": {
+                "ru": "Поломки и мастер"
+              },
+              "goal": "сообщить о поломке и договориться о ремонте",
+              "free_preview": false,
+              "volatile": false
+            },
+            {
+              "id": "a2m5.4",
+              "title": {
+                "ru": "Разговор с арендодателем"
+              },
+              "goal": "провести разговор об аренде",
+              "free_preview": false,
+              "volatile": false
+            }
+          ]
+        },
+        {
+          "id": "a2m6",
+          "title": {
+            "ru": "Работа и учреждения"
+          },
+          "lessons": [
+            {
+              "id": "a2m6.1",
+              "title": {
+                "ru": "На работе: коллеги и задачи"
+              },
+              "goal": "рассказать о своей работе",
+              "free_preview": false,
+              "volatile": false
+            },
+            {
+              "id": "a2m6.2",
+              "title": {
+                "ru": "Urząd: документы и очередь"
+              },
+              "goal": "понять типичные фразы в учреждении",
+              "free_preview": false,
+              "volatile": false
+            },
+            {
+              "id": "a2m6.3",
+              "title": {
+                "ru": "Телефонный разговор"
+              },
+              "goal": "начать и закончить разговор по телефону",
+              "free_preview": false,
+              "volatile": false
+            },
+            {
+              "id": "a2m6.4",
+              "title": {
+                "ru": "Разговор: в urzędzie"
+              },
+              "goal": "уладить вопрос в учреждении",
+              "free_preview": false,
+              "volatile": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "b1",
+      "title": {
+        "ru": "Свободная речь · B1"
+      },
+      "goal": "Свободно поддерживать разговор, выражать мнение, рассказывать истории и понимать живую речь.",
+      "modules": [
+        {
+          "id": "b1m1",
+          "title": {
+            "ru": "Вид глагола"
+          },
+          "lessons": [
+            {
+              "id": "b1m1.1",
+              "title": {
+                "ru": "Robić или zrobić?"
+              },
+              "goal": "различать несовершенный и совершенный вид",
+              "free_preview": false,
+              "volatile": false
+            },
+            {
+              "id": "b1m1.2",
+              "title": {
+                "ru": "Вид в прошедшем времени"
+              },
+              "goal": "выбирать вид, рассказывая о прошлом",
+              "free_preview": false,
+              "volatile": false
+            },
+            {
+              "id": "b1m1.3",
+              "title": {
+                "ru": "Вид в будущем времени"
+              },
+              "goal": "выбирать вид, говоря о будущем",
+              "free_preview": false,
+              "volatile": false
+            },
+            {
+              "id": "b1m1.4",
+              "title": {
+                "ru": "Разговор: история из жизни"
+              },
+              "goal": "рассказать связную историю",
+              "free_preview": false,
+              "volatile": false
+            }
+          ]
+        },
+        {
+          "id": "b1m2",
+          "title": {
+            "ru": "Мнение и спор"
+          },
+          "lessons": [
+            {
+              "id": "b1m2.1",
+              "title": {
+                "ru": "Moim zdaniem… Выражаем мнение"
+              },
+              "goal": "выражать мнение и аргумент",
+              "free_preview": false,
+              "volatile": false
+            },
+            {
+              "id": "b1m2.2",
+              "title": {
+                "ru": "Согласие и несогласие"
+              },
+              "goal": "вежливо соглашаться и возражать",
+              "free_preview": false,
+              "volatile": false
+            },
+            {
+              "id": "b1m2.3",
+              "title": {
+                "ru": "Связки: bo, ponieważ, więc, jednak"
+              },
+              "goal": "связывать мысли в длинные фразы",
+              "free_preview": false,
+              "volatile": false
+            },
+            {
+              "id": "b1m2.4",
+              "title": {
+                "ru": "Разговор-дискуссия"
+              },
+              "goal": "отстоять мнение в короткой дискуссии",
+              "free_preview": false,
+              "volatile": false
+            }
+          ]
+        },
+        {
+          "id": "b1m3",
+          "title": {
+            "ru": "Если бы… Условное наклонение"
+          },
+          "lessons": [
+            {
+              "id": "b1m3.1",
+              "title": {
+                "ru": "Chciałbym, mógłbyś"
+              },
+              "goal": "вежливо просить и предлагать через -bym",
+              "free_preview": false,
+              "volatile": false
+            },
+            {
+              "id": "b1m3.2",
+              "title": {
+                "ru": "Gdybym miał…"
+              },
+              "goal": "говорить о гипотетических ситуациях",
+              "free_preview": false,
+              "volatile": false
+            },
+            {
+              "id": "b1m3.3",
+              "title": {
+                "ru": "Советы: powinieneś"
+              },
+              "goal": "давать и просить советы",
+              "free_preview": false,
+              "volatile": false
+            },
+            {
+              "id": "b1m3.4",
+              "title": {
+                "ru": "Разговор: что бы ты сделал?"
+              },
+              "goal": "обсудить гипотетическую ситуацию",
+              "free_preview": false,
+              "volatile": false
+            }
+          ]
+        },
+        {
+          "id": "b1m4",
+          "title": {
+            "ru": "Живая речь"
+          },
+          "lessons": [
+            {
+              "id": "b1m4.1",
+              "title": {
+                "ru": "Разговорные слова: no, spoko, serio"
+              },
+              "goal": "понимать разговорные слова",
+              "free_preview": false,
+              "volatile": false
+            },
+            {
+              "id": "b1m4.2",
+              "title": {
+                "ru": "Идиомы и устойчивые выражения"
+              },
+              "goal": "понять и использовать 10 идиом",
+              "free_preview": false,
+              "volatile": false
+            },
+            {
+              "id": "b1m4.3",
+              "title": {
+                "ru": "Ложные друзья русскоговорящих"
+              },
+              "goal": "избегать ловушек похожих слов",
+              "free_preview": false,
+              "volatile": false
+            },
+            {
+              "id": "b1m4.4",
+              "title": {
+                "ru": "Разговор с поляком в баре"
+              },
+              "goal": "свободно поболтать о жизни",
+              "free_preview": false,
+              "volatile": false
+            }
+          ]
+        },
+        {
+          "id": "b1m5",
+          "title": {
+            "ru": "Работа и карьера"
+          },
+          "lessons": [
+            {
+              "id": "b1m5.1",
+              "title": {
+                "ru": "Резюме и опыт"
+              },
+              "goal": "рассказать о своём опыте работы",
+              "free_preview": false,
+              "volatile": false
+            },
+            {
+              "id": "b1m5.2",
+              "title": {
+                "ru": "Собеседование"
+              },
+              "goal": "отвечать на типичные вопросы собеседования",
+              "free_preview": false,
+              "volatile": false
+            },
+            {
+              "id": "b1m5.3",
+              "title": {
+                "ru": "Письмо и e-mail"
+              },
+              "goal": "написать вежливое письмо",
+              "free_preview": false,
+              "volatile": false
+            },
+            {
+              "id": "b1m5.4",
+              "title": {
+                "ru": "Разговор: собеседование"
+              },
+              "goal": "пройти собеседование на польском",
+              "free_preview": false,
+              "volatile": false
+            }
+          ]
+        },
+        {
+          "id": "b1m6",
+          "title": {
+            "ru": "Польша и жизнь"
+          },
+          "lessons": [
+            {
+              "id": "b1m6.1",
+              "title": {
+                "ru": "Праздники и традиции"
+              },
+              "goal": "рассказать о польских праздниках",
+              "free_preview": false,
+              "volatile": false
+            },
+            {
+              "id": "b1m6.2",
+              "title": {
+                "ru": "Новости и события"
+              },
+              "goal": "понять и пересказать короткую новость",
+              "free_preview": false,
+              "volatile": false
+            },
+            {
+              "id": "b1m6.3",
+              "title": {
+                "ru": "Путешествия по Польше"
+              },
+              "goal": "спланировать поездку и рассказать о ней",
+              "free_preview": false,
+              "volatile": false
+            },
+            {
+              "id": "b1m6.4",
+              "title": {
+                "ru": "Итоговый разговор B1"
+              },
+              "goal": "свободно говорить 5 минут на общие темы",
+              "free_preview": false,
+              "volatile": false
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "language": {
+    "target": "pl",
+    "base": "ru"
+  }
+}

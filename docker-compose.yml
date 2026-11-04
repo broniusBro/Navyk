@@ -1,0 +1,28 @@
+# brolingvo · polski on the shared application server (see bronus-core/host/README.md).
+# Own "apartment": Compose project "polish", port 127.0.0.1:8110 (registered in /etc/host/projects),
+# secrets /etc/polish/polish.env (ANTHROPIC_API_KEY, EMAIL_PROVIDER, EMAIL_API_KEY, PUBLIC_ORIGIN ...).
+# Accounts database: named volume polish-data → /data/brolingvo.sqlite (daily copies: deploy/backup.sh).
+name: polish
+
+services:
+  app:
+    build: .
+    image: polish:latest
+    restart: unless-stopped
+    env_file: /etc/polish/polish.env
+    environment:
+      DATA_DIR: /data
+    volumes:
+      - polish-data:/data
+    # only reachable from the server itself; Caddy terminates HTTPS
+    ports:
+      - "127.0.0.1:${APP_PORT:-8110}:8080"
+    read_only: true
+    tmpfs: [/tmp]
+    security_opt: ["no-new-privileges:true"]
+    cap_drop: [ALL]
+    mem_limit: 512m
+    stop_grace_period: 15s
+
+volumes:
+  polish-data:

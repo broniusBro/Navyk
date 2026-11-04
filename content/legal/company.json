@@ -1,0 +1,13 @@
+{
+  "_comment": "Данные владельца сервиса для юридических страниц (/privacy, /cookies, /terms). Пустые поля не выводятся. После правки — дата в updated.",
+  "name": "BRONIUS AND BRO GROUP SP. Z O.O.",
+  "street": "ul. Świeradowska 47",
+  "postcode": "02-662",
+  "city": "Warszawa",
+  "country": { "ru": "Польша", "uk": "Польща", "en": "Poland", "pl": "Polska" },
+  "krs": "",
+  "nip": "5214102539",
+  "email": "info@broniusgroup.com",
+  "site": "https://navyk.app",
+  "updated": "2026-10-16"
+}

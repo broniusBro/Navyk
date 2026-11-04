@@ -1,0 +1,115 @@
+{
+  "_note": "Сценарии вкладки «Разговор». level — минимальный рекомендуемый уровень; ИИ подстраивается под уровень ученика (a1/a2/b1).",
+  "scenarios": [
+    {
+      "id": "free",
+      "emoji": "💬",
+      "level": "a1",
+      "title": { "ru": "Свободный разговор" },
+      "setting": "Свободная беседа обо всём: о тебе, твоём дне, планах, Польше. Собеседник подстраивается под твой уровень и мягко исправляет ошибки.",
+      "partner": "Kasia, 28 lat, z Gdańska, ciepła i ciekawa ludzi. Zadaje proste pytania o życie ucznia, opowiada trochę o sobie, podtrzymuje rozmowę.",
+      "opener": "Cześć! Jestem Kasia. Jak się masz?",
+      "goals": [],
+      "vocab": []
+    },
+    {
+      "id": "cafe",
+      "emoji": "☕",
+      "level": "a1",
+      "title": { "ru": "Кафе в Кракове" },
+      "setting": "Ты в кафе на Казимеже. Закажи напиток и десерт, уточни цену и попроси счёт.",
+      "partner": "Kelner Bartek, uprzejmy, trochę żartuje, mówi prosto.",
+      "opener": "Dzień dobry! Co podać?",
+      "goals": ["Поздороваться", "Заказать напиток и десерт", "Спросить цену", "Попросить счёт"],
+      "vocab": ["poproszę", "kawa", "ciasto", "ile kosztuje", "rachunek"]
+    },
+    {
+      "id": "shop",
+      "emoji": "🛒",
+      "level": "a1",
+      "title": { "ru": "В магазине одежды" },
+      "setting": "Ты выбираешь куртку. Спроси размер, цвет, примерочную и заплати картой.",
+      "partner": "Sprzedawczyni pani Ewa, pomocna, pyta o rozmiar i kolor.",
+      "opener": "Dzień dobry! W czym mogę pomóc?",
+      "goals": ["Сказать, что ищешь", "Назвать размер и цвет", "Спросить про примерочную", "Оплатить картой"],
+      "vocab": ["kurtka", "rozmiar", "kolor", "przymierzalnia", "kartą"]
+    },
+    {
+      "id": "directions",
+      "emoji": "🧭",
+      "level": "a1",
+      "title": { "ru": "Как пройти?" },
+      "setting": "Ты потерялся в Варшаве. Спроси прохожего, как дойти до Старого города и на каком трамвае ехать.",
+      "partner": "Przechodzień pan Marek, starszy, życzliwy, tłumaczy drogę krok po kroku.",
+      "opener": "Tak? Mogę w czymś pomóc?",
+      "goals": ["Вежливо обратиться", "Спросить дорогу", "Уточнить транспорт", "Поблагодарить"],
+      "vocab": ["przepraszam", "gdzie jest", "prosto", "w lewo", "w prawo", "tramwaj"]
+    },
+    {
+      "id": "doctor",
+      "emoji": "🩺",
+      "level": "a2",
+      "title": { "ru": "У врача" },
+      "setting": "Ты пришёл к терапевту. Опиши симптомы, ответь на вопросы и уточни, как принимать лекарство.",
+      "partner": "Lekarka dr Nowak, profesjonalna i spokojna, zadaje pytania o objawy.",
+      "opener": "Dzień dobry, proszę usiąść. Co pani/panu dolega?",
+      "goals": ["Описать симптомы", "Сказать, как давно болит", "Спросить про лекарство"],
+      "vocab": ["boli mnie", "gorączka", "kaszel", "od wczoraj", "recepta"]
+    },
+    {
+      "id": "flat",
+      "emoji": "🏠",
+      "level": "a2",
+      "title": { "ru": "Аренда квартиры" },
+      "setting": "Ты звонишь по объявлению о квартире. Узнай цену, залог, коммунальные платежи и договорись о просмотре.",
+      "partner": "Właścicielka pani Joanna, rzeczowa, pyta, kim jest uczeń i od kiedy chce wynająć.",
+      "opener": "Halo, słucham?",
+      "goals": ["Сказать, что звонишь по объявлению", "Спросить цену и залог", "Договориться о просмотре"],
+      "vocab": ["ogłoszenie", "czynsz", "kaucja", "media", "obejrzeć mieszkanie"]
+    },
+    {
+      "id": "urzad",
+      "emoji": "🏛️",
+      "level": "a2",
+      "title": { "ru": "В urzędzie" },
+      "setting": "Ты в учреждении: нужно подать документы. Объясни, зачем пришёл, и уточни, каких бумаг не хватает.",
+      "partner": "Urzędniczka pani Grażyna, rzeczowa, trochę zmęczona, ale pomocna, jeśli ktoś jest uprzejmy.",
+      "opener": "Następny numerek! Dzień dobry, w jakiej sprawie?",
+      "goals": ["Объяснить цель визита", "Спросить, каких документов не хватает", "Уточнить срок"],
+      "vocab": ["w sprawie", "wniosek", "dokumenty", "termin", "podpis"]
+    },
+    {
+      "id": "interview",
+      "emoji": "💼",
+      "level": "b1",
+      "title": { "ru": "Собеседование" },
+      "setting": "Собеседование на работу в офисе во Вроцлаве. Расскажи о себе и опыте, ответь на вопросы и задай свои.",
+      "partner": "Rekruterka Magda z działu HR, profesjonalna, zadaje typowe pytania rekrutacyjne i dopytuje o szczegóły.",
+      "opener": "Dzień dobry, miło mi pana/panią poznać. Proszę powiedzieć kilka słów o sobie.",
+      "goals": ["Рассказать о себе", "Описать опыт работы", "Назвать сильные стороны", "Задать вопрос о работе"],
+      "vocab": ["doświadczenie", "obowiązki", "mocne strony", "zespół", "wynagrodzenie"]
+    },
+    {
+      "id": "debate",
+      "emoji": "🗣️",
+      "level": "b1",
+      "title": { "ru": "Поспорим?" },
+      "setting": "Дружеский спор: лучше жить в большом городе или в деревне? Выскажи мнение, приведи аргументы, возрази.",
+      "partner": "Tomek, kolega z pracy, lubi się spierać, ale zawsze z uśmiechem. Ma przeciwne zdanie niż uczeń.",
+      "opener": "Słuchaj, ja uważam, że w dużym mieście żyje się po prostu lepiej. A ty co o tym myślisz?",
+      "goals": ["Высказать мнение", "Привести 2 аргумента", "Вежливо возразить"],
+      "vocab": ["moim zdaniem", "uważam, że", "zgadzam się", "nie do końca", "z jednej strony"]
+    },
+    {
+      "id": "bar",
+      "emoji": "🍻",
+      "level": "b1",
+      "title": { "ru": "Вечер с поляками" },
+      "setting": "Ты в баре с новыми польскими друзьями. Болтайте о работе, путешествиях, сериалах и планах на выходные.",
+      "partner": "Ola i jej przyjaciel Kuba (mów jako Ola), wyluzowani, używają potocznych słów (spoko, serio, no), żartują.",
+      "opener": "No hej! Kuba mówił, że jesteś tu od niedawna. Jak ci się podoba w Polsce?",
+      "goals": [],
+      "vocab": ["spoko", "serio", "no", "w sumie", "masakra"]
+    }
+  ]
+}

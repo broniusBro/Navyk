@@ -1,0 +1,16 @@
+node_modules/
+.expo/
+dist/
+web-build/
+.next/
+*.log
+.DS_Store
+.env
+.env.*
+!.env.example
+content/dist/
+server/eval/results/*.json
+
+# SQLite data (accounts) — local dev
+server/data/
+/data/

@@ -1,0 +1,15 @@
+.git
+.github
+.claude
+node_modules
+research
+docs
+design
+deploy
+content/dist
+server/eval/results
+web/tools
+web/test
+*.log
+.env
+.env.*

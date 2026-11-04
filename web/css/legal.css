@@ -1,0 +1,37 @@
+/* Legal pages (/privacy, /cookies, /terms): static HTML built by scripts/build_legal.py. Light theme only. */
+:root {
+  --ink: #22223b; --ink-muted: #4a4a68; --paper: #fffdf8; --paper-dot: #e4ddcf; --surface: #fff;
+  --border: #22223b; --highlight: #fff0a3; --focus: #4078c4;
+  --font: Nunito, system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+* { box-sizing: border-box; }
+html { color-scheme: light; -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; font-family: var(--font); color: var(--ink); font-size: 16px; line-height: 1.6;
+  background: radial-gradient(var(--paper-dot) 1.2px, transparent 1.2px) 0 0 / 22px 22px, var(--paper);
+}
+a { color: inherit; text-underline-offset: 0.18em; }
+:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+.legal-top { max-width: 760px; margin: 0 auto; padding: 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.legal-brand { font-weight: 900; font-size: 22px; text-decoration: none; }
+.legal-brand span { color: #ff5fa2; }
+.legal-langs { display: flex; gap: 4px; }
+.legal-langs a { font-weight: 800; font-size: 14px; text-decoration: none; padding: 6px 9px; border-radius: 10px; min-width: 40px; text-align: center; }
+.legal-langs a[aria-current="page"] { background: var(--highlight); box-shadow: inset 0 0 0 2px var(--border); }
+.legal {
+  max-width: 760px; margin: 0 auto 24px; padding: 20px 22px 28px; background: var(--surface);
+  border: 2px solid var(--border); border-radius: 14px; box-shadow: 0 3px 0 var(--border);
+}
+@media (max-width: 800px) { .legal { margin: 0 16px 24px; padding: 16px; } }
+.legal-back { font-weight: 800; font-size: 14px; }
+.legal h1 { font-size: 30px; font-weight: 900; line-height: 1.2; margin: 8px 0 4px; }
+.legal h2 { font-size: 20px; font-weight: 900; line-height: 1.3; margin: 28px 0 8px; }
+.legal p, .legal ul { margin: 0 0 12px; }
+.legal ul { padding-left: 1.3em; }
+.legal li + li { margin-top: 6px; }
+.legal code { font-size: 0.9em; background: #f4efe4; border-radius: 6px; padding: 1px 5px; word-break: break-all; }
+.legal-foot { max-width: 760px; margin: 0 auto; padding: 0 16px 32px; font-size: 13px; color: var(--ink-muted); text-align: center; }
+.legal-foot nav { font-weight: 800; color: var(--ink); margin-bottom: 6px; }
+.legal-foot nav a[aria-current="page"] { text-decoration: none; }
+.legal-foot p { margin: 4px 0; }
+@media print { body { background: none; } .legal { border: 0; box-shadow: none; } .legal-top, .legal-foot nav, .legal-back { display: none; } }

@@ -1,0 +1,7 @@
+{
+  "_comment": "Подписи на юридических страницах (/privacy, /cookies, /terms). Тексты документов — в <doc>.<lang>.md.",
+  "ru": { "privacy": "Конфиденциальность", "cookies": "Cookies", "terms": "Условия", "back": "← В приложение", "independent": "Navyk — независимый курс, не связан с Anthropic.", "language": "Язык", "documents": "Документы" },
+  "uk": { "privacy": "Конфіденційність", "cookies": "Cookies", "terms": "Умови", "back": "← До застосунку", "independent": "Navyk — незалежний курс, не пов'язаний з Anthropic.", "language": "Мова", "documents": "Документи" },
+  "en": { "privacy": "Privacy", "cookies": "Cookies", "terms": "Terms", "back": "← Back to the app", "independent": "Navyk is an independent course, not affiliated with Anthropic.", "language": "Language", "documents": "Documents" },
+  "pl": { "privacy": "Prywatność", "cookies": "Cookies", "terms": "Regulamin", "back": "← Wróć do aplikacji", "independent": "Navyk to niezależny kurs, niezwiązany z Anthropic.", "language": "Język", "documents": "Dokumenty" }
+}

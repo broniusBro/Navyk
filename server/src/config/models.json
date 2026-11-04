@@ -1,0 +1,31 @@
+{
+  "verified_at": "2026-10-13",
+  "source": "https://platform.claude.com/docs/en/about-claude/pricing",
+  "ai": {
+    "translate": {
+      "model": "claude-haiku-5-5",
+      "max_tokens": 600,
+      "cache_ttl": "1h"
+    },
+    "dialog": {
+      "model": "claude-haiku-5-5",
+      "max_tokens": 900,
+      "cache_ttl": "1h"
+    },
+    "helper": {
+      "model": "claude-haiku-5-5",
+      "max_tokens": 700,
+      "cache_ttl": "1h"
+    }
+  },
+  "pricing_usd_per_mtok": {
+    "claude-haiku-5-5": {
+      "input": 0.1,
+      "output": 0.5,
+      "cache_write_5m": 0.125,
+      "cache_write_1h": 0.2,
+      "cache_read": 0.01,
+      "note": "Prompts up to 100k tokens. Tutor prompts are far below that."
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "name": "brolingvo-server",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "brolingvo · polski backend. Zero runtime dependencies: Node.js >= 22.18 (native fetch and TypeScript type stripping).",
+  "engines": { "node": ">=22.18" },
+  "scripts": {
+    "test": "node --disable-warning=ExperimentalWarning --test \"test/*.test.ts\"",
+    "start": "node --disable-warning=ExperimentalWarning src/http.ts",
+    "backup": "node --disable-warning=ExperimentalWarning src/backup.ts"
+  }
+}
